@@ -2,47 +2,122 @@
 @tailwind components;
 @tailwind utilities;
 
-body{
-    overflow-x: hidden;
+body {
+  overflow-x: hidden;
 }
 
-
-.bg-image{
-    background:  url(./ASSETS/Image/homeimg.png);
-    height: 520px;
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: cover;
+.bg-image {
+  background: url(./ASSETS/Image/homeimg.png);
+  height: 520px;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
 }
 
-.bg-color{
-    background-color: #066AB240;
-    height: 520px;
+.bg-color {
+  background-color: #066ab240;
+  height: 520px;
 }
 
-.img_taille img{
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-
+.img_taille img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
-.img_taille{
-    width: 451px;
-    height: 465px;
+.img_taille {
+  width: 451px;
+  height: 465px;
+  position: relative;
+  overflow: hidden;
+}
+
+.bg-image-progression {
+  background: url(./ASSETS/Image/progression.png);
+  height: 280px;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+}
+
+.bg-color-progression {
+  background-color: #0000007d;
+  height: 280px;
+}
+
+.img-activite {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.activite-img-taille {
+  width: 350px;
+  height: 275px;
+  position: relative;
+  overflow: hidden;
+}
+
+.bg-color-activite {
+  background-color: #066ab261;
+  width: 350px;
+  height: 275px;
+}
+
+.bg-color-white {
+  background-color: rgba(255, 255, 255, 0.616);
+}
+
+.photo-membre {
+  width: 206px;
+  height: 220px;
+  position: relative;
+  overflow: hidden;
+}
+
+.photo-membre img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+@media screen and (max-width: 640px) {
+  .img_taille {
+    width: 320px;
+    height: 265px;
     position: relative;
     overflow: hidden;
+  }
+
+  .bg-image-progression {
+      background: url(./ASSETS/Image/progression.png);
+      height: 100%;
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: cover;
+  }
+
+  .bg-color-progression {
+      background-color: #0000007d;
+      height: 100%;
+  }
 }
 
-.bg-image-progression{
-    background:  url(./ASSETS/Image/progression.png);
-    height: 280px;
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: cover;
-}
+@media screen and (max-width: 1024px){
+    
+    .bg-image-progression {
+        background: url(./ASSETS/Image/progression.png);
+        height: 100%;
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: cover;
+    }
 
-.bg-color-progression{
-    background-color: #0000007D;
-    height: 280px;
+    .bg-color-progression {
+        background-color: #0000007d;
+        height: 100%;
+    }
 }
