@@ -32,14 +32,14 @@ function About() {
         style={{ backgroundImage: `url(${backAbout})` }}
       >
         <div className="bg-[#066AB225] flex justify-center items-center h-[400px]  ">
-          <div className="sm:text-4xl md:px-10 px-4  text-2xl font-bold text-white w-[320px] sm:w-[520px] uppercase leading-relaxed">
+          <div className="sm:text-4xl md:px-10 px-4  text-2xl font-bold text-white  uppercase leading-relaxed">
             À propos de nous
           </div>
         </div>
       </div>
 
       {/* Qui somme nous ? */}
-      <div className="mt-20 flex space-x-28 justify-center">
+      <div className="mt-20 flex flex-col md:flex-row md:space-x-28 md:space-y-0 space-y-12 justify-center s:px-4 md:px-0">
         <div className="flex flex-col space-y-3 ">
           <div className="text-white text-sm bg-[#DCA61D] w-36 text-center py-1 rounded-full">
             Qui sommes-nous
@@ -47,7 +47,7 @@ function About() {
           <p className="text-3xl font-semibold text-[#066AB2]">
             Nom de l’association
           </p>
-          <div className="w-[500px] leading-loose">
+          <div className="sm:w-[500px] leading-loose">
             We aim to simplify complex processes, enhance operational
             efficiency, and drive growth through our innovative software and
             services. By providing reliable solutions, we enable our clients to
@@ -55,15 +55,15 @@ function About() {
             enable our clients to navigate the ever-changing tech landscape.
           </div>
         </div>
-        <div className="w-[500px]">
+        <div className="sm:w-[500px]">
           <Mission />
         </div>
       </div>
 
       {/* Nous rejoindre */}
-      <div className="mt-20 bg-[#FEF8E7] p-10 flex justify-center space-x-20">
+      <div className="mt-20 bg-[#FEF8E7] p-10 flex md:flex-row flex-col justify-center md:space-x-20 md:space-y-0 space-y-14">
         {/* image description */}
-        <div className="relative overflow-hidden w-[451px] h-[435px] ">
+        <div className="relative overflow-hidden sm:w-[451px] sm:h-[435px]  ">
           <img
             src={img_rejoindre}
             className="w-full h-full  object-cover"
@@ -124,9 +124,11 @@ function About() {
         <div className="grid sm:grid-cols-4  gap-y-8  mt-12 place-content-center place-items-center">
           {/* membre1 */}
           <div>
-            <div className="photo-membre">
-              <img src={profil1} alt="pp1" />
-            </div>
+            <Link to='/A-propos/membre'>
+              <div className="photo-membre">
+                <img src={profil1} alt="pp1" />
+              </div>
+            </Link>
             <div className="flex flex-col items-center space-y-2 w-[206px] p-3 pb-6 bg-white shadow">
               <p className=" font-medium text-[#DCA61D] text-center">
                 Presidente

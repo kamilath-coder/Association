@@ -4,7 +4,6 @@ import { Link } from "react-router-dom";
 
 import React from "react";
 import {
-  Navbar,
   MobileNav,
   IconButton,
 } from "@material-tailwind/react";
@@ -23,14 +22,14 @@ export function NavbarDefault() {
     <ul className="mt-2 mb-4 flex flex-col gap-2 text-lg lg:mb-0 lg:mt-0 lg:flex-row lg:items-center lg:gap-6">
       <Link to="/">Accueil</Link>
       <Link to="/A-propos">A propos</Link>
-      <Link to="*">Nos activités</Link>
+      <Link to="/Nos-activites">Nos activités</Link>
       <Link to="*">Nouvelle</Link>
       <Link to="*">Contact</Link>
     </ul>
   );
 
   return (
-    <Navbar className=" px-4 py-2 lg:px-8 lg:py-4 w-screen bg-[#066AB2] rounded-none">
+    <div className=" px-4 py-2 lg:px-8 lg:py-4  bg-[#066AB2] rounded-none text-white ">
       <div className="container flex items-center justify-between">
         <div className="hidden lg:block">{navList}</div>
         <div className="hidden lg:inline-block">
@@ -110,6 +109,6 @@ export function NavbarDefault() {
           </div>
         </div>
       </MobileNav>
-    </Navbar>
+    </div>
   );
 }

@@ -44,7 +44,7 @@ export function Mission() {
   ];
  
   return (
-    <Tabs  value="html" className="max-w-[40rem] bg-[#DDF1FF] rounded">
+    <Tabs  value="html" className="max-w-[40rem] bg-[#DDF1FF] rounded p-3">
       <TabsHeader
         className="bg-transparent"
         indicatorProps={{
