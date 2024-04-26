@@ -23,7 +23,7 @@ export function NavbarDefault() {
       <Link to="/">Accueil</Link>
       <Link to="/A-propos">A propos</Link>
       <Link to="/Nos-activites">Nos activités</Link>
-      <Link to="*">Nouvelle</Link>
+      <Link to="/Les-nouvelles">Nouvelles</Link>
       <Link to="*">Contact</Link>
     </ul>
   );
