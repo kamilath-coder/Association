@@ -116,7 +116,7 @@ function About() {
         >
           <div className="bg-color-white h-[340px] md:px-10 px-5 pt-6">
             <div className="text-2xl uppercase text-[#DCA61D] font-bold">
-              Les menbres de notre équipe
+              Les membres de notre équipe
             </div>
           </div>
         </div>

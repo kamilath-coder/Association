@@ -18,7 +18,7 @@ function Nouvelle() {
     const timer = setTimeout(() => {
       // Après 5 secondes, masquer le spinner et rediriger l'utilisateur
       setLoading(false);
-    }, 2000); // 5000 millisecondes = 5 secondes
+    }, 1000); // 5000 millisecondes = 5 secondes
 
     // Nettoyer le timer si le composant est démonté avant la fin du délai
     return () => clearTimeout(timer);

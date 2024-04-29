@@ -6,6 +6,7 @@ import ActiviteVoirplus from './PAGES/Activite/VoirPlus'
 import Membre from './PAGES/About/Membre';
 import Nouvelle from './PAGES/Nouvelle/Nouvelle';
 import NouvelleVoirplus from './PAGES/Nouvelle/VoirPlus'
+import Contact from './PAGES/Contact/Contact'
 function App() {
   return (
     <BrowserRouter>
@@ -17,6 +18,7 @@ function App() {
         <Route path="/Nos-activites/Voir-plus" element={<ActiviteVoirplus/>}/>
         <Route path="/Les-nouvelles" element={<Nouvelle/>}/>
         <Route path="/Les-nouvelles/voir-plus" element={<NouvelleVoirplus/>}/>
+        <Route path="/Contact" element={<Contact/>}/>
       </Routes>
     </BrowserRouter>
   );

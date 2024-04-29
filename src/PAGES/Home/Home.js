@@ -393,7 +393,7 @@ function Home() {
                   {/* titre et bouton */}
                   <div className="flex sm:flex-row flex-col justify-between items-center">
                     <div className="text-2xl uppercase text-[#DCA61D] font-bold">
-                      Les menbres de notre équipe
+                      Les membres de notre équipe
                     </div>
                     <button className="flex items-center space-x-3 bg-[#066AB2] py-2 px-3 text-white">
                       <svg
