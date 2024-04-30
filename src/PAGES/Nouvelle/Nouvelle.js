@@ -37,11 +37,11 @@ function Nouvelle() {
 
             {/* en tete */}
             <div
-              className="bg-cover bg-center bg-no-repeat h-[400px]"
+              className="bg-cover bg-center bg-no-repeat h-[400px] animate-fade animate-once animate-duration-[1000ms] animate-delay-[1ms] animate-ease-linear animate-normal"
               style={{ backgroundImage: `url(${backActivite})` }}
             >
               <div className="bg-[#066AB225] flex justify-center items-center h-[400px]  ">
-                <div className="sm:text-4xl md:px-10 px-4  text-2xl font-bold text-white uppercase leading-relaxed">
+                <div className="sm:text-4xl md:px-10 px-4  text-2xl font-bold text-white uppercase leading-relaxed animate-fade-up animate-once animate-duration-1000 animate-delay-[1ms] animate-normal">
                   Les nouvelles
                 </div>
               </div>

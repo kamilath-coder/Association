@@ -4,7 +4,7 @@ function Header() {
   return (
     <div>
         <div className='w-screen bg-[rgb(220,166,29)] h-1'></div>
-        <div className='bg-white space-y-4 sm:space-y-0 py-3 flex sm:flex-row flex-col sm:justify-between md:px-10 px-5'>
+        <div className='bg-white space-y-4 sm:space-y-0 py-3 flex sm:flex-row flex-col sm:justify-between md:px-10 px-5 animate-fade animate-once animate-duration-[2000ms] animate-delay-[1ms] animate-ease-linear animate-normal animate-fill-both'>
             <div className='text-3xl  text-[#DCA61D] font-bold'>Association.</div>
             <div className='bg-[#e0dfdf] w-[300px] sm:w-[400px] flex flex-row items-center space-x-4 py-2 px-4 rounded-full'>
                 <input type='search' placeholder='un mot clé' className=' bg-transparent outline-none px-3 w-[280px] sm:w-[380px]' />

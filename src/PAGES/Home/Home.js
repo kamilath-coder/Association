@@ -27,7 +27,7 @@ function Home() {
     const timer = setTimeout(() => {
       // Après 5 secondes, masquer le spinner et rediriger l'utilisateur
       setLoading(false);
-    }, 2000); // 5000 millisecondes = 5 secondes
+    }, 1000); // 5000 millisecondes = 5 secondes
 
     // Nettoyer le timer si le composant est démonté avant la fin du délai
     return () => clearTimeout(timer);
@@ -45,20 +45,20 @@ function Home() {
             <NavbarDefault />
 
             {/* en tete */}
-            <div className="bg-image w-screen bg-cover bg-center bg-no-repeat">
+            <div className="bg-image w-screen bg-cover bg-center bg-no-repeat animate-fade animate-once animate-duration-[1000ms] animate-delay-[1ms] animate-ease-linear animate-normal">
               <div className="bg-color flex items-center  ">
                 <div className="md:px-10 px-4 flex flex-col space-y-6 relative bottom-6">
-                  <div className="sm:text-4xl text-2xl font-bold text-white w-[320px] sm:w-[520px] uppercase leading-relaxed">
+                  <div className="sm:text-4xl text-2xl font-bold text-white w-[320px] sm:w-[520px] uppercase leading-relaxed animate-fade-up animate-once animate-duration-1000  animate-delay-[1ms] animate-normal animate-fill-forwards">
                     Quis nostrud exercitation ullamco laboris nisi ut aliquip
                   </div>
-                  <div className="text-lg   w-[320px] sm:w-[520px] text-white ">
+                  <div className="text-lg   w-[320px] sm:w-[520px] text-white animate-fade-up animate-once animate-duration-1000 animate-delay-[1ms] animate-normal ">
                     ex ea commodo consequat. Duis aute irure dolor in
                     reprehenderit in voluptate ullamco laboris nisi ut aliquip
                     velit esse cillum dolore eu fugiat nulla pariatur. 
                   </div>
                   <Link
                     to="/Nos-activites"
-                    className="bg-white text-[#DCA61D] text-center hover:text-white hover:bg-[#DCA61D] w-40 py-3 font-medium text-lg transition delay-150 duration-700 ease-in-out hover:-translate-y-1 hover:scale-110"
+                    className="bg-white text-[#DCA61D] text-center hover:text-white hover:bg-[#DCA61D] w-40 py-3 font-medium text-lg transition delay-150 duration-700 ease-in-out hover:-translate-y-1 hover:scale-110 animate-fade-up animate-once animate-duration-[1200ms] animate-delay-[1ms] animate-ease-linear animate-normal"
                   >
                     Nos activités
                   </Link>
@@ -67,7 +67,7 @@ function Home() {
             </div>
 
             {/* Card option */}
-            <div className="grid sm:grid-cols-2 md:grid-cols-3 place-content-center place-items-center s:gap-10 md:gap-0 relative bottom-12">
+            <div className="grid sm:grid-cols-2 md:grid-cols-3 place-content-center place-items-center s:gap-10 md:gap-0 relative bottom-12 animate-fade-right animate-once animate-duration-1000 animate-delay-[1ms] animate-ease-linear animate-normal">
               {/* card1 */}
               <div className="bg-white w-[300px] shadow h-[329px] flex flex-col space-y-4 p-6 border-t-8 border-[#DCA61D]">
                 <svg
@@ -174,7 +174,7 @@ function Home() {
             </div>
 
             {/* description entreprise */}
-            <div className="flex md:flex-row md:space-x-28 flex-col space-y-20 md:space-y-0 pt-20 justify-center items-center md:items-start">
+            <div className="flex md:flex-row md:space-x-28 flex-col space-y-20 md:space-y-0 pt-20 justify-center items-center md:items-start animate-fade-up animate-once animate-duration-1000 animate-delay-[1ms] animate-ease-linear animate-normal animate-fill-both">
               <div className="flex flex-col space-y-5 pl-4 sm:pl-0">
                 <div className="uppercase text-lg sm:text-2xl md:w-[400px] font-semibold text-[#4E4E4E]">
                   Welcome to Egovenz City Municipal
@@ -395,7 +395,7 @@ function Home() {
                     <div className="text-2xl uppercase text-[#DCA61D] font-bold">
                       Les membres de notre équipe
                     </div>
-                    <button className="flex items-center space-x-3 bg-[#066AB2] py-2 px-3 text-white">
+                    <Link to="/A-propos" className="flex items-center space-x-3 bg-[#066AB2] py-2 px-3 text-white">
                       <svg
                         width="25"
                         height="25"
@@ -409,7 +409,7 @@ function Home() {
                         />
                       </svg>
                       <p>Tout les membres</p>
-                    </button>
+                    </Link>
                   </div>
 
                   {/* quelques membres */}

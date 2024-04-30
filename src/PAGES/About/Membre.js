@@ -9,7 +9,7 @@ import { GoX } from "react-icons/go";
 
 function Membre() {
   return (
-    <div className='w-screen sm:h-screen flex justify-center items-center '>
+    <div className='w-screen sm:h-screen flex justify-center items-center animate-fade animate-once animate-duration-1000 animate-delay-[1ms] animate-ease-linear animate-normal animate-fill-both'>
         <div className='bg-[#DDF1FF] w-[812px] p-12 flex flex-col sm:flex-row sm:space-x-10 sm:space-y-0 space-y-10 justify-center rounded-md '>
             
             {/* photo du membre */}

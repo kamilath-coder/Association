@@ -19,5 +19,7 @@ module.exports = withMT( {
     }
     
   },
-  plugins: [],
+  plugins: [
+    require('tailwindcss-animated')
+  ],
 });
