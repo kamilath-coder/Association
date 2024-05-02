@@ -7,12 +7,15 @@ import Membre from './PAGES/About/Membre';
 import Nouvelle from './PAGES/Nouvelle/Nouvelle';
 import NouvelleVoirplus from './PAGES/Nouvelle/VoirPlus'
 import Contact from './PAGES/Contact/Contact'
+import {SlideHome} from "./COMPONENTS/SlideHome/SlideHome"
+
 function App() {
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Home/>}/>
         <Route path="/A-propos" element={<About/>}/>
+        <Route path="/Carousel" element={<SlideHome/>}/>
         <Route path="/A-propos/membre" element={<Membre/>}/>
         <Route path="/Nos-activites" element={<Activite/>}/>
         <Route path="/Nos-activites/Voir-plus" element={<ActiviteVoirplus/>}/>

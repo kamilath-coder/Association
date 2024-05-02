@@ -14,6 +14,22 @@ body {
   background-size: cover;
 }
 
+.bg-image2 {
+  background: url(./ASSETS/Image/people-joining-hands-together-group-friends-keeping-hands-together.jpg);
+  height: 520px;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+}
+
+.bg-image3 {
+  background: url(./ASSETS/Image/multi-ethnic-group-young-people-studying-together-white-de.jpg);
+  height: 520px;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+}
+
 .bg-color {
   background-color: #066ab240;
   height: 520px;

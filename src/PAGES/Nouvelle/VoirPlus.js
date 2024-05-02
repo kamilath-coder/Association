@@ -192,7 +192,7 @@ function VoirPlus() {
                 </div>
 
                 <div className=" mt-20">
-                  <p className="text-xl  font-medium pb-10">Postes recents</p>
+                  <p className="text-xl  font-medium pb-10">Nouvelles recentes</p>
                   <div className=" grid grid-cols-1 sm:grid-cols-2 md:grid-cols-1">
                     {/*Nouvelle 1 */}
                     <div className="w-[220px] flex flex-col space-y-3 ">

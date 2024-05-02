@@ -13,19 +13,18 @@ function Membre() {
         <div className='bg-[#DDF1FF] w-[812px] p-12 flex flex-col sm:flex-row sm:space-x-10 sm:space-y-0 space-y-10 justify-center rounded-md '>
             
             {/* photo du membre */}
-            <div className="relative overflow-hidden w-[304px] h-[367px] rounded-md ">
+            <div className="relative overflow-hidden w-[364px] h-[387px] rounded-md ">
                 <img src={profil1} alt="pp1" className='w-full h-full object-cover' />
             </div> 
             <div>
-                
-                <p className='text-[#4E4E4E] pt-2 font-medium text-sm '>Assistante maketing</p>
-                <div className='w-[354px] text-[#4E4E4E] leading-loose pt-4'>
+                <p className=' text-lg font-semibold'>Touré Victoria</p>
+                <p className='text-[#4E4E4E] font-medium text-sm '>Assistante maketing</p>
+                <div className='w-[354px] text-[#4E4E4E] leading-loose pt-2'>
                     I am adept at leading cross-functional teams and managing budgets 
-                    effectively. I am a creative problem solver, always seeking innovative 
-                    solutions to marketing challenges...
+                    effectively. I am a creative problem solver...
                 </div>
                 {/* information professionelle */}
-                <div className='pt-4'>
+                <div className='pt-3'>
                     {/* Portable */}
                     <div className='w-[354px] bg-[#cfcfcf] h-[1px]'></div>
                     <div className='flex items-center space-x-1 py-3'>
@@ -43,6 +42,12 @@ function Membre() {
                     <div className='flex items-center space-x-1 py-3'>
                         <p className=' font-semibold'>Profession : </p>
                         <p className='text-[#4E4E4E]'>Comunity manager</p>
+                    </div>
+                    {/* Entreprise */}
+                    <div className='w-[354px] bg-[#cfcfcf] h-[1px]'></div>
+                    <div className='flex items-center space-x-1 py-3'>
+                        <p className=' font-semibold'>Entreprise : </p>
+                        <p className='text-[#4E4E4E]'>Mon Bon Séjour</p>
                     </div>
                 </div>
                 {/* reseaux sociaux */}

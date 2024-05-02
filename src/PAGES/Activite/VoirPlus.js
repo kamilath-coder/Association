@@ -194,7 +194,7 @@ function VoirPlus() {
                 </div>
 
                 <div className=" mt-20">
-                  <p className="text-xl  font-medium pb-10">Postes recents</p>
+                  <p className="text-xl  font-medium pb-10">Activités recentes</p>
                   <div className=" grid grid-cols-1 sm:grid-cols-2 md:grid-cols-1">
                     {/* Activité 1 */}
                     <div className="activite-img-taille">
