@@ -58,7 +58,7 @@ function About() {
             </div>
 
             {/* Qui somme nous ? */}
-            <div className="mt-20 flex flex-col md:flex-row md:space-x-28 md:space-y-0 space-y-12 justify-center s:px-4 md:px-0">
+            <div className="Animation-option mt-20 flex flex-col md:flex-row md:space-x-28 md:space-y-0 space-y-12 justify-center s:px-4 md:px-0">
               <div className="flex flex-col space-y-3 ">
                 <div className="text-white text-sm bg-[#DCA61D] w-36 text-center py-1 rounded-full">
                   Qui sommes-nous
@@ -81,7 +81,7 @@ function About() {
             </div>
 
             {/* Nous rejoindre */}
-            <div className="mt-20 bg-[#FEF8E7] p-10 flex md:flex-row flex-col justify-center md:space-x-20 md:space-y-0 space-y-14">
+            <div className="Animation-option mt-20 bg-[#FEF8E7] p-10 flex md:flex-row flex-col justify-center md:space-x-20 md:space-y-0 space-y-14">
               {/* image description */}
               <div className="relative overflow-hidden sm:w-[451px] sm:h-[435px]  ">
                 <img
@@ -131,7 +131,7 @@ function About() {
             </div>
 
             {/* Nos membres */}
-            <div className="mt-20">
+            <div className="mt-20 Animation-option">
               <div
                 className="bg-cover bg-center bg-no-repeat h-[140px]"
                 style={{ backgroundImage: `url(${backimagemenbre})` }}

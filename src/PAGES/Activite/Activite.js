@@ -48,16 +48,16 @@ function Activite() {
 
             {/* Activité */}
             <div className="py-20 flex flex-col items-center space-y-4">
-              <div className="uppercase text-lg md:text-2xl w-[400px] text-center font-semibold text-[#4E4E4E]">
+              <div className="Animation-option uppercase text-lg md:text-2xl w-[400px] text-center font-semibold text-[#4E4E4E]">
                 nos différents activités
               </div>
-              <div className="sm:w-[600px] text-center">
+              <div className="Animation-option sm:w-[600px] text-center">
                 Ut enim ad minim veniam, quis nostrud exercitation ullamco
                 laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure
                 dolor in reprehenderit in voluptate
               </div>
               {/* Activite bloc */}
-              <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-12 pt-14">
+              <div className=" Animation-option grid sm:grid-cols-2 md:grid-cols-3 gap-12 pt-14">
                 {/* Activité 1 */}
                 <div className="activite-img-taille">
                   <div
@@ -404,7 +404,7 @@ function Activite() {
             </div>
 
             {/* Donation */}
-            <div className="flex flex-col items-center space-y-4 ">
+            <div className=" Animation-option flex flex-col items-center space-y-4 ">
               <div className="uppercase text-lg md:text-2xl w-[400px] text-center font-semibold text-[#4E4E4E]">
                 faire une donation ici
               </div>

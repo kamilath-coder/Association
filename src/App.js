@@ -9,6 +9,7 @@ import NouvelleVoirplus from './PAGES/Nouvelle/VoirPlus'
 import Contact from './PAGES/Contact/Contact'
 import {SlideHome} from "./COMPONENTS/SlideHome/SlideHome"
 
+
 function App() {
   return (
     <BrowserRouter>

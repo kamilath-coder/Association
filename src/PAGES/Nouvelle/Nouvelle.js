@@ -48,7 +48,7 @@ function Nouvelle() {
             </div>
 
             {/* Les nouvelles */}
-            <div className=" flex flex-col items-center my-20 space-y-4">
+            <div className="Animation-option flex flex-col items-center my-20 space-y-4">
               <div className="uppercase text-lg md:text-2xl w-[400px] text-center font-semibold text-[#4E4E4E]">
                 les nouvelles
               </div>
@@ -261,7 +261,7 @@ function Nouvelle() {
             </div>
 
             {/* Donation */}
-            <div className="flex flex-col items-center space-y-4 ">
+            <div className="Animation-option flex flex-col items-center space-y-4 ">
               <div className="uppercase text-lg md:text-2xl w-[400px] text-center font-semibold text-[#4E4E4E]">
                 faire une donation ici
               </div>

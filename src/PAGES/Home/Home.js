@@ -49,7 +49,7 @@ function Home() {
            <SlideHome/>
 
             {/* Card option */}
-            <div className="grid sm:grid-cols-2 md:grid-cols-3 place-content-center place-items-center s:gap-10 md:gap-0 relative bottom-12 animate-fade-right animate-once animate-duration-1000 animate-delay-[1ms] animate-ease-linear animate-normal">
+            <div className="animation-card grid sm:grid-cols-2 md:grid-cols-3 place-content-center place-items-center s:gap-10 md:gap-0 relative bottom-12 ">
               {/* card1 */}
               <div className="bg-white w-[300px] shadow h-[329px] flex flex-col space-y-4 p-6 border-t-8 border-[#DCA61D]">
                 <svg
@@ -156,7 +156,7 @@ function Home() {
             </div>
 
             {/* description entreprise */}
-            <div className="flex md:flex-row md:space-x-28 flex-col space-y-20 md:space-y-0 pt-20 justify-center items-center md:items-start animate-fade-up animate-once animate-duration-1000 animate-delay-[1ms] animate-ease-linear animate-normal animate-fill-both">
+            <div className=" Animation-option flex md:flex-row md:space-x-28 flex-col space-y-20 md:space-y-0 pt-20 justify-center items-center md:items-start animate-fade-up animate-once animate-duration-1000 animate-delay-[1ms] animate-ease-linear animate-normal animate-fill-both">
               <div className="flex flex-col space-y-5 pl-4 sm:pl-0">
                 <div className="uppercase text-lg sm:text-2xl md:w-[400px] font-semibold text-[#4E4E4E]">
                   Welcome to Egovenz City Municipal
@@ -198,7 +198,7 @@ function Home() {
             </div>
 
             {/* progression */}
-            <div className="pt-20">
+            <div className="pt-20 Animation-option">
               <div className=" bg-image-progression">
                 <div className="bg-color-progression flex flex-col md:space-y-16 space-y-8 py-7 items-center justify-center">
                   <div className="text-3xl font-semibold text-white">
@@ -231,7 +231,7 @@ function Home() {
             </div>
 
             {/* Activité */}
-            <div className="pt-20 flex flex-col items-center space-y-4">
+            <div className="Animation-option pt-20 flex flex-col items-center space-y-4">
               <div className="uppercase text-lg md:text-2xl w-[400px] text-center font-semibold text-[#4E4E4E]">
                 nos différents activités
               </div>
@@ -366,7 +366,7 @@ function Home() {
             </div>
 
             {/* Menbre de l'equipe */}
-            <div className="pt-20 mb-[1400px] sm:mb-0">
+            <div className="Animation-option pt-20 mb-[1400px] sm:mb-0">
               <div
                 className="bg-cover bg-center bg-no-repeat h-[340px]"
                 style={{ backgroundImage: `url(${backimagemenbre})` }}
@@ -520,7 +520,7 @@ function Home() {
             </div>
 
             {/* newsletter */}
-            <div className="mt-60">
+            <div className="mt-60 Animation-option">
               <div
                 className="bg-cover bg-center bg-no-repeat h-full sm:h-[280px]"
                 style={{ backgroundImage: `url(${back_newletter})` }}
@@ -548,7 +548,7 @@ function Home() {
             </div>
 
             {/* Les partenaires */}
-            <div className="mt-20 flex flex-col items-center">
+            <div className="mt-20 flex flex-col items-center Animation-option">
               <p className=" uppercase text-2xl font-semibold text-[#4e4e4e]">
                 nos partenaires
               </p>
@@ -566,7 +566,7 @@ function Home() {
               </div>
             </div>
 
-            <div className="pt-20">
+            <div className="pt-20 Animation-option">
               <Footer />
             </div>
           </div>

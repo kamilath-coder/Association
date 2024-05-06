@@ -48,7 +48,7 @@ function Contact() {
               </div>
             </div>
 
-            <div className="flex sm:flex-row flex-col s:space-y-10 md:space-y-0 sm:px-14 px-4 mt-20">
+            <div className="Animation-option  flex sm:flex-row flex-col s:space-y-10 md:space-y-0 sm:px-14 px-4 mt-20">
               <div className=" md:w-1/2">
                 <p className=" text-2xl text-[#4E4E4E] font-semibold uppercase">
                   Formulaire de contact

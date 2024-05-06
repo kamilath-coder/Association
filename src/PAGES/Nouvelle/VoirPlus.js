@@ -47,7 +47,7 @@ function VoirPlus() {
               </div>
             </div>
 
-            <div className="flex md:flex-row flex-col md:space-y-0 space-y-14 my-20  px-10">
+            <div className=" Animation-option flex md:flex-row flex-col md:space-y-0 space-y-14 my-20  px-10">
               <div className=" md:w-3/4">
                 {/* premiere image de l'activite */}
                 <div className=" relative overflow-hidden sm:w-[731px] sm:h-[465px] ">
@@ -266,7 +266,7 @@ function VoirPlus() {
             </div>
 
             {/* Donation */}
-            <div className="flex flex-col items-center space-y-4 ">
+            <div className="Animation-option flex flex-col items-center space-y-4 ">
               <div className="uppercase text-lg md:text-2xl w-[400px] text-center font-semibold text-[#4E4E4E]">
                 faire une donation ici
               </div>

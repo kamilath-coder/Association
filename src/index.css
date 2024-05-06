@@ -100,6 +100,40 @@ body {
   object-fit: cover;
 }
 
+
+
+@media (prefers-reduced-motion: no-preference){
+  .Animation-option{
+    animation: reveal linear both ;
+    animation-timeline: view(); 
+    animation-range: 25vh 75vh
+  }
+}
+
+@keyframes reveal {
+  from {
+    padding-top: 200px;
+    opacity: 0.5;
+  }
+ 
+}
+
+.animation-card{
+  animation: down linear both ;
+  animation-timeline: view(); 
+  animation-range: 25vh 75vh
+
+}
+
+@keyframes down {
+  from {
+    padding-bottom: 8000px;
+    opacity: 0.5;
+  }
+ 
+}
+
+
 @media screen and (max-width: 640px) {
   .img_taille {
     width: 320px;
