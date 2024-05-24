@@ -13,9 +13,11 @@ import { Link } from "react-router-dom";
 import activite1 from "../../ASSETS/Image/Activity1.png";
 import { useState, useEffect } from "react";
 import Loader from "../../COMPONENTS/Loader/Loading";
+import { fetchContactInfo } from  '../../API/contact/Contact';
 
 function VoirPlus() {
   const [loading, setLoading] = useState(true);
+  const [info, setInfo] = useState({});
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -26,6 +28,33 @@ function VoirPlus() {
     // Nettoyer le timer si le composant est démonté avant la fin du délai
     return () => clearTimeout(timer);
   }, []);
+  useEffect(() => {
+    fetchContactInfo()
+      .then(response => {
+        console.log('Réponse du serveur :', response.data);
+        // setAddress(response.data.info.address);
+        // setPhone(response.data.info.phone);
+        // setEmail(response.data.info.email);
+        // setFace(response.data.info.facebook_link);
+        // setLink(response.data.info.linkedin_link);
+        // setGmail(response.data.info.google_link);
+        // setTweet(response.data.info.twitter_link);
+        // setInsta(response.data.info.instagram_link);
+        setInfo(response.data.info);
+      })
+      .catch(error => {
+        console.error('Il y avait une erreur!', error);
+      });
+      // fetchContactBanner()
+      // .then(response => {
+      //   console.log('Réponse du serveur :', response.data.info.banner);
+      //   setBanner(response.data.info.banner.fr_text1);
+      //   setBannerPicture(response.data.info.banner.picture);
+      // })
+      // .catch(error => {
+      //   console.error('Il y avait une erreur!', error);
+      // });
+  }, []);
   return (
     <>
       {loading ? (
@@ -34,7 +63,7 @@ function VoirPlus() {
       ) : (
         <>
           <div>
-            <Header />
+            <Header info={info}/>
             <NavbarDefault />
 
             {/* en tete */}
@@ -290,7 +319,7 @@ function VoirPlus() {
               <Donation />
             </div>
             <div className="pt-20">
-              <Footer />
+              <Footer info={info} />
             </div>
           </div>
         </>

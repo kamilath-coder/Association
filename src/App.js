@@ -21,7 +21,8 @@ function App() {
         <Route path="/Nos-activites" element={<Activite/>}/>
         <Route path="/Nos-activites/Voir-plus" element={<ActiviteVoirplus/>}/>
         <Route path="/Les-nouvelles" element={<Nouvelle/>}/>
-        <Route path="/Les-nouvelles/voir-plus" element={<NouvelleVoirplus/>}/>
+        {/* <Route path="/Les-nouvelles/voir-plus" element={<NouvelleVoirplus/>}/> */}
+        <Route path="/Les-nouvelles/voir-plus/:id" element={<NouvelleVoirplus/>}/>
         <Route path="/Contact" element={<Contact/>}/>
       </Routes>
     </BrowserRouter>

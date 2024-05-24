@@ -20,10 +20,17 @@ import Footer from "../../COMPONENTS/Footer/Footer";
 import { useState, useEffect } from "react";
 import Loader from "../../COMPONENTS/Loader/Loading";
 import {SlideHome} from "../../COMPONENTS/SlideHome/SlideHome"
+import { fetchNouvelleInfo } from  '../../API/nouvelle/Nouvelle';
+import { fetchNouvelleBanner } from  '../../API/nouvelle/Nouvelle';
+import { fetchNouvelles } from  '../../API/nouvelle/Nouvelle';
+//import { fetchMembers } from  '../../API/about/About';
+import { removeTags } from '../../UTILS/Util';
 
 function Home() {
   const [loading, setLoading] = useState(true);
-
+  const [info, setInfo] = useState({});
+  const [Banner, setBanner] = useState('');
+  const [BannerPicture, setBannerPicture] = useState('');
   useEffect(() => {
     const timer = setTimeout(() => {
       // Après 5 secondes, masquer le spinner et rediriger l'utilisateur
@@ -34,6 +41,33 @@ function Home() {
     return () => clearTimeout(timer);
   }, []);
 
+  useEffect(() => {
+    fetchNouvelleInfo()
+      .then(response => {
+        console.log('Réponse du serveur :', response.data);
+        // setNameSite(response.data.info.name);
+        // setPresentation(response.data.info.presentation_text);
+        // setPresentationTitle(response.data.info.fr_presentation_title);
+        // setPresentationPhoto(response.data.info.presentation_photo);
+        setInfo(response.data.info);
+        
+      })
+      .catch(error => {
+        console.error('Il y avait une erreur!', error);
+      });
+    fetchNouvelleBanner()
+      .then(response => {
+        console.log('Réponse du serveur :', response.data.info);
+        setBanner(response.data.info.banner.fr_text1);
+        setBannerPicture(response.data.info.banner.picture);
+      })
+      .catch(error => {
+        console.error('Il y avait une erreur!', error);
+      });
+
+     
+  }, []);
+
   return (
     <>
       {loading ? (
@@ -42,7 +76,7 @@ function Home() {
       ) : (
         <>
           <div className="bg-[#F9F9F9]">
-            <Header />
+            <Header  info={info}/>
             <NavbarDefault />
 
             {/* en tete */}
@@ -567,7 +601,7 @@ function Home() {
             </div>
 
             <div className="pt-20 Animation-option">
-              <Footer />
+              <Footer info={info} />
             </div>
           </div>
         </>

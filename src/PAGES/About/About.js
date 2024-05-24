@@ -7,23 +7,36 @@ import img_rejoindre from "../../ASSETS/Image/Activity1.png";
 import backimagemenbre from "../../ASSETS/Image/backimgmenbre.png";
 import { Link } from "react-router-dom";
 import profil1 from "../../ASSETS/Image/Profil1.png";
-import profil2 from "../../ASSETS/Image/Profil2.png";
-import profil3 from "../../ASSETS/Image/Profil3.png";
-import profil4 from "../../ASSETS/Image/Profil4.png";
-import profil5 from "../../ASSETS/Image/Profil5.png";
-import profil6 from "../../ASSETS/Image/Profil6.png";
-import profil7 from "../../ASSETS/Image/Profil7.png";
-import profil8 from "../../ASSETS/Image/Profil8.png";
+// import profil2 from "../../ASSETS/Image/Profil2.png";
+// import profil3 from "../../ASSETS/Image/Profil3.png";
+// import profil4 from "../../ASSETS/Image/Profil4.png";
+// import profil5 from "../../ASSETS/Image/Profil5.png";
+// import profil6 from "../../ASSETS/Image/Profil6.png";
+// import profil7 from "../../ASSETS/Image/Profil7.png";
+// import profil8 from "../../ASSETS/Image/Profil8.png";
 import { GrFacebookOption } from "react-icons/gr";
 import { IoIosMail } from "react-icons/io";
-import { FaInstagram } from "react-icons/fa";
+//import { FaInstagram } from "react-icons/fa";
 import { TiSocialLinkedin } from "react-icons/ti";
+import { RiTwitterXLine } from "react-icons/ri";
 import Footer from "../../COMPONENTS/Footer/Footer";
 import { useState, useEffect } from "react";
 import Loader from "../../COMPONENTS/Loader/Loading";
+import { fetchAboutInfo } from  '../../API/about/About';
+import { fetchAboutBanner } from  '../../API/about/About';
+import { fetchMembers } from  '../../API/about/About';
+import { removeTags } from '../../UTILS/Util';
 
 function About() {
   const [loading, setLoading] = useState(true);
+  const [NameSite, setNameSite] = useState('');
+  const [PresentationTitle, setPresentationTitle] = useState('');
+  const [PresentationPhoto, setPresentationPhoto] = useState('');
+  const [Presentation, setPresentation] = useState('');
+  const [Banner, setBanner] = useState('');
+  const [BannerPicture, setBannerPicture] = useState('');
+  const [Members, setMembers] = useState([]);
+  const [info, setInfo] = useState({});
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -34,6 +47,38 @@ function About() {
     // Nettoyer le timer si le composant est démonté avant la fin du délai
     return () => clearTimeout(timer);
   }, []);
+  useEffect(() => {
+    fetchAboutInfo()
+      .then(response => {
+        console.log('Réponse du serveur :', response.data);
+        setNameSite(response.data.info.name);
+        setPresentation(response.data.info.presentation_text);
+        setPresentationTitle(response.data.info.fr_presentation_title);
+        setPresentationPhoto(response.data.info.presentation_photo);
+        setInfo(response.data.info);
+        
+      })
+      .catch(error => {
+        console.error('Il y avait une erreur!', error);
+      });
+      fetchAboutBanner()
+      .then(response => {
+        console.log('Réponse du serveur :', response.data.info);
+        setBanner(response.data.info.banner.fr_text1);
+        setBannerPicture(response.data.info.banner.picture);
+      })
+      .catch(error => {
+        console.error('Il y avait une erreur!', error);
+      });
+      fetchMembers()
+      .then(response => {
+        console.log('Réponse du serveur :', response.data.info);
+        setMembers(response.data.info);
+      })
+      .catch(error => {
+        console.error('Il y avait une erreur!', error);
+      });
+  }, []);
   return (
     <>
       {loading ? (
@@ -42,17 +87,17 @@ function About() {
       ) : (
         <>
           <div>
-            <Header />
+            <Header info={info} />
             <NavbarDefault />
 
             {/* en tete */}
             <div
               className="bg-cover bg-center bg-no-repeat h-[400px] animate-fade animate-once animate-duration-[1000ms] animate-delay-[1ms] animate-ease-linear animate-normal"
-              style={{ backgroundImage: `url(${backAbout})` }}
+              style={{ backgroundImage: `url(data:image/png;base64,${BannerPicture ? BannerPicture : backAbout})` }}
             >
               <div className="bg-[#066AB225] flex justify-center items-center h-[400px]  ">
                 <div className="sm:text-4xl md:px-10 px-4  text-2xl font-bold text-white  uppercase leading-relaxed animate-fade-up animate-once animate-duration-1000 animate-delay-[1ms] animate-normal">
-                  À propos de nous
+                 {Banner ? Banner :'À propos de nous'}
                 </div>
               </div>
             </div>
@@ -64,15 +109,10 @@ function About() {
                   Qui sommes-nous
                 </div>
                 <p className="text-3xl font-semibold text-[#066AB2]">
-                  Nom de l’association
+                  {NameSite? NameSite :'Nom de l’association'}
                 </p>
                 <div className="sm:w-[500px] leading-loose">
-                  We aim to simplify complex processes, enhance operational
-                  efficiency, and drive growth through our innovative software
-                  and services. By providing reliable solutions, we enable our
-                  clients to navigate the ever-changing tech landscape. eliable
-                  solutions, we enable our clients to navigate the ever-changing
-                  tech landscape.
+                 {Presentation? removeTags(Presentation) :''}
                 </div>
               </div>
               <div className="sm:w-[500px]">
@@ -85,7 +125,7 @@ function About() {
               {/* image description */}
               <div className="relative overflow-hidden sm:w-[451px] sm:h-[435px]  ">
                 <img
-                  src={img_rejoindre}
+                  src={PresentationPhoto ? `data:image/png;base64,${PresentationPhoto}` : img_rejoindre}
                   className="w-full h-full  object-cover"
                   alt="rejoindre"
                 />
@@ -94,11 +134,11 @@ function About() {
               {/* Description texte */}
               <div>
                 <p className="text-3xl font-semibold text-[#066AB2] uppercase">
-                  Pourquoi nous rejoindre ?
+                  {PresentationTitle ? PresentationTitle :'Pourquoi nous rejoindre'} ?
                 </p>
                 <div className="h-1 w-20 bg-[#DCA61D] mt-4"></div>
                 <div className="sm:w-[500px] w-[320px] leading-loose mt-4">
-                  Integer vitae justo eget magna fermentum iaculis. Mattis
+                  {/* Integer vitae justo eget magna fermentum iaculis. Mattis
                   rhoncus urna neque viverra. Nisi porta lorem mollis aliquam ut
                   porttitor leo a diam. Dictum fusce ut placerat orci nulla
                   pellentesque.
@@ -110,7 +150,8 @@ function About() {
                   turpis. <br />
                   <br />
                   Sed blandit libero volutpat sed cras ornare. Cras adipiscing
-                  enim eu turpis egestas pretium aenean pharetra magna ....
+                  enim eu turpis egestas pretium aenean pharetra magna .... */}
+                   {Presentation? removeTags(Presentation) :''}
                 </div>
                 <button className="flex items-center space-x-3 bg-[#DCA61D] text-white mt-4 py-2 px-3 ">
                   <svg
@@ -145,244 +186,43 @@ function About() {
               {/* quelques membres */}
               <div className="grid sm:grid-cols-4  gap-y-8  mt-12 place-content-center place-items-center">
                 {/* membre1 */}
-                <div>
-                  <Link to="/A-propos/membre">
-                    <div className="photo-membre">
-                      <img src={profil1} alt="pp1" />
-                    </div>
-                  </Link>
-                  <div className="flex flex-col items-center space-y-2 w-[206px] p-3 pb-6 bg-white shadow">
-                    <p className=" font-medium text-[#DCA61D] text-center">
-                      Presidente
-                    </p>
-                    <p className="text-lg font-semibold text-[#4e4e4e] text-center">
-                      Touré Victoria
-                    </p>
-                    {/* reseaux sociaux */}
-                    <div className="flex flex-row items-center space-x-2 pt-3">
-                      <Link to="">
-                        <GrFacebookOption className="text-xl text-[#4e4e4e] bg-[#d9d9d9] hover:bg-[#066AB2] hover:text-white w-6 h-6 rounded-full p-1" />
-                      </Link>
-                      <Link to="">
-                        <TiSocialLinkedin className="text-xl text-[#4e4e4e] bg-[#d9d9d9] hover:bg-[#066AB2] hover:text-white w-6 h-6 rounded-full p-1" />
-                      </Link>
-                      <Link to="">
-                        <IoIosMail className="text-xl text-[#4e4e4e] bg-[#d9d9d9] hover:bg-[#066AB2] hover:text-white w-6 h-6 rounded-full p-1" />
-                      </Link>
-                      <Link to="">
-                        <FaInstagram className="text-xl text-[#4e4e4e] bg-[#d9d9d9] hover:bg-[#066AB2] hover:text-white w-6 h-6 rounded-full p-1" />
-                      </Link>
-                    </div>
-                  </div>
-                </div>
-                {/* membre2 */}
-                <div>
-                  <div className="photo-membre">
-                    <img src={profil2} alt="pp1" />
-                  </div>
-                  <div className="flex flex-col items-center space-y-2 w-[206px] p-3 pb-6 bg-white shadow">
-                    <p className=" font-medium text-[#DCA61D] text-center">
-                      Directeur
-                    </p>
-                    <p className="text-lg font-semibold text-[#4e4e4e] text-center">
-                      Kouakou ange christ
-                    </p>
-                    {/* reseaux sociaux */}
-                    <div className="flex flex-row items-center space-x-2 pt-3">
-                      <Link to="">
-                        <GrFacebookOption className="text-xl text-[#4e4e4e] bg-[#d9d9d9] hover:bg-[#066AB2] hover:text-white w-6 h-6 rounded-full p-1" />
-                      </Link>
-                      <Link to="">
-                        <TiSocialLinkedin className="text-xl text-[#4e4e4e] bg-[#d9d9d9] hover:bg-[#066AB2] hover:text-white w-6 h-6 rounded-full p-1" />
-                      </Link>
-                      <Link to="">
-                        <IoIosMail className="text-xl text-[#4e4e4e] bg-[#d9d9d9] hover:bg-[#066AB2] hover:text-white w-6 h-6 rounded-full p-1" />
-                      </Link>
-                      <Link to="">
-                        <FaInstagram className="text-xl text-[#4e4e4e] bg-[#d9d9d9] hover:bg-[#066AB2] hover:text-white w-6 h-6 rounded-full p-1" />
-                      </Link>
+                {Members.map((member, index) => (
+                  <div key={index}>
+                    <Link to="/A-propos/membre">
+                      <div className="photo-membre">
+                        <img src={member.picture ? `data:image/png;base64,${member.picture}` : profil1} alt="pp1" />
+                      </div>
+                    </Link>
+                    <div className="flex flex-col items-center space-y-2 w-[206px] p-3 pb-6 bg-white shadow">
+                      <p className=" font-medium text-[#DCA61D] text-center">
+                        {member.role ? member.role : 'Presidente'}
+                      </p>
+                      <p className="text-lg font-semibold text-[#4e4e4e] text-center">
+                        {member.name? member.name : 'Kouakou ange christ'}
+                      </p>
+                      {/* reseaux sociaux */}
+                      <div className="flex flex-row items-center space-x-2 pt-3">
+                       {member.facebook_link? <a href={member.facebook_link} target="_blank" rel="noreferrer noopener">
+                          <GrFacebookOption className="text-xl text-[#4e4e4e] bg-[#d9d9d9] hover:bg-[#066AB2] hover:text-white w-6 h-6 rounded-full p-1" />
+                        </a>:''}
+                        {member.linkedin_link ? <a href={member.linkedin_link} target="_blank" rel="noreferrer noopener">
+                          <TiSocialLinkedin className="text-xl text-[#4e4e4e] bg-[#d9d9d9] hover:bg-[#066AB2] hover:text-white w-6 h-6 rounded-full p-1" />
+                        </a> :''}
+                        {member.google_link ?<a href={member.google_link} target="_blank" rel="noreferrer noopener">
+                          <IoIosMail className="text-xl text-[#4e4e4e] bg-[#d9d9d9] hover:bg-[#066AB2] hover:text-white w-6 h-6 rounded-full p-1" />
+                        </a>:''}
+                       {member.twitter_link ? <a href={member.twitter_link} target="_blank" rel="noreferrer noopener">
+                          <RiTwitterXLine className="text-xl text-[#4e4e4e] bg-[#d9d9d9] hover:bg-[#066AB2] hover:text-white w-6 h-6 rounded-full p-1" />
+                        </a>: '' }
+                      </div>
                     </div>
                   </div>
-                </div>
-                {/* membre3 */}
-                <div>
-                  <div className="photo-membre">
-                    <img src={profil3} alt="pp1" />
-                  </div>
-                  <div className="flex flex-col items-center space-y-2 w-[206px] p-3 pb-6 bg-white shadow">
-                    <p className=" font-medium text-[#DCA61D] text-center">
-                      Assistante
-                    </p>
-                    <p className="text-lg font-semibold text-[#4e4e4e] text-center">
-                      koudou hermine
-                    </p>
-                    {/* reseaux sociaux */}
-                    <div className="flex flex-row items-center space-x-2 pt-3">
-                      <Link to="">
-                        <GrFacebookOption className="text-xl text-[#4e4e4e] bg-[#d9d9d9] hover:bg-[#066AB2] hover:text-white w-6 h-6 rounded-full p-1" />
-                      </Link>
-                      <Link to="">
-                        <TiSocialLinkedin className="text-xl text-[#4e4e4e] bg-[#d9d9d9] hover:bg-[#066AB2] hover:text-white w-6 h-6 rounded-full p-1" />
-                      </Link>
-                      <Link to="">
-                        <IoIosMail className="text-xl text-[#4e4e4e] bg-[#d9d9d9] hover:bg-[#066AB2] hover:text-white w-6 h-6 rounded-full p-1" />
-                      </Link>
-                      <Link to="">
-                        <FaInstagram className="text-xl text-[#4e4e4e] bg-[#d9d9d9] hover:bg-[#066AB2] hover:text-white w-6 h-6 rounded-full p-1" />
-                      </Link>
-                    </div>
-                  </div>
-                </div>
-                {/* membre4 */}
-                <div>
-                  <div className="photo-membre">
-                    <img src={profil4} alt="pp1" />
-                  </div>
-                  <div className="flex flex-col items-center space-y-2 w-[206px] p-3 pb-6 bg-white shadow">
-                    <p className=" font-medium text-[#DCA61D] text-center">
-                      Interprete
-                    </p>
-                    <p className="text-lg font-semibold text-[#4e4e4e] text-center">
-                      Yao christianah
-                    </p>
-                    {/* reseaux sociaux */}
-                    <div className="flex flex-row items-center space-x-2 pt-3">
-                      <Link to="">
-                        <GrFacebookOption className="text-xl text-[#4e4e4e] bg-[#d9d9d9] hover:bg-[#066AB2] hover:text-white w-6 h-6 rounded-full p-1" />
-                      </Link>
-                      <Link to="">
-                        <TiSocialLinkedin className="text-xl text-[#4e4e4e] bg-[#d9d9d9] hover:bg-[#066AB2] hover:text-white w-6 h-6 rounded-full p-1" />
-                      </Link>
-                      <Link to="">
-                        <IoIosMail className="text-xl text-[#4e4e4e] bg-[#d9d9d9] hover:bg-[#066AB2] hover:text-white w-6 h-6 rounded-full p-1" />
-                      </Link>
-                      <Link to="">
-                        <FaInstagram className="text-xl text-[#4e4e4e] bg-[#d9d9d9] hover:bg-[#066AB2] hover:text-white w-6 h-6 rounded-full p-1" />
-                      </Link>
-                    </div>
-                  </div>
-                </div>
-                {/* membre5 */}
-                <div>
-                  <div className="photo-membre">
-                    <img src={profil5} alt="pp1" />
-                  </div>
-                  <div className="flex flex-col items-center space-y-2 w-[206px] p-3 pb-6 bg-white shadow">
-                    <p className=" font-medium text-[#DCA61D] text-center">
-                      Interprete
-                    </p>
-                    <p className="text-lg font-semibold text-[#4e4e4e] text-center">
-                      Yao christianah
-                    </p>
-                    {/* reseaux sociaux */}
-                    <div className="flex flex-row items-center space-x-2 pt-3">
-                      <Link to="">
-                        <GrFacebookOption className="text-xl text-[#4e4e4e] bg-[#d9d9d9] hover:bg-[#066AB2] hover:text-white w-6 h-6 rounded-full p-1" />
-                      </Link>
-                      <Link to="">
-                        <TiSocialLinkedin className="text-xl text-[#4e4e4e] bg-[#d9d9d9] hover:bg-[#066AB2] hover:text-white w-6 h-6 rounded-full p-1" />
-                      </Link>
-                      <Link to="">
-                        <IoIosMail className="text-xl text-[#4e4e4e] bg-[#d9d9d9] hover:bg-[#066AB2] hover:text-white w-6 h-6 rounded-full p-1" />
-                      </Link>
-                      <Link to="">
-                        <FaInstagram className="text-xl text-[#4e4e4e] bg-[#d9d9d9] hover:bg-[#066AB2] hover:text-white w-6 h-6 rounded-full p-1" />
-                      </Link>
-                    </div>
-                  </div>
-                </div>
-                {/* membre6 */}
-                <div>
-                  <div className="photo-membre">
-                    <img src={profil6} alt="pp1" />
-                  </div>
-                  <div className="flex flex-col items-center space-y-2 w-[206px] p-3 pb-6 bg-white shadow">
-                    <p className=" font-medium text-[#DCA61D] text-center">
-                      Interprete
-                    </p>
-                    <p className="text-lg font-semibold text-[#4e4e4e] text-center">
-                      Yao christianah
-                    </p>
-                    {/* reseaux sociaux */}
-                    <div className="flex flex-row items-center space-x-2 pt-3">
-                      <Link to="">
-                        <GrFacebookOption className="text-xl text-[#4e4e4e] bg-[#d9d9d9] hover:bg-[#066AB2] hover:text-white w-6 h-6 rounded-full p-1" />
-                      </Link>
-                      <Link to="">
-                        <TiSocialLinkedin className="text-xl text-[#4e4e4e] bg-[#d9d9d9] hover:bg-[#066AB2] hover:text-white w-6 h-6 rounded-full p-1" />
-                      </Link>
-                      <Link to="">
-                        <IoIosMail className="text-xl text-[#4e4e4e] bg-[#d9d9d9] hover:bg-[#066AB2] hover:text-white w-6 h-6 rounded-full p-1" />
-                      </Link>
-                      <Link to="">
-                        <FaInstagram className="text-xl text-[#4e4e4e] bg-[#d9d9d9] hover:bg-[#066AB2] hover:text-white w-6 h-6 rounded-full p-1" />
-                      </Link>
-                    </div>
-                  </div>
-                </div>
-                {/* membre7 */}
-                <div>
-                  <div className="photo-membre">
-                    <img src={profil7} alt="pp1" />
-                  </div>
-                  <div className="flex flex-col items-center space-y-2 w-[206px] p-3 pb-6 bg-white shadow">
-                    <p className=" font-medium text-[#DCA61D] text-center">
-                      Interprete
-                    </p>
-                    <p className="text-lg font-semibold text-[#4e4e4e] text-center">
-                      Yao christianah
-                    </p>
-                    {/* reseaux sociaux */}
-                    <div className="flex flex-row items-center space-x-2 pt-3">
-                      <Link to="">
-                        <GrFacebookOption className="text-xl text-[#4e4e4e] bg-[#d9d9d9] hover:bg-[#066AB2] hover:text-white w-6 h-6 rounded-full p-1" />
-                      </Link>
-                      <Link to="">
-                        <TiSocialLinkedin className="text-xl text-[#4e4e4e] bg-[#d9d9d9] hover:bg-[#066AB2] hover:text-white w-6 h-6 rounded-full p-1" />
-                      </Link>
-                      <Link to="">
-                        <IoIosMail className="text-xl text-[#4e4e4e] bg-[#d9d9d9] hover:bg-[#066AB2] hover:text-white w-6 h-6 rounded-full p-1" />
-                      </Link>
-                      <Link to="">
-                        <FaInstagram className="text-xl text-[#4e4e4e] bg-[#d9d9d9] hover:bg-[#066AB2] hover:text-white w-6 h-6 rounded-full p-1" />
-                      </Link>
-                    </div>
-                  </div>
-                </div>
-                {/* membre8 */}
-                <div>
-                  <div className="photo-membre">
-                    <img src={profil8} alt="pp1" />
-                  </div>
-                  <div className="flex flex-col items-center space-y-2 w-[206px] p-3 pb-6 bg-white shadow">
-                    <p className=" font-medium text-[#DCA61D] text-center">
-                      Interprete
-                    </p>
-                    <p className="text-lg font-semibold text-[#4e4e4e] text-center">
-                      Yao christianah
-                    </p>
-                    {/* reseaux sociaux */}
-                    <div className="flex flex-row items-center space-x-2 pt-3">
-                      <Link to="">
-                        <GrFacebookOption className="text-xl text-[#4e4e4e] bg-[#d9d9d9] hover:bg-[#066AB2] hover:text-white w-6 h-6 rounded-full p-1" />
-                      </Link>
-                      <Link to="">
-                        <TiSocialLinkedin className="text-xl text-[#4e4e4e] bg-[#d9d9d9] hover:bg-[#066AB2] hover:text-white w-6 h-6 rounded-full p-1" />
-                      </Link>
-                      <Link to="">
-                        <IoIosMail className="text-xl text-[#4e4e4e] bg-[#d9d9d9] hover:bg-[#066AB2] hover:text-white w-6 h-6 rounded-full p-1" />
-                      </Link>
-                      <Link to="">
-                        <FaInstagram className="text-xl text-[#4e4e4e] bg-[#d9d9d9] hover:bg-[#066AB2] hover:text-white w-6 h-6 rounded-full p-1" />
-                      </Link>
-                    </div>
-                  </div>
-                </div>
+                ))}
               </div>
             </div>
 
             <div className="pt-20">
-              <Footer />
+              <Footer info={info} />
             </div>
           </div>
         </>

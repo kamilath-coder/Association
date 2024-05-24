@@ -10,9 +10,22 @@ import { Donation } from "../Activite/Donation";
 import Footer from "../../COMPONENTS/Footer/Footer";
 import Nouvelle2 from "../../ASSETS/Image/Nouvelle2.png";
 import Nouvelle3 from "../../ASSETS/Image/Nouvelle3.png";
+import { fetchNouvelleInfo } from  '../../API/nouvelle/Nouvelle';
+import { fetchNouvelleBanner } from  '../../API/nouvelle/Nouvelle';
+import { fetchArticle } from  '../../API/nouvelle/Nouvelle';
+import { fetchNouvelleslast } from  '../../API/nouvelle/Nouvelle';
+import { useParams } from 'react-router-dom';
+import { removeTags } from '../../UTILS/Util';
 
 function VoirPlus() {
   const [loading, setLoading] = useState(true);
+  const [Banner, setBanner] = useState('');
+  const [BannerPicture, setBannerPicture] = useState('');
+  const { id } = useParams();
+  const [Article, setArticle] = useState(null);
+  const [ArticleLast, setArticleLast] = useState('');
+  const [info, setInfo] = useState({});
+  let options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -23,6 +36,52 @@ function VoirPlus() {
     // Nettoyer le timer si le composant est démonté avant la fin du délai
     return () => clearTimeout(timer);
   }, []);
+  useEffect(() => {
+    fetchNouvelleInfo()
+      .then(response => {
+        console.log('Réponse du serveur :', response.data);
+        // setNameSite(response.data.info.name);
+        // setPresentation(response.data.info.presentation_text);
+        // setPresentationTitle(response.data.info.fr_presentation_title);
+        // setPresentationPhoto(response.data.info.presentation_photo);
+        setInfo(response.data.info);
+        
+      })
+      .catch(error => {
+        console.error('Il y avait une erreur!', error);
+      });
+    fetchNouvelleBanner()
+      .then(response => {
+        console.log('Réponse du serveur :', response.data.info);
+        setBanner(response.data.info.banner.fr_text1);
+        setBannerPicture(response.data.info.banner.picture);
+      })
+      .catch(error => {
+        console.error('Il y avait une erreur!', error);
+      });
+
+    
+    fetchNouvelleslast()
+      .then(response => {
+        console.log('Réponse du serveur :', response.data.info);
+        setArticleLast(response.data.info);
+      })
+      .catch(error => {
+        console.error('Il y avait une erreur!', error);
+      });
+      const loadArticle = async () => {
+        try {
+          const data = await fetchArticle(id);
+          console.log(data);
+          setArticle(data);
+        } catch (error) {
+          console.error('Erreur lors de la récupération de l\'article:', error);
+        }
+      };
+  
+      loadArticle();
+     
+  }, [id]);
 
   return (
     <>
@@ -32,17 +91,17 @@ function VoirPlus() {
       ) : (
         <>
           <div>
-            <Header />
+            <Header info={info}/>
             <NavbarDefault />
 
             {/* en tete */}
             <div
               className="bg-cover bg-center bg-no-repeat h-[400px] animate-fade animate-once animate-duration-[1000ms] animate-delay-[1ms] animate-ease-linear animate-normal"
-              style={{ backgroundImage: `url(${backActivite})` }}
+              style={{ backgroundImage: `url(data:image/png;base64,${BannerPicture ? BannerPicture : backActivite})` }}
             >
               <div className="bg-[#066AB225] flex justify-center items-center h-[400px]  ">
                 <div className="sm:text-4xl md:px-10 px-4  text-2xl font-bold text-white uppercase leading-relaxed animate-fade-up animate-once animate-duration-1000 animate-delay-[1ms] animate-normal">
-                  Les nouvelles
+                {Banner ? Banner :'Nouvelle'}
                 </div>
               </div>
             </div>
@@ -52,14 +111,15 @@ function VoirPlus() {
                 {/* premiere image de l'activite */}
                 <div className=" relative overflow-hidden sm:w-[731px] sm:h-[465px] ">
                   <img
-                    src={Nouvelle1}
+                    src={Article.picture ? `data:image/png;base64,${Article.picture}` :Nouvelle1}
                     alt="photoactivite "
                     className="w-full h-full object-cover"
                   />
                 </div>
                 <div className="sm:w-[731px]">
                   <p className="text-2xl font-semibold pt-4 text-[#066AB2]">
-                    Duis aute irure dolor in reprehenderit
+                    
+                    {Article.article_tittle? Article.article_tittle : 'Duis aute irure dolor in reprehenderit'} 
                   </p>
                   {/* date et lieu */}
                   <div className="flex flex-col sm:flex-row sm:items-center sm:space-x-3 pt-4">
@@ -88,7 +148,13 @@ function VoirPlus() {
                           </clipPath>
                         </defs>
                       </svg>
-                      <p className=" font-thin italic">Jeudi 23 Mars 2024</p>
+                      <p className=" font-thin italic">
+                        {/* {Article.creation_date? Article.article_tittle : 'Jeudi 23 Mars 2024'}  */}
+                        {Article.creation_date 
+                          ? new Date(Article.creation_date).toLocaleDateString('fr-FR', options)
+                          : 'Jeudi 23 Mars 2024'
+                        }
+                      </p>
                     </div>
                     {/* heure de l'activite */}
                     <div className="flex items-center space-x-2">
@@ -109,7 +175,14 @@ function VoirPlus() {
                           stroke-linecap="round"
                         />
                       </svg>
-                      <p className=" font-thin italic">09h30</p>
+                      <p className=" font-thin italic">
+                        {
+                          Article.creation_date 
+                          ? `${new Date(Article.creation_date).getHours().toString().padStart(2, '0')}h ${new Date(Article.creation_date).getMinutes().toString().padStart(2, '0')}`
+                          : '09h30'
+                        }
+                       
+                      </p>
                     </div>
                     {/* Lieu */}
                     <div className="flex items-center space-x-2">
@@ -132,14 +205,19 @@ function VoirPlus() {
                   </div>
                   {/* description */}
                   <div className=" pt-4 leading-loose">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
+                    {/* Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
                     do eiusmod tempor incididunt ut labore et dolore magna
                     aliqua. Ut enim ad minim veniam, quis nostrud exercitation
                     ullamco laboris nisi ut aliquip ex ea commodo consequat.
                     Duis aute irure dolor in reprehenderit in voluptate velit
                     esse cillum dolore eu fugiat nulla pariatur. Excepteur sint
                     occaecat cupidatat non proident, sunt in culpa qui officia
-                    deserunt mollit anim id est laborum.
+                    deserunt mollit anim id est laborum. */}
+                    {
+                      Article.article 
+                      ? removeTags(Article.article) 
+                      : 'Aliquam erat volutpat. Etiam ut nisi tempus, sagittis leo ut, placerat metus. Cras non convallis tellus....'
+                    }
                   </div>
                   <p className="text-lg font-semibold pt-10 text-[#4E4E4E]">
                     Les photos de l'activité
@@ -199,17 +277,23 @@ function VoirPlus() {
                       {/* image */}
                       <div className=" relative overflow-hidden w-[214px] h-[125px]">
                         <img
-                          src={Nouvelle1}
+                          src={ArticleLast.picture ? `data:image/png;base64,${Article.picture}` :Nouvelle1}
                           className="w-full h-full object-cover"
                           alt="Nouvelle1"
                         />
                       </div>
                       <p className="  font-semibold text-[#4e4e4e]">
-                        Consulting project
+                       {ArticleLast.article_tittle? ArticleLast.article_tittle : 'Consulting project'}
+                        
                       </p>
                       <div className="text-sm">
-                        Aliquam erat volutpat. Etiam ut nisi tempus, sagittis
-                        leo ut, placerat metus. Cras non convallis tellus....
+                        {/* Aliquam erat volutpat. Etiam ut nisi tempus, sagittis
+                        leo ut, placerat metus. Cras non convallis tellus.... */}
+                        {
+                          ArticleLast.article 
+                          ? removeTags(ArticleLast.article) 
+                          : 'Aliquam erat volutpat. Etiam ut nisi tempus, sagittis leo ut, placerat metus. Cras non convallis tellus....'
+                        }
                       </div>
                       {/* date */}
                       <div className="flex items-center space-x-2">
@@ -236,12 +320,15 @@ function VoirPlus() {
                             </clipPath>
                           </defs>
                         </svg>
-                        <p className=" font-thin italic">Jeudi 23 Mars 2024</p>
+                        <p className=" font-thin italic">{ArticleLast.creation_date 
+                          ? new Date(ArticleLast.creation_date).toLocaleDateString('fr-FR', options)
+                          : 'Jeudi 23 Mars 2024'
+                        }</p>
                       </div>
                       {/* button lire plus */}
                       <div className=" text-white">
                         <Link
-                          to="/Les-nouvelles/voir-plus"
+                          to={`/Les-nouvelles/voir-plus/${ArticleLast.id_article}`}
                           className="flex flex-row items-center justify-center space-x-3 bg-[#DCA61D]  py-2  "
                         >
                           <svg
@@ -279,7 +366,7 @@ function VoirPlus() {
             </div>
 
             <div className="pt-20">
-              <Footer />
+              <Footer info={info}/>
             </div>
           </div>
         </>

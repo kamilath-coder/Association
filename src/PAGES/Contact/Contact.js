@@ -4,17 +4,38 @@ import { NavbarDefault } from "../../COMPONENTS/Navbar/Navbar";
 import backcontact from "../../ASSETS/Image/Backcontact.png";
 import { useState, useEffect } from "react";
 import Loader from "../../COMPONENTS/Loader/Loading";
-import { Link } from "react-router-dom";
+//import { Link } from "react-router-dom";
 import { GrFacebookOption } from "react-icons/gr";
 import { IoIosMail } from "react-icons/io";
 import { FaInstagram } from "react-icons/fa";
 import { TiSocialLinkedin } from "react-icons/ti";
 import Footer from "../../COMPONENTS/Footer/Footer";
 import { RiTwitterXLine } from "react-icons/ri";
+import { sendFormData } from '../../API/contact/Contact';
+import { fetchContactInfo } from  '../../API/contact/Contact';
+import { fetchContactBanner } from  '../../API/contact/Contact';
+
 
 function Contact() {
   const [loading, setLoading] = useState(true);
-
+  const [addressInfo, setAddress] = useState('');
+  const [phoneInfo, setPhone] = useState('');
+  const [emailInfo, setEmail] = useState('');
+  const [FaceInfo, setFace] = useState('');
+  const [LinkInfo, setLink] = useState('');
+  const [GmailInfo, setGmail] = useState('');
+  const [TweetInfo, setTweet] = useState('');
+  const [InstaInfo, setInsta] = useState('');
+  const [Banner, setBanner] = useState('');
+  const [BannerPicture, setBannerPicture] = useState('');
+  // const [InstaInfo, setInsta] = useState('');
+  const [formState, setFormState] = useState({
+    nom: '',
+    email: '',
+    sujet: '',
+    message: '',
+  });
+  const [info, setInfo] = useState({});
   useEffect(() => {
     const timer = setTimeout(() => {
       // Après 5 secondes, masquer le spinner et rediriger l'utilisateur
@@ -24,6 +45,55 @@ function Contact() {
     // Nettoyer le timer si le composant est démonté avant la fin du délai
     return () => clearTimeout(timer);
   }, []);
+  useEffect(() => {
+    fetchContactInfo()
+      .then(response => {
+        console.log('Réponse du serveur :', response.data);
+        setAddress(response.data.info.address);
+        setPhone(response.data.info.phone);
+        setEmail(response.data.info.email);
+        setFace(response.data.info.facebook_link);
+        setLink(response.data.info.linkedin_link);
+        setGmail(response.data.info.google_link);
+        setTweet(response.data.info.twitter_link);
+        setInsta(response.data.info.instagram_link);
+        setInfo(response.data.info);
+      })
+      .catch(error => {
+        console.error('Il y avait une erreur!', error);
+      });
+      fetchContactBanner()
+      .then(response => {
+        console.log('Réponse du serveur :', response.data.info.banner);
+        setBanner(response.data.info.banner.fr_text1);
+        setBannerPicture(response.data.info.banner.picture);
+      })
+      .catch(error => {
+        console.error('Il y avait une erreur!', error);
+      });
+  }, []);
+
+  // useEffect(() => {
+    
+  // }, []);
+  
+  const handleInputChange = (event) => {
+    setFormState({
+      ...formState,
+      [event.target.name]: event.target.value,
+    });
+  };
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    console.log('Formulaire soumis :', formState);
+    try {
+      const response = await sendFormData(formState);
+      console.log('Réponse du serveur :', response);
+    } catch (error) {
+      console.error('Erreur lors de l\'envoi du formulaire :', error);
+    }
+  };
+
 
   return (
     <>
@@ -33,17 +103,18 @@ function Contact() {
       ) : (
         <>
           <div>
-            <Header />
+            <Header info={info} />
             <NavbarDefault />
 
             {/* en tete */}
             <div
               className="bg-cover bg-center bg-no-repeat h-[400px] animate-fade animate-once animate-duration-[1000ms] animate-delay-[1ms] animate-ease-linear animate-normal"
-              style={{ backgroundImage: `url(${backcontact})` }}
+
+              style={{ backgroundImage: `url(data:image/png;base64,${BannerPicture ? BannerPicture :  backcontact})` }}
             >
               <div className="bg-[#066AB225] flex justify-center items-center h-[400px]  ">
                 <div className="sm:text-4xl md:px-10 px-4  text-2xl font-bold text-white uppercase leading-relaxed animate-fade-up animate-once animate-duration-1000 animate-delay-[1ms] animate-normal">
-                  contactez-nous
+                 {Banner ? Banner :'contactez-nous'}
                 </div>
               </div>
             </div>
@@ -54,7 +125,7 @@ function Contact() {
                   Formulaire de contact
                 </p>
                 <div className="h-1 w-20 bg-[#DCA61D] mt-3"></div>
-                <form className="mt-10 flex flex-col space-y-5">
+                {/* <form className="mt-10 flex flex-col space-y-5">
                   <input
                     type="text"
                     className="sm:w-[550px] border-[#B7B6B6] border outline-none px-2 h-12"
@@ -75,6 +146,38 @@ function Contact() {
                     placeholder="Message* "
                   ></textarea>
                   <button className=" bg-[#DCA61D] text-white w-40 h-10 rounded-full ">
+                    Envoyer
+                  </button>
+                </form> */}
+                <form className="mt-10 flex flex-col space-y-5" onSubmit={handleSubmit}>
+                  <input
+                    type="text"
+                    name="nom"
+                    className="sm:w-[550px] border-[#B7B6B6] border outline-none px-2 h-12"
+                    placeholder="Nom & Prenom* "
+                    onChange={handleInputChange}
+                  />
+                  <input
+                    type="text"
+                    name="email"
+                    className="sm:w-[550px] border-[#B7B6B6] border outline-none px-2 h-12"
+                    placeholder="Adresse mail* "
+                    onChange={handleInputChange}
+                  />
+                  <input
+                    type="text"
+                    name="sujet"
+                    className="sm:w-[550px] border-[#B7B6B6] border outline-none px-2 h-12"
+                    placeholder="Sujet* "
+                    onChange={handleInputChange}
+                  />
+                  <textarea
+                    name="message"
+                    className="sm:w-[550px] border-[#B7B6B6] border outline-none p-2 h-40"
+                    placeholder="Message* "
+                    onChange={handleInputChange}
+                  ></textarea>
+                  <button type="submit" className=" bg-[#DCA61D] text-white w-40 h-10 rounded-full ">
                     Envoyer
                   </button>
                 </form>
@@ -107,7 +210,7 @@ function Contact() {
                     </div>
                     <div>
                       <p className=" font-semibold pb-1">Localisation</p>
-                      <p>456, Lorem Street, Los Angeles, US 33454.</p>
+                      <p>{addressInfo ? addressInfo : '456, Lorem Street, Los Angeles, US 33454.'}</p>
                     </div>
                   </div>
                   {/* Phone */}
@@ -128,7 +231,7 @@ function Contact() {
                     </div>
                     <div>
                       <p className=" font-semibold pb-1">Télephone</p>
-                      <p>+1 (123) / 123 – 12331</p>
+                      <p>{phoneInfo? phoneInfo :'+1 (123) / 123 – 12331'}</p>
                     </div>
                   </div>
                   {/* Email */}
@@ -149,7 +252,7 @@ function Contact() {
                     </div>
                     <div>
                       <p className=" font-semibold pb-1">Email</p>
-                      <p>info@loremips.com /admin@loremps.com</p>
+                      <p>{emailInfo ? emailInfo:'info@loremips.com /admin@loremps.com'}</p>
                     </div>
                   </div>
                   {/* Email */}
@@ -175,21 +278,22 @@ function Contact() {
                       <p className=" font-semibold pb-1">Nous suivre</p>
                       {/* reseaux sociaux */}
                       <div className="flex flex-row items-center space-x-3">
-                        <Link to="">
+
+                        {FaceInfo?<a href={FaceInfo} target="_blank" rel="noreferrer noopener">
                           <GrFacebookOption className="text-xl text-[#4e4e4e] " />
-                        </Link>
-                        <Link to="">
+                        </a>:''}
+                        {LinkInfo? <a href={LinkInfo} target="_blank" rel="noreferrer noopener">
                           <TiSocialLinkedin className="text-2xl text-[#4e4e4e]  " />
-                        </Link>
-                        <Link to="">
+                        </a>:''}
+                        {GmailInfo?<a href={GmailInfo} target="_blank" rel="noreferrer noopener">
                           <IoIosMail className="text-xl text-[#4e4e4e] " />
-                        </Link>
-                        <Link to="">
+                        </a>:''}
+                        {InstaInfo?<a href={InstaInfo} target="_blank" rel="noreferrer noopener">
                           <FaInstagram className="text-xl text-[#4e4e4e] " />
-                        </Link>
-                        <Link to="">
+                        </a>:''}
+                        {TweetInfo?<a href={TweetInfo} target="_blank" rel="noreferrer noopener">
                           <RiTwitterXLine className="text-lg text-[#4e4e4e] " />
-                        </Link>
+                        </a>:''}
                       </div>
                     </div>
                   </div>
@@ -198,7 +302,7 @@ function Contact() {
             </div>
 
             <div className="pt-20">
-              <Footer />
+              <Footer  info={info}/>
             </div>
           </div>
         </>
