@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\Contact;
 use App\Models\WebPage;
 use App\Models\WebSiteInfo;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class ContactController extends Controller
 {
@@ -50,6 +52,8 @@ class ContactController extends Controller
 
     public function store(Request $request)
     {
+        $datas = WebSiteInfo::first();
+        //dd($email->email);
         $data = $request->validate([
             'nom' => 'required|max:255',
             'email' => 'required|email|max:255',
@@ -57,9 +61,20 @@ class ContactController extends Controller
             'message' => 'required',
         ]);
 
+        $details = [
+            'nom' => $data['nom'],
+            'email' => $data['email'],
+            'sujet' => $data['sujet'],
+            'message' => $data['message'],
+        ];
 
 
-        return response()->json(['message' => 'Formulaire envoyé avec succès',
+        //ENVOYER LE MAIL A L'ADMIN DU SITE
+        $mail=new Contact($details,$datas);
+
+        Mail::to($datas->email)->send($mail);
+        return response()->json([
+        'message' => 'Formulaire envoyé avec succès',
         'data' => $data
 
         ], 200);

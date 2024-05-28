@@ -1,5 +1,6 @@
 import React from "react";
 import Header from "../../COMPONENTS/Header/Header";
+import { useParams } from 'react-router-dom';
 import { NavbarDefault } from "../../COMPONENTS/Navbar/Navbar";
 import backActivite from "../../ASSETS/Image/backActivity.png";
 import activite3 from "../../ASSETS/Image/Activity3.png";
@@ -13,11 +14,21 @@ import { Link } from "react-router-dom";
 import activite1 from "../../ASSETS/Image/Activity1.png";
 import { useState, useEffect } from "react";
 import Loader from "../../COMPONENTS/Loader/Loading";
-import { fetchContactInfo } from  '../../API/contact/Contact';
+import {fetchActivityInfo } from  '../../API/activity/Activity';
+import {fetchActivityBanner } from  '../../API/activity/Activity';
+import {fetchNouvelleslast} from  '../../API/activity/Activity';
+import {fetchArticle } from  '../../API/activity/Activity';
+import { removeTags } from '../../UTILS/Util';
+
 
 function VoirPlus() {
   const [loading, setLoading] = useState(true);
   const [info, setInfo] = useState({});
+  const [Banner, setBanner] = useState('');
+  const [BannerPicture, setBannerPicture] = useState('');
+  const { id } = useParams();
+  const [Article, setArticle] = useState(null);
+  const [ArticleLast, setArticleLast] = useState('');
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -29,7 +40,7 @@ function VoirPlus() {
     return () => clearTimeout(timer);
   }, []);
   useEffect(() => {
-    fetchContactInfo()
+    fetchActivityInfo()
       .then(response => {
         console.log('Réponse du serveur :', response.data);
         // setAddress(response.data.info.address);
@@ -45,16 +56,36 @@ function VoirPlus() {
       .catch(error => {
         console.error('Il y avait une erreur!', error);
       });
-      // fetchContactBanner()
-      // .then(response => {
-      //   console.log('Réponse du serveur :', response.data.info.banner);
-      //   setBanner(response.data.info.banner.fr_text1);
-      //   setBannerPicture(response.data.info.banner.picture);
-      // })
-      // .catch(error => {
-      //   console.error('Il y avait une erreur!', error);
-      // });
-  }, []);
+      fetchActivityBanner()
+      .then(response => {
+        console.log('Réponse du serveur :', response.data.info.banner);
+        setBanner(response.data.info.banner.fr_text1);
+        setBannerPicture(response.data.info.banner.picture);
+      })
+      .catch(error => {
+        console.error('Il y avait une erreur!', error);
+      });
+      fetchNouvelleslast()
+      .then(response => {
+        console.log('Réponse du serveur :', response.data.info);
+        setArticleLast(response.data.info);
+      })
+      .catch(error => {
+        console.error('Il y avait une erreur!', error);
+      });
+     
+    const loadArticle = async () => {
+        try {
+            const data = await fetchArticle(id);
+            console.log(data);
+            setArticle(data);
+        } catch (error) {
+            console.error('Erreur lors de la récupération de l\'article:', error);
+        }
+    };
+    loadArticle();
+
+  }, [id]);
   return (
     <>
       {loading ? (
@@ -69,11 +100,11 @@ function VoirPlus() {
             {/* en tete */}
             <div
               className="bg-cover bg-center bg-no-repeat h-[400px] animate-fade animate-once animate-duration-[1000ms] animate-delay-[1ms] animate-ease-linear animate-normal"
-              style={{ backgroundImage: `url(${backActivite})` }}
+              style={{ backgroundImage: BannerPicture ?  `url(data:image/png;base64,${BannerPicture })`: `url(${backActivite})` }}
             >
               <div className="bg-[#066AB225] flex justify-center items-center h-[400px]  ">
                 <div className="sm:text-4xl md:px-10 px-4  text-2xl font-bold text-white uppercase leading-relaxed animate-fade-up animate-once animate-duration-1000 animate-delay-[1ms] animate-normal">
-                  Nos activités
+                  {Banner ? Banner :'Nos activités'}
                 </div>
               </div>
             </div>
@@ -83,14 +114,14 @@ function VoirPlus() {
                 {/* premiere image de l'activite */}
                 <div className=" relative overflow-hidden sm:w-[731px] sm:h-[465px] ">
                   <img
-                    src={activite3}
+                    src={Article.Pictures ? `data:image/png;base64,${Article.Pictures}` :activite3}
                     alt="photoactivite "
                     className="w-full h-full object-cover"
                   />
                 </div>
                 <div className="sm:w-[731px]">
                   <p className="text-2xl font-semibold pt-4 text-[#066AB2]">
-                    Duis aute irure dolor in reprehenderit
+                    {Article.Descriptions?Article.Descriptions:'Duis aute irure dolor in reprehenderit'}
                   </p>
                   {/* date et lieu */}
                   <div className="flex flex-col sm:flex-row sm:items-center sm:space-x-3 pt-4">
@@ -163,14 +194,19 @@ function VoirPlus() {
                   </div>
                   {/* description */}
                   <div className=" pt-4 leading-loose">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
+                    {/* Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
                     do eiusmod tempor incididunt ut labore et dolore magna
                     aliqua. Ut enim ad minim veniam, quis nostrud exercitation
                     ullamco laboris nisi ut aliquip ex ea commodo consequat.
                     Duis aute irure dolor in reprehenderit in voluptate velit
                     esse cillum dolore eu fugiat nulla pariatur. Excepteur sint
                     occaecat cupidatat non proident, sunt in culpa qui officia
-                    deserunt mollit anim id est laborum.
+                    deserunt mollit anim id est laborum. */}
+                    {
+                      Article.Descriptions 
+                      ? removeTags(Article.Descriptions) 
+                      : 'Aliquam erat volutpat. Etiam ut nisi tempus, sagittis leo ut, placerat metus. Cras non convallis tellus....'
+                    }
                   </div>
                   <p className="text-lg font-semibold pt-10 text-[#4E4E4E]">
                     Les photos de l'activité
@@ -229,11 +265,16 @@ function VoirPlus() {
                     <div className="activite-img-taille">
                       <div
                         className="bg-cover bg-center bg-no-repeat h-[200px] w-[250px]"
-                        style={{ backgroundImage: `url(${activite1})` }}
+                        style={{ backgroundImage: ArticleLast.Pictures ?  `url(data:image/png;base64,${ArticleLast.Pictures })`: `url(${activite1})` }}
                       >
                         <div className=" bg-[#066AB225] h-[200px] w-[250px] text-white pl-4 flex flex-col justify-end">
                           <div className="text-lg font-semibold w-72">
-                            Duis aute irure dolor in reprehenderit
+                            
+                            {
+                              ArticleLast.Names
+                              ? removeTags(ArticleLast.Names) 
+                              : 'Duis aute irure dolor in reprehenderit'
+                            }
                           </div>
                           <div className=" italic font-light text-sm">
                             Jeudi 23 mars 2024
@@ -242,7 +283,7 @@ function VoirPlus() {
                           {/* button lire plus */}
                           <div className=" grid place-items-end">
                             <Link
-                              to="/Nos-activites/Voir-plus"
+                              to={`/Nos-activites/Voir-plus/${ArticleLast.Items_Numbers}`}
                               className="flex flex-row items-center justify-center space-x-2 bg-[#DCA61D] rounded-s-full  py-1 w-[100px] "
                             >
                               <svg

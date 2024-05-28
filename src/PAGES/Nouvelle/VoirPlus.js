@@ -69,17 +69,17 @@ function VoirPlus() {
       .catch(error => {
         console.error('Il y avait une erreur!', error);
       });
-      const loadArticle = async () => {
-        try {
-          const data = await fetchArticle(id);
-          console.log(data);
-          setArticle(data);
-        } catch (error) {
-          console.error('Erreur lors de la récupération de l\'article:', error);
-        }
-      };
+    const loadArticle = async () => {
+      try {
+        const data = await fetchArticle(id);
+        console.log(data);
+        setArticle(data);
+      } catch (error) {
+        console.error('Erreur lors de la récupération de l\'article:', error);
+      }
+    };
   
-      loadArticle();
+    loadArticle();
      
   }, [id]);
 

@@ -1,5 +1,7 @@
 import React from "react";
 import Header from "../../COMPONENTS/Header/Header";
+import {ToastContainer,toast} from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { NavbarDefault } from "../../COMPONENTS/Navbar/Navbar";
 import { Link } from "react-router-dom";
 import img_description from "../../ASSETS/Image/description_association.png";
@@ -15,6 +17,7 @@ import { GrFacebookOption } from "react-icons/gr";
 import { IoIosMail } from "react-icons/io";
 import { FaInstagram } from "react-icons/fa";
 import { TiSocialLinkedin } from "react-icons/ti";
+import { RiTwitterXLine } from "react-icons/ri";
 import back_newletter from "../../ASSETS/Image/back_img_newletter.png";
 import Footer from "../../COMPONENTS/Footer/Footer";
 import { useState, useEffect } from "react";
@@ -25,12 +28,23 @@ import { fetchNouvelleBanner } from  '../../API/nouvelle/Nouvelle';
 import { fetchNouvelles } from  '../../API/nouvelle/Nouvelle';
 //import { fetchMembers } from  '../../API/about/About';
 import { removeTags } from '../../UTILS/Util';
+import { fetchMembers } from  '../../API/home/Home';
+import { fetchPartenaire } from  '../../API/home/Home';
+import { subscribe } from  '../../API/home/Home';
 
 function Home() {
   const [loading, setLoading] = useState(true);
   const [info, setInfo] = useState({});
   const [Banner, setBanner] = useState('');
   const [BannerPicture, setBannerPicture] = useState('');
+  const [Members, setMembers] = useState([]);
+  const [Partenaires, setPartenaire] = useState([]);
+  const [NameSite, setNameSite] = useState('');
+  const [PresentationTitle, setPresentationTitle] = useState('');
+  const [PresentationPhoto, setPresentationPhoto] = useState('');
+  const [Presentation, setPresentation] = useState('');
+  const [email, setEmail] = useState('');
+  
   useEffect(() => {
     const timer = setTimeout(() => {
       // Après 5 secondes, masquer le spinner et rediriger l'utilisateur
@@ -45,10 +59,10 @@ function Home() {
     fetchNouvelleInfo()
       .then(response => {
         console.log('Réponse du serveur :', response.data);
-        // setNameSite(response.data.info.name);
-        // setPresentation(response.data.info.presentation_text);
-        // setPresentationTitle(response.data.info.fr_presentation_title);
-        // setPresentationPhoto(response.data.info.presentation_photo);
+        setNameSite(response.data.info.name);
+        setPresentation(response.data.info.presentation_text);
+        setPresentationTitle(response.data.info.fr_presentation_title);
+        setPresentationPhoto(response.data.info.presentation_photo);
         setInfo(response.data.info);
         
       })
@@ -65,8 +79,48 @@ function Home() {
         console.error('Il y avait une erreur!', error);
       });
 
+      fetchMembers()
+      .then(response => {
+        console.log('Réponse du serveur :', response.data.info);
+        setMembers(response.data.info);
+      })
+      .catch(error => {
+        console.error('Il y avait une erreur!', error);
+      });
+
+      fetchPartenaire()
+      .then(response => {
+        console.log('Réponse du serveur :', response.data.info);
+        setPartenaire(response.data.info);
+      })
+      .catch(error => {
+        console.error('Il y avait une erreur!', error);
+      });
      
   }, []);
+  const handleInputChange = (event) => {
+    setEmail(event.target.value);
+  };
+  const handleSubmit = async (event) => {
+   
+    event.preventDefault();
+    console.log('Formulaire soumis :', email);
+
+    try {
+      const response = await subscribe(email);
+      console.log(response.message);
+      toast.success(response.message);
+    } catch (error) {
+      console.error(error);
+      if (error.response && error.response.status === 422) {
+          const errors = error.response.data.errors;
+          if (errors.email) {
+              toast.error(errors.email[0]);
+          }
+      }
+    }
+  };
+
 
   return (
     <>
@@ -81,7 +135,7 @@ function Home() {
 
             {/* en tete */}
            <SlideHome/>
-
+          <ToastContainer />
             {/* Card option */}
             <div className="animation-card grid sm:grid-cols-2 md:grid-cols-3 place-content-center place-items-center s:gap-10 md:gap-0 relative bottom-12 ">
               {/* card1 */}
@@ -193,11 +247,12 @@ function Home() {
             <div className=" Animation-option flex md:flex-row md:space-x-28 flex-col space-y-20 md:space-y-0 pt-20 justify-center items-center md:items-start animate-fade-up animate-once animate-duration-1000 animate-delay-[1ms] animate-ease-linear animate-normal animate-fill-both">
               <div className="flex flex-col space-y-5 pl-4 sm:pl-0">
                 <div className="uppercase text-lg sm:text-2xl md:w-[400px] font-semibold text-[#4E4E4E]">
-                  Welcome to Egovenz City Municipal
+                  {/* Welcome to Egovenz City Municipal */}
+                  {PresentationTitle ? PresentationTitle :'Pourquoi nous rejoindre'} ?
                 </div>
                 <div className="h-1 w-20 bg-[#DCA61D]"></div>
                 <div className="sm:w-[500px] w-[320px] leading-loose">
-                  Integer vitae justo eget magna fermentum iaculis. Mattis
+                  {/* Integer vitae justo eget magna fermentum iaculis. Mattis
                   rhoncus urna neque viverra. Nisi porta lorem mollis aliquam ut
                   porttitor leo a diam. Dictum fusce ut placerat orci nulla
                   pellentesque.
@@ -209,7 +264,8 @@ function Home() {
                   turpis. <br />
                   <br />
                   Sed blandit libero volutpat sed cras ornare. Cras adipiscing
-                  enim eu turpis egestas pretium aenean pharetra magna ....
+                  enim eu turpis egestas pretium aenean pharetra magna .... */}
+                  {Presentation? removeTags(Presentation) :''}
                 </div>
                 <Link
                   to="/A-propos"
@@ -221,12 +277,13 @@ function Home() {
               <div className=" flex flex-col ">
                 <div className="img_taille">
                   <img
-                    src={img_description}
+                    src={PresentationPhoto ? `data:image/png;base64,${PresentationPhoto}` : img_description}
                     alt="imagede description de l'association"
                   />
                 </div>
                 <div className=" bg-white rounded-md relative bottom-20 md:left-44 border-b-4 border-[#066AB2] text-xl  flex items-center justify-center h-10 w-80 ">
-                  Nom de l'association
+                  {/* Nom de l'association */}
+                  {NameSite? NameSite :'Nom de l’association'}
                 </div>
               </div>
             </div>
@@ -431,18 +488,18 @@ function Home() {
                   {/* quelques membres */}
                   <div className="grid sm:grid-cols-4 sm:gap-y-0 gap-y-8  mt-12 place-content-center place-items-center">
                     {/* membre1 */}
-                    <div>
+                    {Members.map((member, index) => ( <div>
                       <Link to="/A-propos/membre">
                         <div className="photo-membre">
-                          <img src={profil1} alt="pp1" />
+                          <img src={member.picture ? `data:image/png;base64,${member.picture}` : profil1} alt="pp1" />
                         </div>
                       </Link>
                       <div className="flex flex-col items-center space-y-2 w-[206px] p-3 pb-6 bg-white shadow">
                         <p className=" font-medium text-[#DCA61D] text-center">
-                          Presidente
+                        {member.role ? member.role : 'Presidente'}
                         </p>
                         <p className="text-lg font-semibold text-[#4e4e4e] text-center">
-                          Touré Victoria
+                          {member.name? member.name : 'Kouakou ange christ'}
                         </p>
                         {/* reseaux sociaux */}
                         <div className="flex flex-row items-center space-x-2 pt-3">
@@ -459,95 +516,22 @@ function Home() {
                             <FaInstagram className="text-xl text-[#4e4e4e] bg-[#d9d9d9] hover:bg-[#066AB2] hover:text-white w-6 h-6 rounded-full p-1" />
                           </Link>
                         </div>
-                      </div>
-                    </div>
-                    {/* membre2 */}
-                    <div>
-                      <div className="photo-membre">
-                        <img src={profil2} alt="pp1" />
-                      </div>
-                      <div className="flex flex-col items-center space-y-2 w-[206px] p-3 pb-6 bg-white shadow">
-                        <p className=" font-medium text-[#DCA61D] text-center">
-                          Directeur
-                        </p>
-                        <p className="text-lg font-semibold text-[#4e4e4e] text-center">
-                          Kouakou ange christ
-                        </p>
-                        {/* reseaux sociaux */}
                         <div className="flex flex-row items-center space-x-2 pt-3">
-                          <Link to="">
+                        {member.facebook_link? <a href={member.facebook_link} target="_blank" rel="noreferrer noopener">
                             <GrFacebookOption className="text-xl text-[#4e4e4e] bg-[#d9d9d9] hover:bg-[#066AB2] hover:text-white w-6 h-6 rounded-full p-1" />
-                          </Link>
-                          <Link to="">
-                            <TiSocialLinkedin className="text-xl text-[#4e4e4e] bg-[#d9d9d9] hover:bg-[#066AB2] hover:text-white w-6 h-6 rounded-full p-1" />
-                          </Link>
-                          <Link to="">
-                            <IoIosMail className="text-xl text-[#4e4e4e] bg-[#d9d9d9] hover:bg-[#066AB2] hover:text-white w-6 h-6 rounded-full p-1" />
-                          </Link>
-                          <Link to="">
-                            <FaInstagram className="text-xl text-[#4e4e4e] bg-[#d9d9d9] hover:bg-[#066AB2] hover:text-white w-6 h-6 rounded-full p-1" />
-                          </Link>
+                          </a>:''}
+                        {member.linkedin_link ? <a href={member.linkedin_link} target="_blank" rel="noreferrer noopener">
+                          <TiSocialLinkedin className="text-xl text-[#4e4e4e] bg-[#d9d9d9] hover:bg-[#066AB2] hover:text-white w-6 h-6 rounded-full p-1" />
+                        </a> :''}
+                        {member.google_link ?<a href={member.google_link} target="_blank" rel="noreferrer noopener">
+                          <IoIosMail className="text-xl text-[#4e4e4e] bg-[#d9d9d9] hover:bg-[#066AB2] hover:text-white w-6 h-6 rounded-full p-1" />
+                        </a>:''}
+                       {member.twitter_link ? <a href={member.twitter_link} target="_blank" rel="noreferrer noopener">
+                          <RiTwitterXLine className="text-xl text-[#4e4e4e] bg-[#d9d9d9] hover:bg-[#066AB2] hover:text-white w-6 h-6 rounded-full p-1" />
+                        </a>: '' }
                         </div>
                       </div>
-                    </div>
-                    {/* membre3 */}
-                    <div>
-                      <div className="photo-membre">
-                        <img src={profil3} alt="pp1" />
-                      </div>
-                      <div className="flex flex-col items-center space-y-2 w-[206px] p-3 pb-6 bg-white shadow">
-                        <p className=" font-medium text-[#DCA61D] text-center">
-                          Assistante
-                        </p>
-                        <p className="text-lg font-semibold text-[#4e4e4e] text-center">
-                          koudou hermine
-                        </p>
-                        {/* reseaux sociaux */}
-                        <div className="flex flex-row items-center space-x-2 pt-3">
-                          <Link to="">
-                            <GrFacebookOption className="text-xl text-[#4e4e4e] bg-[#d9d9d9] hover:bg-[#066AB2] hover:text-white w-6 h-6 rounded-full p-1" />
-                          </Link>
-                          <Link to="">
-                            <TiSocialLinkedin className="text-xl text-[#4e4e4e] bg-[#d9d9d9] hover:bg-[#066AB2] hover:text-white w-6 h-6 rounded-full p-1" />
-                          </Link>
-                          <Link to="">
-                            <IoIosMail className="text-xl text-[#4e4e4e] bg-[#d9d9d9] hover:bg-[#066AB2] hover:text-white w-6 h-6 rounded-full p-1" />
-                          </Link>
-                          <Link to="">
-                            <FaInstagram className="text-xl text-[#4e4e4e] bg-[#d9d9d9] hover:bg-[#066AB2] hover:text-white w-6 h-6 rounded-full p-1" />
-                          </Link>
-                        </div>
-                      </div>
-                    </div>
-                    {/* membre4 */}
-                    <div>
-                      <div className="photo-membre">
-                        <img src={profil4} alt="pp1" />
-                      </div>
-                      <div className="flex flex-col items-center space-y-2 w-[206px] p-3 pb-6 bg-white shadow">
-                        <p className=" font-medium text-[#DCA61D] text-center">
-                          Interprete
-                        </p>
-                        <p className="text-lg font-semibold text-[#4e4e4e] text-center">
-                          Yao christianah
-                        </p>
-                        {/* reseaux sociaux */}
-                        <div className="flex flex-row items-center space-x-2 pt-3">
-                          <Link to="">
-                            <GrFacebookOption className="text-xl text-[#4e4e4e] bg-[#d9d9d9] hover:bg-[#066AB2] hover:text-white w-6 h-6 rounded-full p-1" />
-                          </Link>
-                          <Link to="">
-                            <TiSocialLinkedin className="text-xl text-[#4e4e4e] bg-[#d9d9d9] hover:bg-[#066AB2] hover:text-white w-6 h-6 rounded-full p-1" />
-                          </Link>
-                          <Link to="">
-                            <IoIosMail className="text-xl text-[#4e4e4e] bg-[#d9d9d9] hover:bg-[#066AB2] hover:text-white w-6 h-6 rounded-full p-1" />
-                          </Link>
-                          <Link to="">
-                            <FaInstagram className="text-xl text-[#4e4e4e] bg-[#d9d9d9] hover:bg-[#066AB2] hover:text-white w-6 h-6 rounded-full p-1" />
-                          </Link>
-                        </div>
-                      </div>
-                    </div>
+                     </div>))}
                   </div>
                 </div>
               </div>
@@ -567,16 +551,19 @@ function Home() {
                     Veuillez entrer votre adresse mail
                   </p>
                   {/* barre de recherche */}
-                  <div className="flex items-center pt-4">
+                  <form onSubmit={handleSubmit} className="flex items-center pt-4">
                     <input
                       type="search"
                       placeholder="andreakonan87@gmail.com"
                       className=" outline-none px-4 sm:w-[500px] h-12"
+                      name="email"
+                      value={email}
+                      onChange={handleInputChange}
                     />
                     <button className="bg-[#066AB2] text-white sm:w-[100px] h-12 s:px-2 sm:px-0 ">
                       S'abonner
                     </button>
-                  </div>
+                  </form>
                 </div>
               </div>
             </div>
@@ -587,16 +574,16 @@ function Home() {
                 nos partenaires
               </p>
               <div className="pt-10 grid md:grid-cols-5 sm:grid-cols-3   gap-10">
-                <div className="bg-[#C8D1D8] w-48 h-20 rounded-lg"></div>
-                <div className="bg-[#C8D1D8] w-48 h-20 rounded-lg"></div>
-                <div className="bg-[#C8D1D8] w-48 h-20 rounded-lg"></div>
-                <div className="bg-[#C8D1D8] w-48 h-20 rounded-lg"></div>
-                <div className="bg-[#C8D1D8] w-48 h-20 rounded-lg"></div>
-                <div className="bg-[#C8D1D8] w-48 h-20 rounded-lg"></div>
-                <div className="bg-[#C8D1D8] w-48 h-20 rounded-lg"></div>
-                <div className="bg-[#C8D1D8] w-48 h-20 rounded-lg"></div>
-                <div className="bg-[#C8D1D8] w-48 h-20 rounded-lg"></div>
-                <div className="bg-[#C8D1D8] w-48 h-20 rounded-lg"></div>
+              {Partenaires.map((partenaire, index) => (
+                <div className="bg-[#C8D1D8] w-48 h-20 rounded-lg" 
+                  key={index}
+                  style={{ backgroundImage: `url(data:image/png;base64,${partenaire.logo ? partenaire.logo : ''})` }}
+                >
+                  
+                </div>
+                
+                
+                ))}
               </div>
             </div>
 

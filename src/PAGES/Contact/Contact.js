@@ -1,6 +1,8 @@
 import React from "react";
 import Header from "../../COMPONENTS/Header/Header";
 import { NavbarDefault } from "../../COMPONENTS/Navbar/Navbar";
+import {ToastContainer,toast} from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import backcontact from "../../ASSETS/Image/Backcontact.png";
 import { useState, useEffect } from "react";
 import Loader from "../../COMPONENTS/Loader/Loading";
@@ -89,8 +91,10 @@ function Contact() {
     try {
       const response = await sendFormData(formState);
       console.log('Réponse du serveur :', response);
+      toast.success(response.message);
     } catch (error) {
       console.error('Erreur lors de l\'envoi du formulaire :', error);
+      toast.error(error.response.data.message);
     }
   };
 
@@ -105,12 +109,12 @@ function Contact() {
           <div>
             <Header info={info} />
             <NavbarDefault />
-
+            <ToastContainer />
             {/* en tete */}
             <div
               className="bg-cover bg-center bg-no-repeat h-[400px] animate-fade animate-once animate-duration-[1000ms] animate-delay-[1ms] animate-ease-linear animate-normal"
 
-              style={{ backgroundImage: `url(data:image/png;base64,${BannerPicture ? BannerPicture :  backcontact})` }}
+              style={{ backgroundImage: BannerPicture ?  `url(data:image/png;base64,${BannerPicture })`: `url(${backcontact})` }}
             >
               <div className="bg-[#066AB225] flex justify-center items-center h-[400px]  ">
                 <div className="sm:text-4xl md:px-10 px-4  text-2xl font-bold text-white uppercase leading-relaxed animate-fade-up animate-once animate-duration-1000 animate-delay-[1ms] animate-normal">

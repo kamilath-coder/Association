@@ -5,5 +5,23 @@ export function fetchHomeInfo() {
 };
 
 export function fetchHomeBanner() {
-    return axios.get(`${process.env.REACT_APP_BASE_URL}/api/homr/baner`);
+    return axios.get(`${process.env.REACT_APP_BASE_URL}/api/home/baner`);
+};
+
+export function fetchMembers() {
+    return axios.get(`${process.env.REACT_APP_BASE_URL}/api/home/members`);
+};
+
+export function fetchPartenaire() {
+    return axios.get(`${process.env.REACT_APP_BASE_URL}/api/home/partenaire`);
+};
+
+export const subscribe = async (email) => {
+    try {
+        const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/api/home/subscribe`, { email });
+        console.log()
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
 };

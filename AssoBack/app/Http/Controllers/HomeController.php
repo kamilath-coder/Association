@@ -3,8 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\WebPage;
+use App\Models\NewsLetter;
+use App\Models\Partenaire;
 use App\Models\WebSiteInfo;
 use Illuminate\Http\Request;
+use App\Models\WebAboutUsTeam;
 
 class HomeController extends Controller
 {
@@ -44,5 +47,57 @@ class HomeController extends Controller
 
 
 
+    }
+
+    public function members(){
+
+        $members=WebAboutUsTeam::take(4)->get();
+
+        if($members){
+            foreach($members as $member){
+                $member->photo=base64_encode($member->photo);
+            }
+
+            return response()->json([
+                'message'=>'Informations du site récupérées avec succès',
+                'info' => $members,
+            ],
+            200);
+        }
+    }
+
+
+
+    public function subscribe(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|unique:web_news_letter,email',
+        ],[
+            'email.unique' => 'Cet email est déjà inscrit à la newsletter.',
+        ]);
+        $newsletter = new NewsLetter;
+        $newsletter->email = $request->email;
+        $newsletter->save();
+
+        //Ici, vous pouvez ajouter le code pour ajouter l'email à votre base de données ou à votre service de newsletter
+
+        return response()->json(['message' => 'Abonnement réussi']);
+    }
+
+    public function partenaire(){
+        $parenaire=Partenaire::all();
+
+        if($parenaire){
+            foreach($parenaire as $part){
+                $part->logo=base64_encode($part->logo);
+            }
+
+            return response()->json([
+                'message'=>'Informations du site récupérées avec succès',
+                'info' => $parenaire,
+            ],
+            200);
+        }
+    
     }
 }
