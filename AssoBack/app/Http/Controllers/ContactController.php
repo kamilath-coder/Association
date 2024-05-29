@@ -59,6 +59,13 @@ class ContactController extends Controller
             'email' => 'required|email|max:255',
             'sujet' => 'required|max:255',
             'message' => 'required',
+        ],[
+            'nom.required' => 'Le nom est obligatoire',
+            'email.required' => 'L\'email est obligatoire',
+            'email.email' => 'L\'email doit être une adresse email valide',
+            'sujet.required' => 'Le sujet est obligatoire',
+            'message.required' => 'Le message est obligatoire',
+
         ]);
 
         $details = [

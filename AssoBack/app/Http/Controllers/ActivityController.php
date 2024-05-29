@@ -56,23 +56,8 @@ class ActivityController extends Controller
         })->get();
 
 
-        // if($article){
-        //     foreach($article as $art){
-        //         $art->Pictures=base64_encode($art->Pictures);
-        //         $art->item_doc=base64_encode($art->item_doc);
-        //         foreach($art->category as $cat){
-        //             $cat->Pictures=base64_encode($cat->Pictures);
-        //         }
-        //     }
-
-        //     return response()->json([
-        //         'message'=>'Informations du site récupérées avec succès',
-        //         'info' => $article,
-        //     ],
-        //     200);
-        // }
-
         if($article){
+            
             foreach($article as $art){
                 $art->Pictures=base64_encode($art->Pictures);
                 $art->item_doc=base64_encode($art->item_doc);
@@ -86,7 +71,7 @@ class ActivityController extends Controller
                 'message'=>'Informations du site récupérées avec succès',
                 'info' => $article,
                 'categoryDescription' => $categoryDescription
-            
+
             ],
             200);
         }
@@ -94,10 +79,14 @@ class ActivityController extends Controller
     }
 
     public function voirarticle($id){
-        $article=Activity::find($id);
+        $article=Activity::with('images')
+        ->find($id);
         if($article){
             $article->Pictures=base64_encode($article->Pictures);
             $article->item_doc=base64_encode($article->item_doc);
+            foreach($article->images as $img){
+                $img->Image=base64_encode($img->Image);
+            }
             return response()->json([
                 'message'=>'Informations du site récupérées avec succès',
                 'info' => $article,
@@ -107,8 +96,8 @@ class ActivityController extends Controller
     }
 
     public function recentarticle(){
-        // $article=Activity::orderBy('last_update_date', 'desc')->first();
-        $article=Activity::first();
+        $article=Activity::orderBy('item_date', 'desc')->first();
+        //$article=Activity::first();
         if($article){
             $article->Pictures=base64_encode($article->Pictures);
             $article->item_doc=base64_encode($article->item_doc);

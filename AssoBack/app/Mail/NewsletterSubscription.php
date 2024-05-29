@@ -9,26 +9,28 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class Contact extends Mailable
+class NewsletterSubscription extends Mailable
 {
     use Queueable, SerializesModels;
 
     /**
      * Create a new message instance.
     */
-
-
-    public $details;
     public $datas;
-
-
-
-    public function __construct($details,$datas)
+    public function __construct($datas)
     {
-        $this->details = $details;
         $this->datas = $datas;
+
+
     }
 
+    public function build()
+    {
+        return
+        $this->from(env('MAIL_FROM_ADDRESS'),env('MAIL_FROM_NAME'))
+            ->view('emails.newsletter_subscription')->with('info',$this->datas);
+
+    }
 
     /**
      * Get the message envelope.
@@ -36,19 +38,8 @@ class Contact extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Contact',
+            subject: 'Newsletter Subscription',
         );
-    }
-
-    public function build()
-    {
-        return $this->from(env('MAIL_FROM_ADDRESS'),env('MAIL_FROM_NAME'))
-        ->view('emails.contact')
-                    ->subject('Contact')
-                    ->with([
-                        'details' => $this->details,
-                        'info' => $this->datas,
-                    ]);
     }
 
     /**
@@ -57,7 +48,7 @@ class Contact extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'emails.contact',
+            view: 'emails.newsletter_subscription',
         );
     }
 

@@ -6,10 +6,38 @@ import {
   DialogBody,
   DialogFooter,
 } from "@material-tailwind/react";
-
+import { sendFormData } from '../../API/formulaire/Adhesion';
+import {ToastContainer,toast} from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 export function Adhesion() {
   const [open, setOpen] = React.useState(false);
-
+  const [formState, setFormState] = React.useState({
+    nom: '',
+    email: '',
+    telephone: '',
+    residence: '',
+    genre: '',
+    profession: '',
+    raison: '',
+  });
+  const handleChange = (event) => {
+    setFormState({
+      ...formState,
+      [event.target.name]: event.target.value,
+    });
+  };
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    console.log('Formulaire soumis :', formState);
+    try {
+      const response = await sendFormData(formState);
+      console.log('Réponse du serveur :', response);
+      toast.success(response.message);
+    } catch (error) {
+      console.error('Erreur lors de l\'envoi du formulaire :', error);
+      toast.error(error.response.data.message);
+    }
+  };
   const handleOpen = () => setOpen(!open);
 
   return (
@@ -32,6 +60,7 @@ export function Adhesion() {
           />
         </svg>
         <p>Devenir membre</p>
+        <ToastContainer />
       </Button>
       <Dialog open={open} handler={handleOpen} size="xs">
         <DialogHeader className=" justify-center">
@@ -39,28 +68,38 @@ export function Adhesion() {
             <p className="  text-lg font-medium">
              Formulaire d'adhésion
             </p>
+            <ToastContainer />
           </div>
         </DialogHeader>
         <DialogBody className="h-[28rem]  overflow-y-scroll pl-8 overflow-x-hidden  ">
-          <form className="mt-6 flex flex-col space-y-3 w-[300px] ">
+          <form className="mt-6 flex flex-col space-y-3 w-[300px] "onSubmit={handleSubmit}>
             <label>Votre nom & prénom</label>
             <input
               type="text"
+              name="nom"
+              onChange={handleChange}
               className="w-[250px] outline-none bg-[#f8f8f8] h-10 px-2"
+
             />
             <label>Votre adresse mail</label>
             <input
               type="email"
+              name="email"
+              onChange={handleChange}
               className="w-[250px] outline-none bg-[#f8f8f8] h-10 px-2"
             />
             <label>Votre numero de télephone</label>
             <input
               type="tel"
+              name="telephone"
+              onChange={handleChange}
               className="w-[250px] outline-none bg-[#f8f8f8] h-10 px-2"
             />
             <label>Votre lieu de residence</label>
             <input
               type="text"
+              name="residence"
+              onChange={handleChange}
               className="w-[250px] outline-none bg-[#f8f8f8] h-10 px-2"
             />
 
@@ -68,33 +107,44 @@ export function Adhesion() {
             <div className=" flex items-center space-x-4">
               {/* genre */}
               <div className=" flex items-center space-x-2">
-                <input type="radio" value="F" name="genre" /> <p>F</p>
+                <input type="radio" value="F" name="genre" onChange={handleChange} /> <p>F</p>
               </div>
               <div className=" flex items-center space-x-2">
-                <input type="radio" value="M" name="genre" /><p>M</p>
+                <input type="radio" value="M" name="genre" onChange={handleChange}/><p>M</p>
               </div>
               <div className=" flex items-center space-x-2">
-                <input type="radio" value="Autre" name="genre" /><p> Autre</p>
+                <input type="radio" value="Autre" name="genre" onChange={handleChange}/><p> Autre</p>
               </div>
             </div>
             <label>Votre profession</label>
             <input
               type="text"
+              name="profession"
+              onChange={handleChange}
               className="w-[250px] outline-none bg-[#f8f8f8] h-10 px-2"
             />
              <label>Pourquoi nous rejoindre ?</label>
-            <textarea className="w-[250px] outline-none bg-[#f8f8f8] h-20 p-2"></textarea>
-           
+            <textarea className="w-[250px] outline-none bg-[#f8f8f8] h-20 p-2"  name="raison"
+            onChange={handleChange}></textarea>
+            <DialogFooter className="space-x-2">
+              <Button variant="text" color="blue-gray" onClick={handleOpen}>
+                Quitter
+              </Button>
+              <Button text="variant" className=" bg-[#DCA61D]" type="submit" >
+                Valider
+              </Button>
+            </DialogFooter>
           </form>
+          {/* <DialogFooter className="space-x-2">
+            <Button variant="text" color="blue-gray" onClick={handleOpen}>
+              Quitter
+            </Button>
+            <Button text="variant" className=" bg-[#DCA61D]" onClick={handleOpen} >
+              Valider
+            </Button>
+          </DialogFooter> */}
         </DialogBody>
-        <DialogFooter className="space-x-2">
-          <Button variant="text" color="blue-gray" onClick={handleOpen}>
-            Quitter
-          </Button>
-          <Button text="variant" className=" bg-[#DCA61D]" onClick={handleOpen}>
-            Valider
-          </Button>
-        </DialogFooter>
+        
       </Dialog>
     </>
   );

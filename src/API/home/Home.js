@@ -11,6 +11,9 @@ export function fetchHomeBanner() {
 export function fetchMembers() {
     return axios.get(`${process.env.REACT_APP_BASE_URL}/api/home/members`);
 };
+export function fetchNouvelles() {
+    return axios.get(`${process.env.REACT_APP_BASE_URL}/api/home/articles`);
+};
 
 export function fetchPartenaire() {
     return axios.get(`${process.env.REACT_APP_BASE_URL}/api/home/partenaire`);

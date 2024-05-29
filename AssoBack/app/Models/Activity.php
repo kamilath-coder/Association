@@ -38,4 +38,11 @@ class Activity extends Model
     {
         return $this->belongsTo(ItemCategory::class, 'Categories','Category_id');
     }
+
+    public function images()
+    {
+        return $this->hasMany(ActivityImage::class, 'Id_item', 'Items_Numbers');
+    }
+
+
 }

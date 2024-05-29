@@ -199,7 +199,7 @@ function VoirPlus() {
                         />
                       </svg>
                       <p className=" font-thin italic">
-                        Cocody,Abidjan, Côte d’ivoire
+                        {Article.related_link? Article.related_link :'Cocody,Abidjan, Côte d’ivoire'}
                       </p>
                     </div>
                   </div>
@@ -224,34 +224,16 @@ function VoirPlus() {
                   </p>
                   {/* AUTRES PHOTOS DE L'ACTIVITE */}
                   <div className="grid sm:grid-cols-4 grid-cols-2 gap-2 pt-6">
-                    <div className=" relative overflow-hidden w-[156px] h-[115px] ">
-                      <img
-                        src={Nouvelle2}
-                        alt="photoactivite"
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
-                    <div className=" relative overflow-hidden w-[156px] h-[115px] ">
-                      <img
-                        src={Nouvelle3}
-                        alt="photoactivite"
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
-                    <div className=" relative overflow-hidden w-[156px] h-[115px] ">
-                      <img
-                        src={Nouvelle1}
-                        alt="photoactivite"
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
-                    <div className=" relative overflow-hidden w-[156px] h-[115px] ">
-                      <img
-                        src={Nouvelle2}
-                        alt="photoactivite"
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
+                    {Article.images.map((article ,index) => (
+                      <div className=" relative overflow-hidden w-[156px] h-[115px]  " key={index}>
+                        <img
+                          src={article.Image ? `data:image/png;base64,${article.Image}` :Nouvelle2}
+                          alt="photoactivite"
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                    ))}
+                   
                   </div>
                 </div>
               </div>

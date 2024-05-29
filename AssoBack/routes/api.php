@@ -21,6 +21,8 @@ Route::get('/home/baner',[HomeController::class,'HomeBaner']);
 Route::get('/home/members',[HomeController::class,'members']);
 Route::post('/home/subscribe',[HomeController::class,'subscribe']);
 Route::get('/home/partenaire',[HomeController::class,'partenaire']);
+Route::get('/home/articles',[HomeController::class,'articles']);
+Route::post('/adhesion/store',[HomeController::class,'adhesion']);
 
 //contact
 Route::post('/contact/store',[ContactController::class,'store']);

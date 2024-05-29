@@ -29,6 +29,7 @@ function VoirPlus() {
   const { id } = useParams();
   const [Article, setArticle] = useState(null);
   const [ArticleLast, setArticleLast] = useState('');
+  let options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -121,7 +122,7 @@ function VoirPlus() {
                 </div>
                 <div className="sm:w-[731px]">
                   <p className="text-2xl font-semibold pt-4 text-[#066AB2]">
-                    {Article.Descriptions?Article.Descriptions:'Duis aute irure dolor in reprehenderit'}
+                    {Article.Descriptions? removeTags(Article.fr_Name):'Duis aute irure dolor in reprehenderit'}
                   </p>
                   {/* date et lieu */}
                   <div className="flex flex-col sm:flex-row sm:items-center sm:space-x-3 pt-4">
@@ -150,7 +151,13 @@ function VoirPlus() {
                           </clipPath>
                         </defs>
                       </svg>
-                      <p className=" font-thin italic">Jeudi 23 Mars 2024</p>
+                      <p className=" font-thin italic">
+                        
+                        {Article.item_date 
+                          ? new Date(Article.item_date).toLocaleDateString('fr-FR', options)
+                          : 'Jeudi 23 Mars 2024'
+                        }
+                      </p>
                     </div>
                     {/* heure de l'activite */}
                     <div className="flex items-center space-x-2">
@@ -171,7 +178,13 @@ function VoirPlus() {
                           stroke-linecap="round"
                         />
                       </svg>
-                      <p className=" font-thin italic">09h30</p>
+                      <p className=" font-thin italic">
+                        {
+                          Article.item_date 
+                          ? `${new Date(Article.item_date).getHours().toString().padStart(2, '0')}h ${new Date(Article.item_date).getMinutes().toString().padStart(2, '0')}`
+                          : '10h20'
+                        }
+                      </p>
                     </div>
                     {/* Lieu */}
                     <div className="flex items-center space-x-2">
@@ -188,7 +201,7 @@ function VoirPlus() {
                         />
                       </svg>
                       <p className=" font-thin italic">
-                        Cocody,Abidjan, Côte d’ivoire
+                        {Article.related_link? Article.related_link:'Cocody,Abidjan, Côte d’ivoire'}
                       </p>
                     </div>
                   </div>
@@ -208,39 +221,20 @@ function VoirPlus() {
                       : 'Aliquam erat volutpat. Etiam ut nisi tempus, sagittis leo ut, placerat metus. Cras non convallis tellus....'
                     }
                   </div>
-                  <p className="text-lg font-semibold pt-10 text-[#4E4E4E]">
+                  {Article.images ? <p className="text-lg font-semibold pt-10 text-[#4E4E4E]">
                     Les photos de l'activité
-                  </p>
+                  </p>:''}
                   {/* AUTRES PHOTOS DE L'ACTIVITE */}
                   <div className="grid sm:grid-cols-4 grid-cols-2 gap-2 pt-6">
-                    <div className=" relative overflow-hidden w-[156px] h-[115px] ">
-                      <img
-                        src={activite4}
-                        alt="photoactivite"
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
-                    <div className=" relative overflow-hidden w-[156px] h-[115px] ">
-                      <img
-                        src={activite5}
-                        alt="photoactivite"
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
-                    <div className=" relative overflow-hidden w-[156px] h-[115px] ">
-                      <img
-                        src={activite6}
-                        alt="photoactivite"
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
-                    <div className=" relative overflow-hidden w-[156px] h-[115px] ">
-                      <img
-                        src={activite7}
-                        alt="photoactivite"
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
+                    {Article.images.map((article ,index) => ( 
+                      <div className=" relative overflow-hidden w-[156px] h-[115px] " key={index}>
+                        <img
+                          src={article.Image ? `data:image/png;base64,${article.Image}` :activite4}
+                          alt="photoactivite"
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                    ))}
                   </div>
                 </div>
               </div>

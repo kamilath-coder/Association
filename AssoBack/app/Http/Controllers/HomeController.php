@@ -3,11 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Models\WebPage;
+use App\Models\Activity;
 use App\Models\NewsLetter;
 use App\Models\Partenaire;
 use App\Models\WebSiteInfo;
 use Illuminate\Http\Request;
 use App\Models\WebAboutUsTeam;
+use App\Mail\NewsletterSubscription;
+use Illuminate\Support\Facades\Mail;
 
 class HomeController extends Controller
 {
@@ -33,10 +36,12 @@ class HomeController extends Controller
 
     public function HomeBaner(){
 
-        $banner=WebPage::with('banner')->where('name','Home')->first();
+        $banner=WebPage::with('banner')->where('name','Home')->get();
         if($banner){
-            $banner->banner->picture=base64_encode($banner->banner->picture);
-
+            // $banner->banner->picture=base64_encode($banner->banner->picture);
+            foreach($banner as $ban){
+                $ban->banner->picture=base64_encode($ban->banner->picture);
+            }
 
             return response()->json([
                 'message'=>'Informations du site récupérées avec succès',
@@ -46,6 +51,35 @@ class HomeController extends Controller
         }
 
 
+
+    }
+    public function articles(){
+        $article = Activity::with('category')->whereHas('category', function ($query) {
+            $query->where('Names', 'Activity');
+        })
+        ->take(3)
+        ->get();
+
+
+        if($article){
+
+            foreach($article as $art){
+                $art->Pictures=base64_encode($art->Pictures);
+                $art->item_doc=base64_encode($art->item_doc);
+                if ($art->category && isset($art->category->Pictures)) {
+                    $art->category->Pictures=base64_encode($art->category->Pictures);
+                }
+            }
+            $categoryDescription = $article[0]->category->fr_description;
+
+            return response()->json([
+                'message'=>'Informations du site récupérées avec succès',
+                'info' => $article,
+                'categoryDescription' => $categoryDescription
+
+            ],
+            200);
+        }
 
     }
 
@@ -70,17 +104,34 @@ class HomeController extends Controller
 
     public function subscribe(Request $request)
     {
+        $datas = WebSiteInfo::first();
+        // $request->validate([
+        //     'email' => 'required|email|unique:web_news_letter,email',
+        // ],[
+        //     'email.unique' => 'Cet email est déjà inscrit à la newsletter.',
+        //     'email.email' => 'Veuillez entrer un email valide.',
+        // ]);
         $request->validate([
-            'email' => 'required|unique:web_news_letter,email',
+            'email' => [
+                'required',
+                'email',
+                'unique:web_news_letter,email',
+                function ($attribute, $value, $fail) {
+                    if (!str_contains($value, '.com')) {
+                        $fail('L\'email doit contenir ".com".');
+                    }
+                },
+            ],
         ],[
             'email.unique' => 'Cet email est déjà inscrit à la newsletter.',
+            'email.email' => 'Veuillez entrer un email valide.',
         ]);
         $newsletter = new NewsLetter;
         $newsletter->email = $request->email;
         $newsletter->save();
 
         //Ici, vous pouvez ajouter le code pour ajouter l'email à votre base de données ou à votre service de newsletter
-
+        Mail::to($request->email)->send(new NewsletterSubscription($datas));
         return response()->json(['message' => 'Abonnement réussi']);
     }
 
@@ -98,6 +149,29 @@ class HomeController extends Controller
             ],
             200);
         }
-    
+
+    }
+
+    public function adhesion(Request $request){
+
+        $request->validate([
+            'nom' => 'required',
+            'email' => 'required|email',
+            'telephone' => 'required',
+            'residence' => 'required',
+            'genre' => 'required',
+            'profession' => 'required',
+            'raison' => 'required',
+        ],[
+            'nom.required' => 'Le nom est requis.',
+            'email.required' => 'L\'email est requis.',
+            'email.email' => 'Veuillez entrer un email valide.',
+            'telephone.required' => 'Le numéro de téléphone est requis.',
+            'residence.required' => 'La résidence est requise.',
+            'genre.required' => 'Le genre est requis.',
+            'profession.required' => 'La profession est requise.',
+            'raison.required' => 'La raison est requise.',
+        ]);
     }
 }
+

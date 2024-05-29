@@ -68,10 +68,14 @@ class NouvelleController extends Controller
     }
 
     public function voirarticle($id){
-        $article=Nouvelles::find($id);
+        $article=Nouvelles::with('images')//->with('images')
+        ->find($id);
         if($article){
             $article->picture=base64_encode($article->picture);
             $article->reference_doc=base64_encode($article->reference_doc);
+            foreach($article->images as $img){
+                $img->Image=base64_encode($img->Image);
+            }
             return response()->json([
                 'message'=>'Informations du site récupérées avec succès',
                 'info' => $article,

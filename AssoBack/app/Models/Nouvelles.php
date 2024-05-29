@@ -30,5 +30,9 @@ class Nouvelles extends Model
         'picture',
     ];
 
+    public function images()
+    {
+        return $this->hasMany(ActivityImage::class, 'Id_item', 'related_item');
+    }
 
 }

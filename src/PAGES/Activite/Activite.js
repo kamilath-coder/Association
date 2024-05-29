@@ -3,8 +3,8 @@ import Header from "../../COMPONENTS/Header/Header";
 import { NavbarDefault } from "../../COMPONENTS/Navbar/Navbar";
 import backActivite from "../../ASSETS/Image/backActivity.png";
 import activite1 from "../../ASSETS/Image/Activity1.png";
-import activite2 from "../../ASSETS/Image/Activity2.png";
-import activite3 from "../../ASSETS/Image/Activity3.png";
+// import activite2 from "../../ASSETS/Image/Activity2.png";
+// import activite3 from "../../ASSETS/Image/Activity3.png";
 import { Link } from "react-router-dom";
 import { Donation } from "./Donation";
 import Footer from "../../COMPONENTS/Footer/Footer";
@@ -22,6 +22,7 @@ function Activite() {
   const [BannerPicture, setBannerPicture] = useState('');
   const [Articles, setArticles] = useState([]);
   const [Article, setArticle] = useState();
+  let options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -103,7 +104,7 @@ function Activite() {
               <div className=" Animation-option grid sm:grid-cols-2 md:grid-cols-3 gap-12 pt-14">
                 {/* Activité 1 */}
                {Articles.map((article ,index) => ( 
-                <div className="activite-img-taille">
+                <div className="activite-img-taille" key={index}>
                   <div
                     className="img-activite"
                     style={{ backgroundImage:  article.Pictures ?   `url(data:image/png;base64,${article.Pictures})`: `url(${activite1})` }}
@@ -113,7 +114,11 @@ function Activite() {
                         {article.Descriptions? removeTags(article.Descriptions):'Duis aute irure dolor in reprehenderit'} 
                       </div>
                       <div className=" italic font-light">
-                        Jeudi 23 mars 2024
+                        
+                        {article.item_date
+                        ? new Date(article.item_date).toLocaleDateString('fr-FR', options)
+                        : 'Jeudi 23 Mars 2024'
+                      }
                       </div>
 
                       {/* button lire plus */}
