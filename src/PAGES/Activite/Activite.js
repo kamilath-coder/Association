@@ -36,7 +36,7 @@ function Activite() {
   useEffect(() => {
     fetchActivityInfo()
       .then(response => {
-        console.log('Réponse du serveur :', response.data);
+        //console.log('Réponse du serveur :', response.data);
         // setAddress(response.data.info.address);
         // setPhone(response.data.info.phone);
         // setEmail(response.data.info.email);
@@ -52,9 +52,11 @@ function Activite() {
       });
       fetchActivityBanner()
       .then(response => {
-        console.log('Réponse du serveur :', response.data.info.banner);
+        console.log('Réponse du serveur :', response.data.info.banners);
         setBanner(response.data.info.banner.fr_text1);
         setBannerPicture(response.data.info.banner.picture);
+        // setBanner(response.data.info.banners[0].fr_text1);
+        // setBannerPicture(response.data.info.banners[0].picture);
       })
       .catch(error => {
         console.error('Il y avait une erreur!', error);

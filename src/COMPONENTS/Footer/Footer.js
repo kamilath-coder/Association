@@ -13,7 +13,7 @@ import { TiSocialLinkedin } from "react-icons/ti";
 //         setTweet(response.data.info.twitter_link);
 //         setInsta(response.data.info.instagram_link);
 function Footer(props) {
-  console.log(props.info)
+  //console.log(props.info)
   return (
     <div className="bg-black flex flex-col space-y-3 items-center pt-10">
       <div className="text-3xl  text-[#DCA61D] font-bold">{props.info.name? props.info.name :'Association'}.</div>

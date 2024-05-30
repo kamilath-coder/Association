@@ -37,13 +37,13 @@ class ContactController extends Controller
         $banner=WebPage::with('banner')->where('name','Contacts')->first();
         if($banner){
             $banner->banner->picture=base64_encode($banner->banner->picture);
-
+            
 
             return response()->json([
                 'message'=>'Informations du site récupérées avec succès',
                 'info' => $banner,
-            ],
-            200);
+            ], 200);
+
         }
 
 

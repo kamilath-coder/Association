@@ -64,9 +64,11 @@ function About() {
       });
       fetchAboutBanner()
       .then(response => {
-        console.log('Réponse du serveur :', response.data.info);
+        console.log('Réponse du serveur :', response.data.info.banners);
         setBanner(response.data.info.banner.fr_text1);
         setBannerPicture(response.data.info.banner.picture);
+        // setBanner(response.data.info.banners[0].fr_text1);
+        // setBannerPicture(response.data.info.banners[0].picture);
       })
       .catch(error => {
         console.error('Il y avait une erreur!', error);

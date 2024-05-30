@@ -15,11 +15,11 @@ class WebPage extends Model
         'id',
         'name',
         'fr_name',
-       
+
     ];
 
     public function banner(){
         return $this->hasOne(WebBanner::class, 'page_id');
     }
-    
+
 }

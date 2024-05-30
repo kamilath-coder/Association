@@ -61,7 +61,7 @@ function Home() {
   useEffect(() => {
     fetchNouvelleInfo()
       .then(response => {
-        console.log('Réponse du serveur :', response.data);
+       // console.log('Réponse du serveur :', response.data);
         setNameSite(response.data.info.name);
         setPresentation(response.data.info.presentation_text);
         setPresentationTitle(response.data.info.fr_presentation_title);
@@ -74,8 +74,10 @@ function Home() {
       });
     fetchHomeBanner()
       .then(response => {
-        console.log('Réponse du serveur :', response.data.info);
-        setBanner(response.data.info);
+        //console.log('Réponse du serveur :', response.data.info.banner);
+        const banners = response.data.info
+        //console.log('Réponse du serveur :',banners );
+        setBanner(banners);
         //setBannerPicture(response.data.info.banner.picture);
       })
       .catch(error => {
@@ -83,7 +85,7 @@ function Home() {
       });
       fetchMembers()
       .then(response => {
-        console.log('Réponse du serveur :', response.data.info);
+       // console.log('Réponse du serveur :', response.data.info);
         setMembers(response.data.info);
       })
       .catch(error => {
@@ -92,7 +94,7 @@ function Home() {
 
       fetchPartenaire()
       .then(response => {
-        console.log('Réponse du serveur :', response.data.info);
+        //.log('Réponse du serveur :', response.data.info);
         setPartenaire(response.data.info);
       })
       .catch(error => {
@@ -101,7 +103,7 @@ function Home() {
     
     fetchNouvelles()
       .then(response => {
-        console.log('Réponse du serveur :', response.data.info);
+        //.log('Réponse du serveur :', response.data.info);
         setArticles(response.data.info);
         setArticle(response.data.categoryDescription);
       })
@@ -120,7 +122,7 @@ function Home() {
 
     try {
       const response = await subscribe(email);
-      console.log(response.message);
+     // console.log(response.message);
       toast.success(response.message);
     } catch (error) {
       console.error(error);

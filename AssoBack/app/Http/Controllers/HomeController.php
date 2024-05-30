@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\Adhesion;
 use App\Models\WebPage;
 use App\Models\Activity;
+use App\Models\Customers;
+use App\Models\WebBanner;
 use App\Models\NewsLetter;
 use App\Models\Partenaire;
 use App\Models\WebSiteInfo;
@@ -36,11 +39,14 @@ class HomeController extends Controller
 
     public function HomeBaner(){
 
-        $banner=WebPage::with('banner')->where('name','Home')->get();
+        $page=WebPage::where('name','Home')->first();
+
+        $banner = WebBanner::where('page_id',$page->id)->get();
+
         if($banner){
             // $banner->banner->picture=base64_encode($banner->banner->picture);
             foreach($banner as $ban){
-                $ban->banner->picture=base64_encode($ban->banner->picture);
+                $ban->picture=base64_encode($ban->picture);
             }
 
             return response()->json([
@@ -48,6 +54,10 @@ class HomeController extends Controller
                 'info' => $banner,
             ],
             200);
+        }else {
+            return response()->json([
+                'message'=>'Aucune information de site trouvée',
+            ], 404);
         }
 
 
@@ -153,7 +163,7 @@ class HomeController extends Controller
     }
 
     public function adhesion(Request $request){
-
+        $info = WebSiteInfo::first();
         $request->validate([
             'nom' => 'required',
             'email' => 'required|email',
@@ -172,6 +182,49 @@ class HomeController extends Controller
             'profession.required' => 'La profession est requise.',
             'raison.required' => 'La raison est requise.',
         ]);
+
+        $data = $request->all();
+        $data['genre'] = $request->genre;
+        $data['raison'] = $request->raison;
+        $data['profession'] = $request->profession;
+        $data['residence'] = $request->residence;
+        $data['telephone'] = $request->telephone;
+        $data['email'] = $request->email;
+        $data['nom'] = $request->nom;
+        $datas=[
+            'genre' => $data['genre'],
+            'raison' => $data['raison'],
+            'profession' => $data['profession'],
+            'residence' => $data['residence'],
+            'telephone' => $data['telephone'],
+            'email' => $data['email'],
+            'nom' => $data['nom'],
+        ];
+
+
+        $customer = new Customers;
+        $customer->Names = $data['nom'];
+        $customer->{'E-mails'}= $data['email'];
+        $customer->Phones = $data['telephone'];
+        $customer->Adresses = $data['residence'];
+        $customer->sexe = $data['genre'];
+        $customer->Categories = $data['profession'];
+        $customer->Description = $data['raison'];
+        $customer->Notes = $data['raison'];
+        //le az_id doit etre aleatoire pour l'instant
+        $customer->az_id = rand(100000,999999);
+
+        $customer->save();
+        $mail=new Adhesion($datas,$info);
+        Mail::to($request->email)->send($mail);
+
+
+        return response()->json(['message' => 'Adhésion réussie']);
+
+
+
+
+
     }
 }
 

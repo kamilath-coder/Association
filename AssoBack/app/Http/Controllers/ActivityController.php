@@ -37,13 +37,14 @@ class ActivityController extends Controller
         $banner=WebPage::with('banner')->where('name','Activity')->first();
         if($banner){
             $banner->banner->picture=base64_encode($banner->banner->picture);
-
+           
 
             return response()->json([
                 'message'=>'Informations du site récupérées avec succès',
                 'info' => $banner,
-            ],
-            200);
+            ], 200);
+
+
         }
 
 
@@ -57,7 +58,7 @@ class ActivityController extends Controller
 
 
         if($article){
-            
+
             foreach($article as $art){
                 $art->Pictures=base64_encode($art->Pictures);
                 $art->item_doc=base64_encode($art->item_doc);

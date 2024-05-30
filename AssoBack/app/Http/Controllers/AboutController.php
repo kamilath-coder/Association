@@ -44,9 +44,8 @@ class AboutController extends Controller
             200);
         }
 
-
-
     }
+   
     public function members(){
 
         $members=WebAboutUsTeam::all();
