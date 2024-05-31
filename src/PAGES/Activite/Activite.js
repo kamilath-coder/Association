@@ -14,7 +14,6 @@ import {fetchActivityInfo } from  '../../API/activity/Activity';
 import {fetchActivityBanner } from  '../../API/activity/Activity';
 import {fetchNouvelles } from  '../../API/activity/Activity';
 import { removeTags } from '../../UTILS/Util';
-
 function Activite() {
   const [loading, setLoading] = useState(true);
   const [info, setInfo] = useState({});
@@ -24,6 +23,8 @@ function Activite() {
   const [Article, setArticle] = useState();
   let options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
 
+
+  
   useEffect(() => {
     const timer = setTimeout(() => {
       // Après 5 secondes, masquer le spinner et rediriger l'utilisateur
@@ -73,6 +74,7 @@ function Activite() {
   }, []);
   return (
     <>
+
       {loading ? (
         // Afficher le spinner tant que loading est true
         <Loader />

@@ -53,10 +53,9 @@ function VoirPlus() {
     fetchNouvelleBanner()
       .then(response => {
         console.log('Réponse du serveur :', response.data.info);
-        // setBanner(response.data.info.banner.fr_text1);
-        // setBannerPicture(response.data.info.banner.picture);
-        setBanner(response.data.info.banners[0].fr_text1);
-        setBannerPicture(response.data.info.banners[0].picture);
+        setBanner(response.data.info.banner.fr_text1);
+        setBannerPicture(response.data.info.banner.picture);
+       
       })
       .catch(error => {
         console.error('Il y avait une erreur!', error);
@@ -261,7 +260,7 @@ function VoirPlus() {
                       {/* image */}
                       <div className=" relative overflow-hidden w-[214px] h-[125px]">
                         <img
-                          src={ArticleLast.picture ? `data:image/png;base64,${Article.picture}` :Nouvelle1}
+                          src={ArticleLast.picture ? `data:image/png;base64,${ArticleLast.picture}` :Nouvelle1}
                           className="w-full h-full object-cover"
                           alt="Nouvelle1"
                         />

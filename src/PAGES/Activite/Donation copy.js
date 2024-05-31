@@ -1,7 +1,4 @@
 import React from "react";
-import { useState } from 'react';
-import axios from 'axios';
-import { FedaCheckoutButton,FedaCheckoutContainer } from 'fedapay-reactjs';
 import {
   Button,
   Dialog,
@@ -12,14 +9,10 @@ import {
 
 
 export function Donation() {
-  //const [open, setOpen] = React.useState(false);
-  const [donationModalOpen, setDonationModalOpen] = React.useState(false);
+  const [open, setOpen] = React.useState(false);
 
-  const handleOpen = () => setDonationModalOpen(!donationModalOpen);
-  const handleSubmit = (e) => {
-    e.preventDefault();
-  }
- 
+  const handleOpen = () => setOpen(!open);
+
   return (
     <>
       <Button
@@ -41,7 +34,7 @@ export function Donation() {
         </svg>
         <p>Envoyer un don</p>
       </Button>
-      <Dialog open={donationModalOpen} handler={handleOpen} size="xs"  >
+      <Dialog open={open} handler={handleOpen} size="xs"  >
         <DialogHeader className=" justify-center">
           <div className=" flex items-center space-x-2 justify-center">
             <svg
@@ -62,7 +55,7 @@ export function Donation() {
           </div>
         </DialogHeader>
         <DialogBody className="h-[28rem]  overflow-y-scroll pl-8 overflow-x-hidden  ">
-          <form className="mt-6 flex flex-col space-y-3 w-[300px]"  onSubmit={handleSubmit}>
+          <form className="mt-6 flex flex-col space-y-3 w-[300px] ">
             <select className=" w-[250px] outline-none bg-[#f8f8f8] h-12 px-2">
               <option>Don de 100$</option>
               <option>Don de 150$</option>
@@ -197,20 +190,18 @@ export function Donation() {
  
               </div>
             </div> */}
-            <DialogFooter className="space-x-2">
-              <Button variant="text" color="blue-gray" onClick={handleOpen}>
-                Quitter
-              </Button>
-              {/* <Button  text='variant' type="submit" className=" bg-[#DCA61D]"  >
-                Valider
-              </Button> */}
-              
-            </DialogFooter>
           </form>
         </DialogBody>
+        <DialogFooter className="space-x-2">
+          <Button variant="text" color="blue-gray" onClick={handleOpen}>
+           Quitter
+          </Button>
+          <Button  text='variant'  className=" bg-[#DCA61D]"  onClick={handleOpen}>
+           Valider
+          </Button>
+        </DialogFooter>
       </Dialog>
     </>
   );
-};
-
+}
 

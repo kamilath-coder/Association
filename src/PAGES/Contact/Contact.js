@@ -94,6 +94,14 @@ function Contact() {
       const response = await sendFormData(formState);
       console.log('Réponse du serveur :', response);
       toast.success(response.message);
+      // Réinitialisez l'état
+      setFormState({
+        nom: '',
+        email: '',
+        sujet: '',
+        message: '',
+      });
+      
     } catch (error) {
       console.error('Erreur lors de l\'envoi du formulaire :', error);
       toast.error(error.response.data.message);
