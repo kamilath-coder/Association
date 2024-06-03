@@ -6,21 +6,17 @@ import {
   TabPanel,
 } from "@material-tailwind/react";
  
-export function Mission() {
+export function Mission(props) {
   const data = [
     {
       label: "Notre histoire",
       value: "html",
-      desc: `It really matters and then like it really doesn't matter.
-      What matters is the people who are sparked by it. And the people 
-      who are like offended by it, it doesn't matter. Excepteur sint 
-      occaecat cupidatat non proident, sunt in culpa qui officia 
-      deserunt mollit anim id est laborum.`,
+      desc: props.info.site_history ? props.info.site_history : "It really matters and then like it really doesn't matter."
     },
     {
       label: "Nos valeurs",
       value: "react",
-      desc: `Because it's about motivating the doers. Excepteur sint 
+      desc: props.info.site_value? props.info.site_value:`Because it's about motivating the doers. Excepteur sint 
       occaecat cupidatat non proident, sunt in culpa qui officia 
       deserunt mollit anim id est laborum.Because I'm here
       to follow my dreams and inspire other people to follow their dreams, too.Excepteur sint 
@@ -30,14 +26,14 @@ export function Mission() {
     {
       label: "Notre mission",
       value: "vue",
-      desc: `We're not always in the position that we want to be at.
+      desc:props.info.site_mission?props.info.site_mission: `We're not always in the position that we want to be at.
       We're constantly growing. We're constantly making mistakes. We're
       constantly trying to express ourselves and actualize our dreams.`,
     },
     {
       label: "Notre vision",
       value: "angular",
-      desc: `Because it's about motivating the doers. Because I'm here
+      desc: props.info.site_vision ? props.info.site_vision : `Because it's about motivating the doers. Because I'm here
       to follow my dreams and inspire other people to follow their dreams, too.`,
     },
     

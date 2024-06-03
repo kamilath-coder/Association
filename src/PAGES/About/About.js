@@ -38,6 +38,7 @@ function About() {
   const [BannerPicture, setBannerPicture] = useState('');
   const [Members, setMembers] = useState([]);
   const [info, setInfo] = useState({});
+  
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -119,7 +120,7 @@ function About() {
                 </div>
               </div>
               <div className="sm:w-[500px]">
-                <Mission />
+                <Mission info={info} />
               </div>
             </div>
 

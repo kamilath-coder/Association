@@ -1,7 +1,7 @@
 
 import { Link } from "react-router-dom";
 import {Adhesion} from '../../PAGES/Formulaire/Adhesion'
-
+import { useTranslation } from 'react-i18next';
 
 import React from "react";
 import {
@@ -11,7 +11,7 @@ import {
 
 export function NavbarDefault() {
   const [openNav, setOpenNav] = React.useState(false);
-
+  const { t} = useTranslation();
   React.useEffect(() => {
     window.addEventListener(
       "resize",
@@ -21,11 +21,11 @@ export function NavbarDefault() {
 
   const navList = (
     <ul className="mt-2 mb-4 flex flex-col gap-2 text-lg lg:mb-0 lg:mt-0 lg:flex-row lg:items-center lg:gap-6 animate-fade-right animate-once animate-duration-1000 animate-delay-[1ms] animate-ease-linear animate-normal animate-fill-both">
-      <Link to="/">Accueil</Link>
-      <Link to="/A-propos">A propos</Link>
-      <Link to="/Nos-activites">Nos activités</Link>
-      <Link to="/Les-nouvelles">Nouvelles</Link>
-      <Link to="/Contact">Contact</Link>
+      <Link to="/">{t('Accueil')}</Link>
+      <Link to="/A-propos">{t('A propos')}</Link>
+      <Link to="/Nos-activites">{t('Nos activités')}</Link>
+      <Link to="/Les-nouvelles">{t('Nouvelles')}</Link>
+      <Link to="/Contact">{t('Contact')}</Link>
     </ul>
   );
 

@@ -16,7 +16,7 @@ import { RiTwitterXLine } from "react-icons/ri";
 import { sendFormData } from '../../API/contact/Contact';
 import { fetchContactInfo } from  '../../API/contact/Contact';
 import { fetchContactBanner } from  '../../API/contact/Contact';
-
+import { useTranslation } from 'react-i18next';
 
 function Contact() {
   const [loading, setLoading] = useState(true);
@@ -107,8 +107,8 @@ function Contact() {
       toast.error(error.response.data.message);
     }
   };
-
-
+  const { t} = useTranslation();
+  
   return (
     <>
       {loading ? (
@@ -136,7 +136,7 @@ function Contact() {
             <div className="Animation-option  flex sm:flex-row flex-col s:space-y-10 md:space-y-0 sm:px-14 px-4 mt-20">
               <div className=" md:w-1/2">
                 <p className=" text-2xl text-[#4E4E4E] font-semibold uppercase">
-                  Formulaire de contact
+                {t('Formulaire de contact')}
                 </p>
                 <div className="h-1 w-20 bg-[#DCA61D] mt-3"></div>
                 {/* <form className="mt-10 flex flex-col space-y-5">
@@ -168,37 +168,37 @@ function Contact() {
                     type="text"
                     name="nom"
                     className="sm:w-[550px] border-[#B7B6B6] border outline-none px-2 h-12"
-                    placeholder="Nom & Prenom* "
+                    placeholder={`${t('Nom & Prenom')}*`}
                     onChange={handleInputChange}
                   />
                   <input
                     type="text"
                     name="email"
                     className="sm:w-[550px] border-[#B7B6B6] border outline-none px-2 h-12"
-                    placeholder="Adresse mail* "
+                    placeholder={`${t('Adresse mail')}*`} 
                     onChange={handleInputChange}
                   />
                   <input
                     type="text"
                     name="sujet"
                     className="sm:w-[550px] border-[#B7B6B6] border outline-none px-2 h-12"
-                    placeholder="Sujet* "
+                    placeholder={`${t('Sujet')}*`} 
                     onChange={handleInputChange}
                   />
                   <textarea
                     name="message"
                     className="sm:w-[550px] border-[#B7B6B6] border outline-none p-2 h-40"
-                    placeholder="Message* "
+                    placeholder={`${t('Message')}*`} 
                     onChange={handleInputChange}
                   ></textarea>
                   <button type="submit" className=" bg-[#DCA61D] text-white w-40 h-10 rounded-full ">
-                    Envoyer
+                    {t('Envoyer')}
                   </button>
                 </form>
               </div>
               <div className=" md:w-1/2">
                 <p className=" text-2xl text-[#4E4E4E] font-semibold uppercase">
-                  Information de contact
+                {t('Information de contact')}
                 </p>
                 <div className="h-1 w-20 bg-[#DCA61D] mt-3"></div>
                 <div className=" mt-6 sm:w-[550px]">
@@ -223,7 +223,7 @@ function Contact() {
                       </svg>
                     </div>
                     <div>
-                      <p className=" font-semibold pb-1">Localisation</p>
+                      <p className=" font-semibold pb-1">{t('Localisation')}</p>
                       <p>{addressInfo ? addressInfo : '456, Lorem Street, Los Angeles, US 33454.'}</p>
                     </div>
                   </div>
@@ -244,7 +244,7 @@ function Contact() {
                       </svg>
                     </div>
                     <div>
-                      <p className=" font-semibold pb-1">Télephone</p>
+                      <p className=" font-semibold pb-1">{t('Télephone')}</p>
                       <p>{phoneInfo? phoneInfo :'+1 (123) / 123 – 12331'}</p>
                     </div>
                   </div>
@@ -265,7 +265,7 @@ function Contact() {
                       </svg>
                     </div>
                     <div>
-                      <p className=" font-semibold pb-1">Email</p>
+                      <p className=" font-semibold pb-1">{t('Email')}</p>
                       <p>{emailInfo ? emailInfo:'info@loremips.com /admin@loremps.com'}</p>
                     </div>
                   </div>
@@ -289,7 +289,7 @@ function Contact() {
                     </div>
 
                     <div>
-                      <p className=" font-semibold pb-1">Nous suivre</p>
+                      <p className=" font-semibold pb-1">{t('Nous suivre')}</p>
                       {/* reseaux sociaux */}
                       <div className="flex flex-row items-center space-x-3">
 

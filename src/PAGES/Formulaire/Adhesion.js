@@ -6,6 +6,7 @@ import {
   DialogBody,
   DialogFooter,
 } from "@material-tailwind/react";
+import { useTranslation } from 'react-i18next';
 import { sendFormData } from '../../API/formulaire/Adhesion';
 import {ToastContainer,toast} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -26,6 +27,7 @@ export function Adhesion() {
       [event.target.name]: event.target.value,
     });
   };
+  const { t} = useTranslation();
   const handleSubmit = async (event) => {
     event.preventDefault();
     console.log('Formulaire soumis :', formState);
@@ -59,21 +61,21 @@ export function Adhesion() {
             fill="white"
           />
         </svg>
-        <p>Devenir membre</p>
+        <p>{t('Devenir membre')}</p>
         <ToastContainer />
       </Button>
       <Dialog open={open} handler={handleOpen} size="xs">
         <DialogHeader className=" justify-center">
           <div className=" flex items-center space-x-2 justify-center">
             <p className="  text-lg font-medium">
-             Formulaire d'adhésion
+             {t('Formulaire d\'adhésion')}
             </p>
             <ToastContainer />
           </div>
         </DialogHeader>
         <DialogBody className="h-[28rem]  overflow-y-scroll pl-8 overflow-x-hidden  ">
           <form className="mt-6 flex flex-col space-y-3 w-[300px] "onSubmit={handleSubmit}>
-            <label>Votre nom & prénom</label>
+            <label>{t('Votre nom & prénom')}</label>
             <input
               type="text"
               name="nom"
@@ -81,21 +83,21 @@ export function Adhesion() {
               className="w-[250px] outline-none bg-[#f8f8f8] h-10 px-2"
 
             />
-            <label>Votre adresse mail</label>
+            <label>{t('Votre adresse mail')}</label>
             <input
               type="email"
               name="email"
               onChange={handleChange}
               className="w-[250px] outline-none bg-[#f8f8f8] h-10 px-2"
             />
-            <label>Votre numero de télephone</label>
+            <label>{t('Votre numero de télephone')}</label>
             <input
               type="tel"
               name="telephone"
               onChange={handleChange}
               className="w-[250px] outline-none bg-[#f8f8f8] h-10 px-2"
             />
-            <label>Votre lieu de residence</label>
+            <label>{t('Votre lieu de residence')}</label>
             <input
               type="text"
               name="residence"
@@ -103,7 +105,7 @@ export function Adhesion() {
               className="w-[250px] outline-none bg-[#f8f8f8] h-10 px-2"
             />
 
-            <label>Quel est votre genre ?</label>
+            <label>{t('Quel est votre genre')} ?</label>
             <div className=" flex items-center space-x-4">
               {/* genre */}
               <div className=" flex items-center space-x-2">
@@ -113,25 +115,25 @@ export function Adhesion() {
                 <input type="radio" value="M" name="genre" onChange={handleChange}/><p>M</p>
               </div>
               <div className=" flex items-center space-x-2">
-                <input type="radio" value="Autre" name="genre" onChange={handleChange}/><p> Autre</p>
+                <input type="radio" value="Autre" name="genre" onChange={handleChange}/><p> {t('Autre')}</p>
               </div>
             </div>
-            <label>Votre profession</label>
+            <label>{t('Votre profession')}</label>
             <input
               type="text"
               name="profession"
               onChange={handleChange}
               className="w-[250px] outline-none bg-[#f8f8f8] h-10 px-2"
             />
-             <label>Pourquoi nous rejoindre ?</label>
+             <label>{t('Pourquoi nous rejoindre')} ?</label>
             <textarea className="w-[250px] outline-none bg-[#f8f8f8] h-20 p-2"  name="raison"
             onChange={handleChange}></textarea>
             <DialogFooter className="space-x-2">
               <Button variant="text" color="blue-gray" onClick={handleOpen}>
-                Quitter
+                {t('Quitter')}
               </Button>
               <Button text="variant" className=" bg-[#DCA61D]" type="submit" >
-                Valider
+                {t('Valider')}
               </Button>
             </DialogFooter>
           </form>

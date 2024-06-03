@@ -15,6 +15,8 @@ import { fetchNouvelleBanner } from  '../../API/nouvelle/Nouvelle';
 import { fetchNouvelles } from  '../../API/nouvelle/Nouvelle';
 //import { fetchMembers } from  '../../API/about/About';
 import { removeTags } from '../../UTILS/Util';
+import { useTranslation } from 'react-i18next';
+
 
 function Nouvelle() {
   const [loading, setLoading] = useState(true);
@@ -72,7 +74,7 @@ function Nouvelle() {
       });
      
   }, []);
-
+  const { t} = useTranslation();
   return (
     <>
       {loading ? (
@@ -99,7 +101,7 @@ function Nouvelle() {
             {/* Les nouvelles */}
             <div className="Animation-option flex flex-col items-center my-20 space-y-4">
               <div className="uppercase text-lg md:text-2xl w-[400px] text-center font-semibold text-[#4E4E4E]">
-                les nouvelles
+                {t('les nouvelles')}
               </div>
               <div className="sm:w-[600px] text-center">
                 Ut enim ad minim veniam, quis nostrud exercitation ullamco
@@ -185,7 +187,7 @@ function Nouvelle() {
                             fill="white"
                           />
                         </svg>
-                        <p>Lire plus</p>
+                        <p>{t('Lire plus')}</p>
                       </Link>
                     </div>
                   </div>
@@ -197,7 +199,7 @@ function Nouvelle() {
             {/* Donation */}
             <div className="Animation-option flex flex-col items-center space-y-4 ">
               <div className="uppercase text-lg md:text-2xl w-[400px] text-center font-semibold text-[#4E4E4E]">
-                faire une donation ici
+                {t('faire une donation ici')}
               </div>
               <div className="sm:w-[800px] text-center pb-8">
                 Ut enim ad minim veniam, quis nostrud exercitation ullamco
