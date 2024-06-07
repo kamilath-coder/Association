@@ -1,6 +1,8 @@
 import React from "react";
-import { useState } from 'react';
+import { useState,useEffect } from 'react';
 import axios from 'axios';
+import { loadStripe } from '@stripe/stripe-js';
+import { Elements } from '@stripe/react-stripe-js';
 import { FedaCheckoutButton,FedaCheckoutContainer } from 'fedapay-reactjs';
 import {
   Button,
@@ -9,19 +11,307 @@ import {
   DialogBody,
   DialogFooter,
   } from "@material-tailwind/react";
+import {sendFormData } from  '../../API/activity/Activity';
+import {ToastContainer,toast} from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogContent from '@mui/material/DialogContent';
+import DialogActions from '@mui/material/DialogActions';
+import IconButton from '@mui/material/IconButton';
+import CloseIcon from '@mui/icons-material/Close';
+import Typography from '@mui/material/Typography';
+import { styled } from '@mui/material/styles';
+import { useTranslation } from 'react-i18next';
+
+const BootstrapDialog = styled(Dialog)(({ theme }) => ({
+    '& .MuiDialogContent-root': {
+        padding: theme.spacing(2),
+    },
+    '& .MuiDialogActions-root': {
+        padding: theme.spacing(1),
+    },
+}));
+
+function PaymentPopup({ open,tel, user_Id, montant, email, onSuccess, userPrenom,userNom, formData, onClose }) {
+    const [isDialogOpen, setIsDialogOpen] = useState(open);
+    const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY);
+    useEffect(() => {
+        setIsDialogOpen(open);
+    }, [open]);
+    //console.log(email)
+    const handleOpenAZ = () => {
+       
+    };
+
+    
+    const createPaymentSession = async () => {
+      try { 
+        const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/api/payment/create`, {
+          provider: 'stripe',
+          item_id: 'item_id',
+          item_name: 'item',
+          amount: montant*100,
+          currency: 'XOF',
+          email: email,
+          description: 'Publicité sur Mon Bon Sejour',
+          phone: tel,
+          last_name: userNom,
+          first_name: userPrenom,
+          success_url: 'https://www.facebook.com',
+          customer_number:1,
+        });
+
+        if (response.data) {
+          return response.data.sessionId;
+          
+        } else {
+          console.error("Erreur lors de la création de la session de paiement :", response.data);
+        }
+      } catch (error) {
+        console.error("Erreur lors de la requête Card :", error);
+      }
+    };
 
 
+    const handleClose = () => {
+        setIsDialogOpen(false);
+        if (onClose) onClose();  
+    };
+
+
+    const handlePayCancel = () => {
+        //console.log('Paiement annulé');
+        handleClose();
+    };
+    const PUBLIC_KEY = process.env.REACT_APP_PUBLIC_KEY;
+    const checkoutButtonOptions = {
+        public_key: PUBLIC_KEY,
+        transaction: {
+          amount: montant,
+          description: 'Don pour Association',
+          callback_url: 'Dashboard/Publications/Hebergement/Ajouter_des_hebergements',
+          custom_metadata: {
+                user_id: user_Id,
+                //additional_info: 'Some additional info'
+            }
+        },
+        currency: {
+          iso: 'XOF'
+        },
+        customer: {
+          lastname: userNom,
+          firstname: userPrenom,
+          email: email
+        },
+        button: {
+          class: 'btn btn-primary',
+          text: 'Payer ' + montant + ' FCFA'
+        },
+        onComplete(resp) {
+          const FedaPay = window['FedaPay'];
+          if (resp.reason === FedaPay.DIALOG_DISMISSED) {
+            //window.location.reload();
+            toast.success('Vous avez fermé la boite de dialogue');
+          } else {
+            setIsDialogOpen(false);
+            onSuccess();
+    
+            // Extraire les données de la transaction
+            const transactionData = {
+              transaction_id: resp.transaction.id,
+              reference: resp.transaction.reference,
+              amount: resp.transaction.amount,
+              description: resp.transaction.description,
+              status: resp.transaction.status,
+              approved_at: resp.transaction.approved_at,
+              customer: {
+                firstname: resp.transaction.customer.firstname,
+                lastname: resp.transaction.customer.lastname,
+                email: resp.transaction.customer.email,
+              },
+              transaction_key: resp.transaction.transaction_key,
+              fees: resp.transaction.fees,
+              mode: resp.transaction.mode,
+              amount_debited: resp.transaction.amount_debited,
+              custom_metadata:resp.transaction.custom_metadata.user_id,
+            };
+            console.log('Transaction Data: ',transactionData);
+            console.log(checkoutButtonOptions);
+            // Envoyer les données de la transaction au backend
+            // fetch(${process.env.REACT_APP_BASE_URL}/api/fedapay/callback, {
+            //   method: 'POST',
+            //   headers: {
+            //     'Content-Type': 'application/json',
+            //     'Accept': 'application/json'
+            //   },
+            //   body: JSON.stringify(transactionData),
+            // })
+            // .then(response => {
+            //   if (!response.ok) {
+            //     return response.json().then(errorData => {
+            //       throw new Error(errorData.message || 'Something went wrong');
+            //     });
+            //   }
+            //   return response.json();
+            // })
+            // .then(data => {
+            //   console.log('Transaction saved:', data);
+            // })
+            // .catch((error) => {
+            //   console.error('Error:', error);
+            // });
+          }
+    
+          console.log(resp.transaction);
+          
+        },
+        onCancel: handlePayCancel
+    };
+    
+    // Lancer le paiement FedaPay
+    const handlePayment = () => {
+      const FedaPay = window['FedaPay'];
+      FedaPay.init(checkoutButtonOptions).open();
+    };
+
+
+    const handleStripePayment = async () => {
+      const sessionId = await createPaymentSession();
+      console.log(sessionId);
+      if (sessionId) {
+        const stripe = await stripePromise;
+
+        const { error } = await stripe.redirectToCheckout({
+          sessionId: sessionId,
+        });
+
+        if (error) {
+          console.error("Erreur lors de la redirection vers Stripe :", error);
+        }else{
+          onSuccess();
+        }
+      }
+    };
+      
+    return (
+        <BootstrapDialog onClose={handleClose} aria-labelledby="customized-dialog-title" open={isDialogOpen}>
+            <DialogTitle sx={{ m: 0, p: 2 }} id="customized-dialog-title" className='flex items-center text-[#FE7F2D] space-x-3'>
+                <p>Veuillez choisir le mode de paiement</p>
+                <IconButton aria-label="close" onClick={handleClose}
+                    sx={{
+                        position: 'absolute',
+                        right: 8,
+                        top: 8,
+                        color: (theme) => theme.palette.grey[500],
+                    }}>
+                    <CloseIcon />
+                </IconButton>
+            </DialogTitle>
+            <DialogContent dividers>
+                <Typography gutterBottom>
+                    Pour les paiements avec votre compte Az, choisissez l'option payer avec mon compte Az-Pay. Et pour les paiements par carte bancaire ou mobile money, choisissez l'option payer par carte ou mobile money
+                </Typography>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={handleOpenAZ} style={{ textTransform: "none", backgroundColor: "#233D4D", color: "white" }}>
+                Az-Pay : {montant} F CFA
+              </Button>
+              {/* <Button id="fedapay_btn_" onClick={handleOpenCard} style={{ textTransform: "none", backgroundColor: "#233D4D", color: "white" }}>
+                  Carte bancaire / Mobile money : {price} F CFA
+              </Button> */}
+
+              {/* <FedaCheckoutButton 
+                  style={{ textTransform: "none", backgroundColor: "#233D4D", color: "white" }}
+                  options={checkoutButtonOptions}
+              /> */}
+
+              <Button onClick={handlePayment} className={checkoutButtonOptions.button.class} 
+                  style={{ textTransform: "none", backgroundColor: "#233D4D", color: "white" }}>
+                  {checkoutButtonOptions.button.text}
+              </Button>
+              <Button onClick={handleStripePayment} style={{ textTransform: "none", backgroundColor: "#233D4D", color: "white" }}>
+                Stripe : {montant} F CFA
+              </Button>
+            </DialogActions>
+
+        </BootstrapDialog>
+    );
+}
 export function Donation() {
-  //const [open, setOpen] = React.useState(false);
+ //const [open, setOpen] = React.useState(false);
   const [donationModalOpen, setDonationModalOpen] = React.useState(false);
+  const {t} = useTranslation();
+  
+  const { i18n } = useTranslation();
+  const [currentLanguage, setCurrentLanguage] = useState(i18n.language);
+  const [formState, setFormState] = useState({
+    prix:'',
+    email:'',
+    nom:'',
+    prenom:'',
+    phone:'',
+  });
+  useEffect(() => {
+    const savedLanguage = localStorage.getItem('language');
+    const browserLang = savedLanguage || navigator.language || navigator.userLanguage;
+    const lang = browserLang.substr(0, 2);
+    i18n.changeLanguage(lang);
+    setCurrentLanguage(lang);
+    console.log('Langue actuelle :', lang);
 
+     // Ajoutez cet écouteur d'événements pour mettre à jour currentLanguage chaque fois que la langue change
+    i18n.on('languageChanged', lng => {
+      setCurrentLanguage(lng);
+    });
+
+    // N'oubliez pas de nettoyer l'écouteur d'événements lorsque le composant est démonté
+    return () => {
+      i18n.off('languageChanged');
+    };
+  }, [i18n]);
+  const handleInputChange = (event) => {
+    setFormState({
+      ...formState,
+      [event.target.name]: event.target.value,
+    });
+  };
+  const submitForm = async (event) => {
+    //event.preventDefault();
+    console.log('Formulaire soumis :', formState);
+    try {
+      const response = await sendFormData(formState);
+      console.log('Réponse du serveur :', response);
+      toast.success(response.message);
+      // Réinitialisez l'état
+      setFormState({
+        prix: '',
+        email: '',
+       
+      });
+      
+    } catch (error) {
+      console.error('Erreur lors de l\'envoi du formulaire :', error);
+      toast.error(error.response.data.message);
+    }
+  };
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    // setDonationModalOpen(false);
+    setShowPopup(true);
+  };
   const handleOpen = () => setDonationModalOpen(!donationModalOpen);
-  const handleSubmit = (e) => {
-    e.preventDefault();
-  }
- 
+  const [showPopup, setShowPopup] = useState(false);
+  const handlePopupSuccess = () => {
+    setShowPopup(false);
+   submitForm();
+  };
+  // Callback d'annulation du popup de paiement
+  const handlePopupCancel = () => {
+    setShowPopup(false);
+  };
   return (
     <>
+     <ToastContainer />
       <Button
         onClick={handleOpen}
         variant="text"
@@ -63,150 +353,79 @@ export function Donation() {
         </DialogHeader>
         <DialogBody className="h-[28rem]  overflow-y-scroll pl-8 overflow-x-hidden  ">
           <form className="mt-6 flex flex-col space-y-3 w-[300px]"  onSubmit={handleSubmit}>
-            <select className=" w-[250px] outline-none bg-[#f8f8f8] h-12 px-2">
-              <option>Don de 100$</option>
-              <option>Don de 150$</option>
-              <option>Don de 200$</option>
-              <option>Don de 300$</option>
-              <option>Don de 400$</option>
+            <select className=" w-[250px] outline-none bg-[#f8f8f8] h-12 px-2" name="prix" onChange={handleInputChange}>
+              <option>100</option>
+              <option>150</option>
+              <option>200</option>
+              <option>300</option>
+              <option>400</option>
             </select>
-            <label>Votre adresse mail</label>
+            <label>{t('Votre adresse mail')}</label>
             <input
               type="email"
+              name="email"
               className="w-[250px] outline-none bg-[#f8f8f8] h-12 px-2"
+              onChange={handleInputChange}
             />
-            <label>Payer par</label>
-            <div className=" flex items-center space-x-4">
-              {/* paypal */}
-              <div className=" flex items-center space-x-2">
-                <input type="radio" value="paypal" name="moyen_paiement" />
-                <svg
-                  width="50"
-                  height="27"
-                  viewBox="0 0 70 47"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <g clip-path="url(#clip0_35_819)">
-                    <path
-                      d="M65.3333 46.6667H4.66667C3.42899 46.6667 2.242 46.175 1.36683 45.2998C0.491665 44.4247 0 43.2377 0 42L0 4.66667C0 3.42899 0.491665 2.242 1.36683 1.36684C2.242 0.491665 3.42899 0 4.66667 0L65.3333 0C66.571 0 67.758 0.491665 68.6332 1.36684C69.5083 2.242 70 3.42899 70 4.66667V42C70 43.2377 69.5083 44.4247 68.6332 45.2998C67.758 46.175 66.571 46.6667 65.3333 46.6667ZM27.2844 20.0764C27.2312 20.0771 27.1788 20.0897 27.131 20.1132C27.0832 20.1368 27.0413 20.1707 27.0083 20.2125C26.9317 20.2905 26.8879 20.3949 26.8858 20.5042C26.8858 20.545 27.0764 21.1264 27.4847 22.3183L28.3675 24.8967L28.7778 26.0983C29.238 27.4465 29.4784 28.1633 29.4992 28.2489C28.5939 29.3697 27.7755 30.558 27.0511 31.8033L26.9772 31.9394L26.9733 31.9881C26.9733 32.1825 27.1308 32.3419 27.3272 32.3419L27.3797 32.3381H27.3778H29.7461C29.8565 32.3374 29.9649 32.3087 30.0612 32.2546C30.1575 32.2005 30.2384 32.1228 30.2964 32.0289L30.2983 32.0269L38.1383 20.7122C38.1796 20.658 38.2021 20.5918 38.2025 20.5236L38.2006 20.4944V20.4964C38.1979 20.3872 38.1542 20.283 38.0781 20.2047C38.0454 20.1631 38.0038 20.1292 37.9564 20.1057C37.9089 20.0821 37.8568 20.0695 37.8039 20.0686H35.4336C35.3229 20.0693 35.2143 20.098 35.1177 20.1521C35.0211 20.2062 34.9398 20.2838 34.8814 20.3778L34.8794 20.3797L31.6128 25.1747L30.2614 20.5625C30.2267 20.422 30.1461 20.297 30.0323 20.2075C29.9185 20.1181 29.7781 20.0692 29.6333 20.0686L29.5828 20.0706H29.5847L27.2844 20.0764ZM54.4639 19.8606H54.4133C52.9394 19.8606 51.6153 20.5003 50.7014 21.5153L50.6975 21.5192C49.698 22.5529 49.1401 23.9351 49.1419 25.3731V25.4256V25.4236C49.1381 25.48 49.1381 25.5481 49.1381 25.6142C49.1381 26.6583 49.5444 27.6092 50.2056 28.315L50.2036 28.3131C50.5797 28.6793 51.0273 28.9641 51.5185 29.1494C52.0096 29.3348 52.5338 29.4168 53.0581 29.3903H53.0483C53.7036 29.3825 54.3258 29.2483 54.8936 29.0072L54.8625 29.0189C55.4361 28.8031 55.9222 28.4667 56.3053 28.0389L56.3092 28.035C56.2897 28.1458 56.2683 28.2392 56.2431 28.3286L56.2469 28.3092C56.2122 28.4282 56.1913 28.5509 56.1847 28.6747V28.6786C56.1847 29.0053 56.3189 29.1706 56.5853 29.1706H58.7067C58.7895 29.178 58.873 29.1687 58.9522 29.1434C59.0314 29.118 59.1047 29.077 59.1678 29.0228C59.2309 28.9686 59.2824 28.9023 59.3195 28.8278C59.3565 28.7533 59.3782 28.6722 59.3833 28.5892V28.5872L60.6433 20.5625C60.6552 20.502 60.6532 20.4395 60.6373 20.3799C60.6215 20.3202 60.5923 20.265 60.5519 20.2183C60.517 20.1701 60.471 20.1309 60.418 20.1039C60.3649 20.0769 60.3062 20.0628 60.2467 20.0628H57.9075C57.6217 20.0628 57.4408 20.4031 57.3825 21.0778C57.0402 20.6386 56.5901 20.2955 56.0759 20.0819C55.5618 19.8682 55.001 19.7913 54.4483 19.8586L54.4639 19.8567V19.8606ZM19.5358 19.8606H19.4814C18.0094 19.8606 16.6853 20.5003 15.7753 21.5153L15.7714 21.5192C14.7719 22.5529 14.214 23.9351 14.2158 25.3731V25.4256V25.4236C14.1901 25.9521 14.2712 26.4804 14.4542 26.9769C14.6373 27.4734 14.9187 27.9278 15.2814 28.3131L15.2794 28.3111C15.9678 28.98 16.9089 29.3922 17.9472 29.3922L18.1339 29.3883H18.1242C18.7697 29.3786 19.3822 29.2444 19.9403 29.0053L19.9092 29.0169C20.4906 28.7953 20.9844 28.4608 21.3831 28.035L21.385 28.0331C21.3131 28.2236 21.2683 28.4453 21.2625 28.6747V28.6786C21.2625 29.0053 21.3986 29.1706 21.6631 29.1706H23.7825C23.8653 29.178 23.9488 29.1687 24.028 29.1434C24.1072 29.118 24.1805 29.077 24.2436 29.0228C24.3067 28.9686 24.3583 28.9023 24.3953 28.8278C24.4323 28.7533 24.454 28.6722 24.4592 28.5892V28.5872L25.7211 20.5625C25.7317 20.5024 25.7288 20.4407 25.7127 20.3819C25.6966 20.323 25.6675 20.2685 25.6278 20.2222C25.5928 20.174 25.5469 20.1348 25.4938 20.1078C25.4408 20.0807 25.3821 20.0667 25.3225 20.0667H22.9833C22.6975 20.0667 22.5167 20.4069 22.4603 21.0817C22.1144 20.646 21.6636 20.3054 21.15 20.0918C20.6364 19.8782 20.0769 19.7986 19.5242 19.8606L19.5397 19.8586L19.5358 19.8606ZM63.4122 15.5556L63.3811 15.5536C63.2883 15.5533 63.1987 15.5879 63.1303 15.6506C63.0618 15.7133 63.0195 15.7995 63.0117 15.8919L61.0128 28.6844C60.9964 28.746 60.9962 28.8108 61.0122 28.8724C61.0282 28.9341 61.0599 28.9906 61.1042 29.0364C61.1409 29.0799 61.1868 29.1149 61.2385 29.1387C61.2903 29.1626 61.3466 29.1748 61.4036 29.1744H63.4453L63.5075 29.1783C63.6622 29.1783 63.8106 29.1169 63.92 29.0075C64.0294 28.8981 64.0908 28.7497 64.0908 28.595V28.5911L66.0858 16.0203L66.0878 15.9775C66.0876 15.8666 66.0515 15.7588 65.9847 15.6703V15.6722C65.9498 15.635 65.9076 15.6052 65.8608 15.5848C65.814 15.5645 65.7635 15.5538 65.7125 15.5536L65.6833 15.5556H63.4122ZM40.7206 15.5556C40.6371 15.5446 40.5523 15.5514 40.4716 15.5754C40.3909 15.5995 40.3162 15.6402 40.2524 15.6951C40.1885 15.75 40.1369 15.8177 40.101 15.8938C40.0651 15.9699 40.0456 16.0528 40.0439 16.1369L38.0469 28.6825C38.0367 28.7421 38.0395 28.8033 38.0553 28.8618C38.0711 28.9202 38.0994 28.9745 38.1383 29.0208C38.1727 29.0692 38.2182 29.1086 38.271 29.1357C38.3238 29.1628 38.3823 29.1767 38.4417 29.1764H40.9792C41.093 29.1763 41.2033 29.1367 41.2913 29.0644C41.3792 28.992 41.4393 28.8914 41.4614 28.7797V28.7758L42.0156 25.2097C42.0321 25.0536 42.1097 24.9103 42.2314 24.8111C42.3641 24.7039 42.5253 24.6347 42.6942 24.6108H42.7C42.8575 24.5817 43.0383 24.5661 43.2231 24.5642C43.3864 24.5642 43.5828 24.5739 43.8083 24.5953C44.0549 24.6236 44.303 24.6366 44.5511 24.6342C45.9757 24.6365 47.3484 24.0995 48.3933 23.1311L48.3894 23.135C48.9105 22.5825 49.3128 21.9291 49.5717 21.2151C49.8305 20.5011 49.9403 19.7417 49.8944 18.9836V18.9992C49.9363 18.4979 49.8503 17.9941 49.6446 17.535C49.4389 17.076 49.1201 16.6766 48.7181 16.3742L48.7103 16.3683C47.7824 15.7816 46.6955 15.497 45.5992 15.5536H45.6108L40.7206 15.5556ZM5.75556 15.5556C5.67422 15.5468 5.59195 15.5553 5.5141 15.5804C5.43625 15.6056 5.36456 15.6468 5.30368 15.7015C5.2428 15.7561 5.1941 15.8229 5.16073 15.8976C5.12736 15.9723 5.11008 16.0532 5.11 16.135V16.1389L3.11111 28.6844C3.10069 28.7441 3.10347 28.8053 3.11926 28.8638C3.13505 28.9222 3.16346 28.9765 3.2025 29.0228C3.23685 29.0712 3.28235 29.1106 3.33515 29.1376C3.38795 29.1647 3.4465 29.1787 3.50583 29.1783H5.84694C5.93041 29.1893 6.01525 29.1825 6.09592 29.1585C6.17659 29.1344 6.25129 29.0936 6.31514 29.0388C6.37899 28.9839 6.43056 28.9162 6.46648 28.8401C6.5024 28.764 6.52187 28.6811 6.52361 28.5969L7.07778 25.2156C7.09462 25.06 7.17133 24.917 7.29167 24.8169C7.42434 24.7097 7.58555 24.6405 7.75444 24.6167H7.76028C7.93234 24.5863 8.10667 24.5707 8.28139 24.57H8.28333C8.44667 24.57 8.64111 24.5797 8.86667 24.6011C9.11257 24.6294 9.35999 24.6424 9.6075 24.64C11.0911 24.64 12.4406 24.0703 13.4517 23.1369L13.4478 23.1408C13.9686 22.5882 14.3708 21.9347 14.6297 21.2208C14.8885 20.5069 14.9984 19.7475 14.9528 18.9894V19.005C14.9946 18.5037 14.9087 17.9999 14.7029 17.5409C14.4972 17.0818 14.1784 16.6824 13.7764 16.38L13.7686 16.3742C12.8448 15.7896 11.7631 15.5044 10.6711 15.5575H10.6828L5.75556 15.5556ZM54.3356 26.9014L54.2422 26.9033C53.7454 26.9038 53.2645 26.7281 52.885 26.4075L52.8889 26.4094C52.7134 26.2478 52.5734 26.0515 52.4777 25.8329C52.3819 25.6144 52.3326 25.3783 52.3328 25.1397L52.3347 25.0522V24.9997C52.3347 24.2725 52.6283 23.6133 53.1047 23.135C53.5733 22.6547 54.2267 22.3572 54.95 22.3572H55.0142H55.0103L55.0764 22.3553C55.5994 22.3553 56.0758 22.5478 56.4414 22.8647L56.4394 22.8628C56.62 23.03 56.764 23.2327 56.8624 23.4582C56.9608 23.6838 57.0114 23.9273 57.0111 24.1733L57.0092 24.2667V24.2628V24.3094C57.0092 25.0269 56.7117 25.6764 56.2314 26.1372C55.9888 26.3789 55.701 26.5704 55.3844 26.7009C55.0678 26.8313 54.7285 26.8981 54.3861 26.8975H54.3375L54.3356 26.9014ZM19.3764 26.9014L19.2792 26.9033C18.7697 26.9033 18.3011 26.7167 17.9433 26.4075L17.9453 26.4094C17.7743 26.2459 17.6382 26.0495 17.5453 25.8319C17.4524 25.6143 17.4046 25.3802 17.4047 25.1436L17.4067 25.0522V24.9997C17.4067 24.2725 17.7003 23.6133 18.1767 23.135C18.6453 22.6547 19.2967 22.3572 20.02 22.3572H20.0881H20.0842L20.1503 22.3553C20.6733 22.3553 21.1497 22.5478 21.5153 22.8647L21.5133 22.8628C21.6934 23.0298 21.837 23.2323 21.935 23.4575C22.033 23.6827 22.0835 23.9258 22.0831 24.1714L22.0811 24.2667V24.2628V24.3308C22.0811 25.0483 21.7836 25.6939 21.3033 26.1547C20.805 26.6344 20.14 26.902 19.4483 26.9014H19.3764ZM42.5289 21.9236L43.0519 18.6356C43.0561 18.5871 43.0698 18.54 43.0922 18.4969C43.1146 18.4538 43.1452 18.4155 43.1824 18.3843C43.2196 18.353 43.2627 18.3294 43.309 18.3148C43.3553 18.3002 43.4041 18.2949 43.4525 18.2992H44.0047L44.1233 18.2972C44.4597 18.2972 44.7922 18.3206 45.1169 18.3653L45.08 18.3614C45.3814 18.4158 45.6439 18.5519 45.85 18.7464C45.9675 18.8574 46.061 18.9912 46.1249 19.1397C46.1887 19.2882 46.2216 19.4481 46.2214 19.6097L46.2194 19.6836V19.6797C46.2603 20.0046 46.2203 20.3345 46.1029 20.6401C45.9855 20.9458 45.7944 21.2177 45.5467 21.4317L45.5447 21.4336C44.9251 21.7872 44.2147 21.9496 43.5031 21.9003H43.5147L42.5328 21.9314L42.5289 21.9236ZM7.56972 21.9236L8.09278 18.6356C8.09669 18.5871 8.11019 18.5398 8.1325 18.4966C8.15481 18.4533 8.18549 18.4149 8.22275 18.3836C8.26001 18.3524 8.30312 18.3288 8.34957 18.3143C8.39602 18.2998 8.44488 18.2946 8.49333 18.2992H9.07472C9.69726 18.2536 10.3205 18.3786 10.8772 18.6608L10.8578 18.6511C11.2253 18.8864 11.3497 19.3861 11.2272 20.1406C11.2178 20.4222 11.1409 20.6975 11.0028 20.9432C10.8647 21.1889 10.6696 21.3978 10.4339 21.5522L10.4281 21.5561C9.50644 21.8955 8.51963 22.0205 7.5425 21.9217L7.56972 21.9236Z"
-                      fill="black"
-                    />
-                  </g>
-                  <defs>
-                    <clipPath id="clip0_35_819">
-                      <rect width="70" height="46.6667" fill="white" />
-                    </clipPath>
-                  </defs>
-                </svg>
-              </div>
-              {/* master*/}
-              <div className=" flex items-center space-x-2">
-                <input type="radio" value="master_card" name="moyen_paiement" />
-                <svg
-                  width="50"
-                  height="55"
-                  viewBox="0 0 70 55"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <g clip-path="url(#clip0_35_814)">
-                    <path
-                      d="M12.7257 54.1436V50.5422C12.7257 49.1613 11.8852 48.2612 10.4444 48.2612C9.7242 48.2612 8.94381 48.5012 8.4035 49.2816C7.9835 48.6213 7.3833 48.2612 6.48287 48.2612C5.8824 48.2612 5.28248 48.4411 4.80205 49.1014V48.3812H3.5415V54.1436H4.80205V50.9622C4.80205 49.942 5.34236 49.4616 6.18291 49.4616C7.02291 49.4616 7.44346 50.0019 7.44346 50.9622V54.1436H8.704V50.9622C8.704 49.942 9.30393 49.4616 10.0843 49.4616C10.9249 49.4616 11.3449 50.0019 11.3449 50.9622V54.1436H12.7257ZM31.3936 48.3812H29.3529V46.6405H28.0924V48.3812H26.9519V49.5214H28.0921V52.1628C28.0921 53.4836 28.6324 54.2637 30.0731 54.2637C30.6135 54.2637 31.2134 54.0837 31.6339 53.8437L31.2735 52.763C30.9134 53.0031 30.4934 53.0633 30.1932 53.0633C29.593 53.0633 29.3529 52.7032 29.3529 52.1027V49.5214H31.3936V48.3812ZM42.0784 48.2609C41.3582 48.2609 40.878 48.6213 40.5778 49.1014V48.3812H39.3172V54.1436H40.5778V50.9023C40.5778 49.942 40.9978 49.4017 41.7782 49.4017C42.0183 49.4017 42.3185 49.4618 42.5586 49.5217L42.9187 48.3213C42.6786 48.2612 42.3185 48.2612 42.0784 48.2612M25.9314 48.8616C25.3309 48.4414 24.4906 48.2614 23.5902 48.2614C22.1497 48.2614 21.1894 48.9817 21.1894 50.1222C21.1894 51.0828 21.9097 51.6228 23.1702 51.803L23.7704 51.8632C24.4308 51.9829 24.7909 52.1631 24.7909 52.4634C24.7909 52.8834 24.3107 53.1836 23.4702 53.1836C22.6299 53.1836 21.9695 52.8834 21.5493 52.5834L20.9491 53.5437C21.6094 54.0239 22.5099 54.2639 23.41 54.2639C25.0908 54.2639 26.0514 53.4838 26.0514 52.4032C26.0514 51.3827 25.271 50.8424 24.0704 50.6625L23.4702 50.6023C22.9299 50.5422 22.5099 50.4224 22.5099 50.0623C22.5099 49.642 22.9299 49.4019 23.5902 49.4019C24.3107 49.4019 25.031 49.7019 25.3911 49.8821L25.9314 48.8616ZM59.4261 48.2614C58.7056 48.2614 58.2255 48.6216 57.9252 49.1017V48.3815H56.6647V54.1439H57.9252V50.9026C57.9252 49.9423 58.3455 49.4019 59.1256 49.4019C59.366 49.4019 59.6662 49.4621 59.9063 49.522L60.2664 48.3216C60.0263 48.2614 59.6662 48.2614 59.4261 48.2614ZM43.339 51.2627C43.339 53.0034 44.5394 54.2639 46.4004 54.2639C47.2406 54.2639 47.8408 54.084 48.441 53.6039L47.8408 52.5834C47.3607 52.9435 46.8805 53.1234 46.3402 53.1234C45.3197 53.1234 44.5995 52.4032 44.5995 51.2627C44.5995 50.1823 45.3197 49.4618 46.3402 49.4019C46.8805 49.4019 47.3607 49.5819 47.8408 49.9423L48.441 48.9218C47.8408 48.4414 47.2406 48.2614 46.4004 48.2614C44.5394 48.2614 43.339 49.522 43.339 51.2627ZM54.9841 51.2627V48.3815H53.7236V49.1017C53.3033 48.5617 52.7031 48.2614 51.9227 48.2614C50.3021 48.2614 49.0415 49.522 49.0415 51.2627C49.0415 53.0034 50.3021 54.2639 51.9227 54.2639C52.763 54.2639 53.3635 53.964 53.7236 53.4237V54.1439H54.9841V51.2627ZM50.3619 51.2627C50.3619 50.2422 51.0223 49.4019 52.1026 49.4019C53.1231 49.4019 53.8436 50.1823 53.8436 51.2627C53.8436 52.2832 53.1231 53.1234 52.1026 53.1234C51.0223 53.0633 50.3619 52.2832 50.3619 51.2627ZM35.2955 48.2614C33.6147 48.2614 32.414 49.4618 32.414 51.2627C32.414 53.0636 33.6144 54.2639 35.3554 54.2639C36.1957 54.2639 37.0362 54.0239 37.6966 53.4838L37.0961 52.5834C36.616 52.9435 36.0158 53.1836 35.4156 53.1836C34.6352 53.1836 33.8548 52.8235 33.6746 51.8027H37.9367V51.3229C37.9968 49.4618 36.9165 48.2614 35.2955 48.2614ZM35.2953 49.3418C36.0754 49.3418 36.616 49.8222 36.7357 50.7227H33.7345C33.8545 49.9423 34.3948 49.3418 35.2953 49.3418ZM66.5688 51.2627V46.1005H65.3083V49.1017C64.888 48.5617 64.2878 48.2614 63.5074 48.2614C61.8868 48.2614 60.6262 49.522 60.6262 51.2627C60.6262 53.0034 61.8868 54.2639 63.5074 54.2639C64.348 54.2639 64.9482 53.964 65.3083 53.4237V54.1439H66.5688V51.2627ZM61.9469 51.2627C61.9469 50.2422 62.607 49.4019 63.6876 49.4019C64.7081 49.4019 65.4283 50.1823 65.4283 51.2627C65.4283 52.2832 64.7081 53.1234 63.6876 53.1234C62.607 53.0633 61.9469 52.2832 61.9469 51.2627ZM19.8083 51.2627V48.3815H18.5478V49.1017C18.1275 48.5617 17.5273 48.2614 16.7469 48.2614C15.1262 48.2614 13.8657 49.522 13.8657 51.2627C13.8657 53.0034 15.1262 54.2639 16.7469 54.2639C17.5874 54.2639 18.1876 53.964 18.5478 53.4237V54.1439H19.8083V51.2627ZM15.1262 51.2627C15.1262 50.2422 15.7866 49.4019 16.8669 49.4019C17.8874 49.4019 18.6079 50.1823 18.6079 51.2627C18.6079 52.2832 17.8874 53.1234 16.8669 53.1234C15.7866 53.0633 15.1262 52.2832 15.1262 51.2627Z"
-                      fill="black"
-                    />
-                    <path
-                      d="M25.5112 4.62189H44.4194V38.5968H25.5112V4.62189Z"
-                      fill="#FF5F00"
-                    />
-                    <path
-                      d="M26.7118 21.6095C26.7118 14.7066 29.9532 8.58375 34.9352 4.62191C31.2739 1.7407 26.652 0 21.6098 0C9.6641 0 0 9.6641 0 21.6095C0 33.5546 9.6641 43.219 21.6095 43.219C26.6517 43.219 31.2736 41.4783 34.9352 38.5968C29.9532 34.6951 26.7118 28.5124 26.7118 21.6095Z"
-                      fill="#EB001B"
-                    />
-                    <path
-                      d="M69.9303 21.6095C69.9303 33.5546 60.2662 43.219 48.3208 43.219C43.2786 43.219 38.6567 41.4783 34.9951 38.5968C40.0373 34.6352 43.2187 28.5124 43.2187 21.6095C43.2187 14.7066 39.9771 8.58375 34.9951 4.62191C38.6564 1.7407 43.2786 0 48.3208 0C60.2662 0 69.9303 9.72426 69.9303 21.6095Z"
-                      fill="#F79E1B"
-                    />
-                  </g>
-                  <defs>
-                    <clipPath id="clip0_35_814">
-                      <rect width="70" height="54.4141" fill="white" />
-                    </clipPath>
-                  </defs>
-                </svg>
-              </div>
-              {/* visa */}
-              <div className=" flex items-center space-x-2">
-                <input type="radio" value="visa" name="moyen_paiement" />
-                <svg
-                  width="50"
-                  height="23"
-                  viewBox="0 0 70 23"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <g clip-path="url(#clip0_35_821)">
-                    <path
-                      d="M36.2023 7.22643C36.1624 10.3753 39.0086 12.1324 41.1526 13.1772C43.3554 14.2491 44.0954 14.9365 44.0866 15.8952C44.0702 17.3622 42.3295 18.0097 40.7006 18.0349C37.8588 18.0789 36.2064 17.2676 34.8928 16.654L33.8691 21.4444C35.187 22.0517 37.6275 22.5813 40.1581 22.6046C46.0986 22.6046 49.9849 19.6722 50.006 15.1258C50.0292 9.35569 42.0249 9.03631 42.0796 6.45725C42.0984 5.67522 42.8447 4.84069 44.4798 4.6285C45.2892 4.52131 47.5234 4.43928 50.0566 5.60576L51.0508 0.970999C49.6885 0.474983 47.9377 2.28882e-05 45.7579 2.28882e-05C40.1666 2.28882e-05 36.234 2.97229 36.2023 7.22643ZM60.6041 0.39924C59.5194 0.39924 58.6053 1.03197 58.1973 2.00295L49.7118 22.2641H55.6478L56.8291 18.9996H64.0828L64.768 22.2641H70L65.4344 0.39924H60.6041ZM61.4346 6.30577L63.1477 14.5163H58.456L61.4346 6.30577ZM29.0052 0.399513L24.3261 22.2639H29.9827L34.6596 0.398968L29.0052 0.399513ZM20.6371 0.399513L14.7495 15.2814L12.3679 2.62748C12.0884 1.2149 10.9848 0.39924 9.75926 0.39924H0.134805L0 1.03416C1.97586 1.46291 4.22078 2.15444 5.58086 2.89436C6.4132 3.34635 6.65055 3.74147 6.92398 4.81553L11.4349 22.2641H17.4125L26.577 0.39924L20.6371 0.399513Z"
-                      fill="url(#paint0_linear_35_821)"
-                    />
-                  </g>
-                  <defs>
-                    <linearGradient
-                      id="paint0_linear_35_821"
-                      x1="3218.18"
-                      y1="67.9492"
-                      x2="3283.61"
-                      y2="-2253.57"
-                      gradientUnits="userSpaceOnUse"
-                    >
-                      <stop stop-color="#222357" />
-                      <stop offset="1" stop-color="#254AA5" />
-                    </linearGradient>
-                    <clipPath id="clip0_35_821">
-                      <rect width="70" height="22.6953" fill="white" />
-                    </clipPath>
-                  </defs>
-                </svg>
-              </div>
-            </div>
-            {/* <label>Nom du titulaire de carte</label>
+            <label>{t('Nom')}</label>
             <input
+              nom="nom" 
               type="text"
               className="w-[250px] outline-none bg-[#f8f8f8] h-12 px-2"
+              onChange={handleInputChange}
             />
-            <label>Numero de carte</label> */}
-            {/* <input
+            <label>{t('Telephone')}</label>
+            <input
+              name="phone"
               type="tel"
               className="w-[250px] outline-none bg-[#f8f8f8] h-12 px-2"
-            /> */}
-            {/* <div className=" flex flex-row items-center space-x-3">
+              onChange={handleInputChange}
+            />
+            <div className=" flex flex-row items-center space-x-3">
               <div className=" flex-col flex">
-                <label>Date d’expiration</label>
+                <label>{t('Prénom')}</label>
                 <input
-                  type="date"
+                  type="text"
+                  name="prenom"
                   className="w-[120px] outline-none bg-[#f8f8f8] h-12 px-2"
                 />
               </div>
-              <div className=" flex-col flex">
-                <label>CVV</label>
+              {/* <div className=" flex-col flex">
+                <label>Téléphone</label>
                 <input
-                  type="number"
+                  
+                  type="text"
                   className="w-[100px] outline-none bg-[#f8f8f8] h-12 px-2"
                 />
  
-              </div>
-            </div> */}
+              </div> */}
+            </div>
             <DialogFooter className="space-x-2">
               <Button variant="text" color="blue-gray" onClick={handleOpen}>
-                Quitter
+               {t('Quitter')}
               </Button>
-              {/* <Button  text='variant' type="submit" className=" bg-[#DCA61D]"  >
-                Valider
-              </Button> */}
+              <Button  text='variant' type="submit" className=" bg-[#DCA61D]"  >
+                {t('Valider')}
+              </Button>
               
             </DialogFooter>
+            {showPopup && (
+                <PaymentPopup
+                    open={showPopup}
+                    montant={parseFloat(formState.prix)}
+                    onSuccess={handlePopupSuccess}
+                    userNom={formState.nom}
+                    userPrenom={formState.prenom}
+                    email={formState.email}
+                    tel={formState.phone}
+                    user_Id="1"
+                    formData={formState}
+                    onCancel={handlePopupCancel}
+                />
+            )}
           </form>
+
+          
         </DialogBody>
       </Dialog>
     </>

@@ -37,7 +37,7 @@ class ContactController extends Controller
         $banner=WebPage::with('banner')->where('name','Contacts')->first();
         if($banner){
             $banner->banner->picture=base64_encode($banner->banner->picture);
-            
+
 
             return response()->json([
                 'message'=>'Informations du site récupérées avec succès',
@@ -54,20 +54,9 @@ class ContactController extends Controller
     {
         $datas = WebSiteInfo::first();
         //dd($email->email);
-        $data = $request->validate([
-            'nom' => 'required|max:255',
-            'email' => 'required|email|max:255',
-            'sujet' => 'required|max:255',
-            'message' => 'required',
-        ],[
-            'nom.required' => 'Le nom est obligatoire',
-            'email.required' => 'L\'email est obligatoire',
-            'email.email' => 'L\'email doit être une adresse email valide',
-            'sujet.required' => 'Le sujet est obligatoire',
-            'message.required' => 'Le message est obligatoire',
-
-        ]);
-
+        //je ne fait plus le validate
+        $data = $request->all();
+        
         $details = [
             'nom' => $data['nom'],
             'email' => $data['email'],

@@ -14,6 +14,7 @@ import {fetchActivityInfo } from  '../../API/activity/Activity';
 import {fetchActivityBanner } from  '../../API/activity/Activity';
 import {fetchNouvelles } from  '../../API/activity/Activity';
 import { removeTags } from '../../UTILS/Util';
+import { useTranslation } from 'react-i18next';
 function Activite() {
   const [loading, setLoading] = useState(true);
   const [info, setInfo] = useState({});
@@ -23,10 +24,32 @@ function Activite() {
   const [Article, setArticle] = useState();
   let options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
 
-
+  const { t} = useTranslation();
   
+  const { i18n } = useTranslation();
+  const [currentLanguage, setCurrentLanguage] = useState(i18n.language);
+
+  useEffect(() => {
+    const savedLanguage = localStorage.getItem('language');
+    const browserLang = savedLanguage || navigator.language || navigator.userLanguage;
+    const lang = browserLang.substr(0, 2);
+    i18n.changeLanguage(lang);
+    setCurrentLanguage(lang);
+    console.log('Langue actuelle :', lang);
+
+     // Ajoutez cet écouteur d'événements pour mettre à jour currentLanguage chaque fois que la langue change
+    i18n.on('languageChanged', lng => {
+      setCurrentLanguage(lng);
+    });
+
+    // N'oubliez pas de nettoyer l'écouteur d'événements lorsque le composant est démonté
+    return () => {
+      i18n.off('languageChanged');
+    };
+  }, [i18n]);
   useEffect(() => {
     const timer = setTimeout(() => {
+     
       // Après 5 secondes, masquer le spinner et rediriger l'utilisateur
       setLoading(false);
     }, 1000); // 5000 millisecondes = 5 secondes
@@ -54,7 +77,7 @@ function Activite() {
       fetchActivityBanner()
       .then(response => {
         console.log('Réponse du serveur :', response.data.info.banners);
-        setBanner(response.data.info.banner.fr_text1);
+        setBanner(response.data.info.banner);
         setBannerPicture(response.data.info.banner.picture);
         // setBanner(response.data.info.banners[0].fr_text1);
         // setBannerPicture(response.data.info.banners[0].picture);
@@ -91,7 +114,8 @@ function Activite() {
             >
               <div className="bg-[#066AB225] flex justify-center items-center h-[400px]  ">
                 <div className="sm:text-4xl md:px-10 px-4  text-2xl font-bold text-white uppercase leading-relaxed animate-fade-up animate-once animate-duration-1000 animate-delay-[1ms] animate-normal">
-                  {Banner ? Banner :'Nos activités'}
+                 {/* {currentLanguage==="fr" && Banner.fr_text1 ?Banner.fr_text1 : (Banner.en_text1 ? Banner.text1 : 'Nos activités')} */}
+                 {currentLanguage==="fr" ? (Banner.fr_text1 ? Banner.fr_text1 : 'Nos activités') : (Banner.text1 ? Banner.text1 : 'Nos activités')}
                 </div>
               </div>
             </div>
@@ -99,7 +123,7 @@ function Activite() {
             {/* Activité */}
             <div className="py-20 flex flex-col items-center space-y-4">
               <div className="Animation-option uppercase text-lg md:text-2xl w-[400px] text-center font-semibold text-[#4E4E4E]">
-                nos différents activités
+                {t('nos différents activités')}
               </div>
               <div className="Animation-option sm:w-[600px] text-center">
                 {Article ? removeTags(Article):'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate'}
@@ -143,7 +167,7 @@ function Activite() {
                               fill="white"
                             />
                           </svg>
-                          <p>Lire plus</p>
+                          <p>{t('Lire plus')}</p>
                         </Link>
                       </div>
                     </div>

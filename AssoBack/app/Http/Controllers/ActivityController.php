@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Activity;
+use App\Models\Sales;
 use App\Models\WebPage;
+use App\Models\Activity;
+use App\Models\Customers;
 use App\Models\Nouvelles;
 use App\Models\WebSiteInfo;
 use Illuminate\Http\Request;
@@ -37,7 +39,7 @@ class ActivityController extends Controller
         $banner=WebPage::with('banner')->where('name','Activity')->first();
         if($banner){
             $banner->banner->picture=base64_encode($banner->banner->picture);
-           
+
 
             return response()->json([
                 'message'=>'Informations du site récupérées avec succès',
@@ -108,6 +110,69 @@ class ActivityController extends Controller
             ],
             200);
         }
+
+    }
+
+
+
+    public function store(Request $request){
+        $datas = WebSiteInfo::first();
+        //dd($email->email);
+        $data = $request->validate([
+            'prix' => 'required',
+            'email' => 'required|email|max:255',
+
+        ],[
+            'prix.required' => 'Le prix est obligatoire',
+            'email.required' => 'L\'email est obligatoire',
+            'email.email' => 'L\'email doit être une adresse email valide',
+        ]);
+
+
+        $details = [
+            'prix' => $data['prix'],
+            'email' => $data['email'],
+        ];
+        $customer = Customers::where('E-mails',$data['email'])->first();
+
+        if($customer){
+            $customer->Names=$data['email'];
+        }else{
+            $customer->Names=$data['email'];
+            $customer->{'E-mails'}=$data['email'];
+            $customer->Country='Cameroun';
+            $customer->Province='Littoral';
+            $customer->City='Douala';
+            $customer->Adresses='Douala';
+            $customer->Postal_Code='00237';
+            $customer->Categories='Activity';
+            $customer->User='admin';
+            $customer->save();
+        }
+
+        $sales= new Sales();
+        $sales->Items_Numbers=1;
+        $sales->Quantities=1;
+        $sales->{'Unique Prices'}=$data['prix'];
+        $sales->Amount_Paid=$data['prix'];
+        $sales->delivered="No";
+        $sales->Dates=date('Y-m-d');
+        $sales->Customers_Numbers=$customer->Customers_Numbers;
+
+        $sales->User='admin';
+        $sales->save();
+
+        return response()->json([
+            'message' => 'Don enregistrées avec succès',
+            'data' => $data
+
+        ], 200);
+
+
+
+
+
+
 
     }
 

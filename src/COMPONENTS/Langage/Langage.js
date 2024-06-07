@@ -21,6 +21,7 @@ import {
     const changeLanguage = (lng) => {
       i18n.changeLanguage(lng);
        setCurrentLanguage(lng);
+       localStorage.setItem('language', lng);
     };
     return (
      <Menu

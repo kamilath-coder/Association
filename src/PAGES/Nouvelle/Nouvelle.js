@@ -28,11 +28,31 @@ function Nouvelle() {
   const [Presentation, setPresentation] = useState('');
   const [Articles, setArticles] = useState([]);
   const [info, setInfo] = useState({});
-
+  const { i18n } = useTranslation();
+  const [currentLanguage, setCurrentLanguage] = useState(i18n.language);
   let options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
 
   useEffect(() => {
+    const savedLanguage = localStorage.getItem('language');
+    const browserLang = savedLanguage || navigator.language || navigator.userLanguage;
+    const lang = browserLang.substr(0, 2);
+    i18n.changeLanguage(lang);
+    setCurrentLanguage(lang);
+    console.log('Langue actuelle :', lang);
+
+     // Ajoutez cet écouteur d'événements pour mettre à jour currentLanguage chaque fois que la langue change
+    i18n.on('languageChanged', lng => {
+      setCurrentLanguage(lng);
+    });
+
+    // N'oubliez pas de nettoyer l'écouteur d'événements lorsque le composant est démonté
+    return () => {
+      i18n.off('languageChanged');
+    };
+  }, [i18n]);
+  useEffect(() => {
     const timer = setTimeout(() => {
+      
       // Après 5 secondes, masquer le spinner et rediriger l'utilisateur
       setLoading(false);
     }, 1000); // 5000 millisecondes = 5 secondes
@@ -57,7 +77,7 @@ function Nouvelle() {
     fetchNouvelleBanner()
       .then(response => {
         console.log('Réponse du serveur :', response.data.info.banners);
-        setBanner(response.data.info.banner.fr_text1);
+        setBanner(response.data.info.banner);
         setBannerPicture(response.data.info.banner.picture);
         })
       .catch(error => {
@@ -93,7 +113,8 @@ function Nouvelle() {
             >
               <div className="bg-[#066AB225] flex justify-center items-center h-[400px]  ">
                 <div className="sm:text-4xl md:px-10 px-4  text-2xl font-bold text-white uppercase leading-relaxed animate-fade-up animate-once animate-duration-1000 animate-delay-[1ms] animate-normal">
-                {Banner ? Banner :'Nouvelle'}
+                {/* {currentLanguage==="fr" && Banner.fr_text1 ?Banner.fr_text1 : (Banner.en_text1 ? Banner.text1 : 'Nos activités')} */}
+                {currentLanguage==="fr" ? (Banner.fr_text1 ? Banner.fr_text1 : 'Nos activités') : (Banner.text1 ? Banner.text1 : 'Nos activités')}
                 </div>
               </div>
             </div>

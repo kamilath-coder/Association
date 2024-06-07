@@ -1,9 +1,32 @@
 import { Carousel } from "@material-tailwind/react";
 import { Link } from "react-router-dom";
 import backActivite from "../../ASSETS/Image/Backnouvelle.png";
+import { useTranslation } from 'react-i18next';
+import { useState, useEffect } from "react";
 
 export function SlideHome({banner}) {
+  const { i18n } = useTranslation();
+  const [currentLanguage, setCurrentLanguage] = useState(i18n.language);
+  const { t} = useTranslation();
   console.log(banner);
+  useEffect(() => {
+    const savedLanguage = localStorage.getItem('language');
+    const browserLang = savedLanguage || navigator.language || navigator.userLanguage;
+    const lang = browserLang.substr(0, 2);
+    i18n.changeLanguage(lang);
+    setCurrentLanguage(lang);
+    console.log('Langue actuelle :', lang);
+
+     // Ajoutez cet écouteur d'événements pour mettre à jour currentLanguage chaque fois que la langue change
+    i18n.on('languageChanged', lng => {
+      setCurrentLanguage(lng);
+    });
+
+    // N'oubliez pas de nettoyer l'écouteur d'événements lorsque le composant est démonté
+    return () => {
+      i18n.off('languageChanged');
+    };
+  }, [i18n]);
   if (!banner ||!Array.isArray(banner)) {
     return <div>La bannière n'est pas un tableau</div>;
   }
@@ -16,7 +39,8 @@ export function SlideHome({banner}) {
         <div className="bg-color flex items-center  ">
           <div className="md:px-10 px-4 flex flex-col space-y-6 relative bottom-6">
             <div className="sm:text-4xl text-2xl font-bold text-white w-[320px] sm:w-[520px] uppercase leading-relaxed animate-fade-up animate-once animate-duration-1000  animate-delay-[1ms] animate-normal animate-fill-forwards">
-              {item.fr_text1? item.fr_text1:'lol'}
+              
+              {currentLanguage==="fr" ? (item.fr_text1 ? item.fr_text1 : 'lol') : (item.text1 ? item.text1: 'lolo')}
 
             </div>
             <div className="text-lg   w-[320px] sm:w-[520px] text-white animate-fade-up animate-once animate-duration-1000 animate-delay-[1ms] animate-normal ">
@@ -28,7 +52,7 @@ export function SlideHome({banner}) {
               to="/Nos-activites"
               className="bg-white text-[#DCA61D] text-center hover:text-white hover:bg-[#DCA61D] w-40 py-3 font-medium text-lg transition delay-150 duration-700 ease-in-out hover:-translate-y-1 hover:scale-110 animate-fade-up animate-once animate-duration-[1200ms] animate-delay-[1ms] animate-ease-linear animate-normal"
             >
-              Nos activités
+              {t('Nos activités')}
             </Link>
           </div>
         </div>

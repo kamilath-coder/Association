@@ -23,6 +23,7 @@ Route::post('/home/subscribe',[HomeController::class,'subscribe']);
 Route::get('/home/partenaire',[HomeController::class,'partenaire']);
 Route::get('/home/articles',[HomeController::class,'articles']);
 Route::post('/adhesion/store',[HomeController::class,'adhesion']);
+Route::post('/payment/create', [HomeController::class, 'create']);
 
 //contact
 Route::post('/contact/store',[ContactController::class,'store']);
@@ -48,6 +49,6 @@ Route::get('/activity/info',[ActivityController::class,'index']);
 Route::get('/activity/articles',[ActivityController::class,'articles']);
 Route::get('/activity/article/{id}',[ActivityController::class,'voirarticle']);
 Route::get('/activity/last',[ActivityController::class,'recentarticle']);
-
+Route::post('/activity/store',[ActivityController::class,'store']);
 
 

@@ -1,6 +1,4 @@
-
 {
-    
     "Formulaire de contact": "Formulaire de contact",
     "Localisation": "Localisation",
     "Nous suivre": "Nous suivre",
@@ -23,7 +21,7 @@
     "Nouvelles": "Nouvelles",
     "Contact": "Contact",
 
-    "Devenir membres": "Devenir membres",
+    "Devenir membre": "Devenir membre",
     "Formulaire d'adhésion": "Formulaire d'adhésion",
     "Votre nom & prénom": "Votre nom & prénom",
     "nom": "nom",
@@ -38,7 +36,34 @@
     "profession": "profession",
     "Valider": "Valider",
     "Quitter": "Quitter",
-    "Pourquoi nous rejoindre": "Pourquoi nous rejoindre"
+    "Pourquoi nous rejoindre": "Pourquoi nous rejoindre",
 
+    "nos différents activités": "nos différents activités",
 
+    "Les membres de notre équipe": "Les membres de notre équipe",
+    "Veuillez entrer votre adresse mail": "Veuillez entrer votre adresse mail",
+    "S'abonner":"S'abonner",
+    "Notre mission": "Notre mission",
+    "Tout les membres": "Tout les membres",
+    "nos partenaires" : "nos partenaires",
+    "Toutes les activités": "Toutes les activités",
+    "Restez informer en vous abonnant a nos newsletter": "Restez informer en vous abonnant a nos newsletter",
+    "Nom": "Nom",
+    "Telephone": "Telephone",
+    "Prénom": "Prénom",
+    "form": {
+        "errors": {
+          "nomRequired": "Le nom est requis",
+          "emailRequired": "L'email est requis",
+          "sujetRequired": "Le sujet est requis",
+          "messageRequired": "Le message est requis",
+          "telephoneRequired": "Le numéro de téléphone est requis",
+          "residenceRequired": "Le lieu de résidence est requis",
+          "genreRequired": "Le genre est requis",
+          "professionRequired": "La profession est requise",
+          "raisonRequired": "La raison est requise",
+          "formError": "Erreur de soumission du formulaire"
+        
+        }
+    }
 }

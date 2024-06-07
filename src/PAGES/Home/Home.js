@@ -31,7 +31,7 @@ import { removeTags } from '../../UTILS/Util';
 import { fetchMembers } from  '../../API/home/Home';
 import { fetchPartenaire } from  '../../API/home/Home';
 import { subscribe } from  '../../API/home/Home';
-
+import { useTranslation } from 'react-i18next';
 function Home() {
   const [loading, setLoading] = useState(true);
   const [info, setInfo] = useState({});
@@ -46,6 +46,9 @@ function Home() {
   const [email, setEmail] = useState('');
   const [Articles, setArticles] = useState([]);
   const [Article, setArticle] = useState();
+  const { i18n } = useTranslation();
+  const [currentLanguage, setCurrentLanguage] = useState(i18n.language);
+  const { t} = useTranslation();
   let options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
   
   useEffect(() => {
@@ -59,12 +62,31 @@ function Home() {
   }, []);
 
   useEffect(() => {
+    const savedLanguage = localStorage.getItem('language');
+    const browserLang = savedLanguage || navigator.language || navigator.userLanguage;
+    const lang = browserLang.substr(0, 2);
+    i18n.changeLanguage(lang);
+    setCurrentLanguage(lang);
+    console.log('Langue actuelle :', lang);
+
+     // Ajoutez cet écouteur d'événements pour mettre à jour currentLanguage chaque fois que la langue change
+    i18n.on('languageChanged', lng => {
+      setCurrentLanguage(lng);
+    });
+
+    // N'oubliez pas de nettoyer l'écouteur d'événements lorsque le composant est démonté
+    return () => {
+      i18n.off('languageChanged');
+    };
+  }, [i18n]);
+
+  useEffect(() => {
     fetchNouvelleInfo()
       .then(response => {
        // console.log('Réponse du serveur :', response.data);
         setNameSite(response.data.info.name);
-        setPresentation(response.data.info.presentation_text);
-        setPresentationTitle(response.data.info.fr_presentation_title);
+        setPresentation(response.data.info);
+        setPresentationTitle(response.data.info);
         setPresentationPhoto(response.data.info.presentation_photo);
         setInfo(response.data.info);
         
@@ -262,7 +284,9 @@ function Home() {
               <div className="flex flex-col space-y-5 pl-4 sm:pl-0">
                 <div className="uppercase text-lg sm:text-2xl md:w-[400px] font-semibold text-[#4E4E4E]">
                   {/* Welcome to Egovenz City Municipal */}
-                  {PresentationTitle ? PresentationTitle :'Pourquoi nous rejoindre'} ?
+                  {/* {PresentationTitle ? PresentationTitle :'Pourquoi nous rejoindre'} ? */}
+                  {currentLanguage==="fr" ? (PresentationTitle.fr_presentation_title ? PresentationTitle.fr_presentation_title : 'Pourquoi nous rejoindre') : (PresentationTitle.presentation_title ? PresentationTitle.presentation_title : 'Pourquoi nous rejoindre')}
+
                 </div>
                 <div className="h-1 w-20 bg-[#DCA61D]"></div>
                 <div className="sm:w-[500px] w-[320px] leading-loose">
@@ -279,13 +303,15 @@ function Home() {
                   <br />
                   Sed blandit libero volutpat sed cras ornare. Cras adipiscing
                   enim eu turpis egestas pretium aenean pharetra magna .... */}
-                  {Presentation? removeTags(Presentation) :''}
+                  {/* {Presentation? removeTags(Presentation) :''} */}
+                  {currentLanguage==="fr" ? (Presentation.fr_presentation_text ? removeTags(Presentation.fr_presentation_text) : '') : (Presentation.presentation_text ? removeTags(Presentation.presentation_text) : '')}
+
                 </div>
                 <Link
                   to="/A-propos"
                   className="hover:bg-white text-center hover:text-[#066AB2] text-white bg-[#066AB2] w-40 py-3 font-medium text-lg transition delay-150 duration-700 ease-in-out hover:-translate-y-1 hover:scale-110"
                 >
-                  Notre mission
+                 {t( 'Notre mission')}
                 </Link>
               </div>
               <div className=" flex flex-col ">
@@ -338,7 +364,7 @@ function Home() {
             {/* Activité */}
             <div className="Animation-option pt-20 flex flex-col items-center space-y-4">
               <div className="uppercase text-lg md:text-2xl w-[400px] text-center font-semibold text-[#4E4E4E]">
-                nos différents activités
+               {t('nos différents activités')}
               </div>
               <div className="sm:w-[600px] text-center">
               {Article ? removeTags(Article):'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate'}
@@ -347,7 +373,7 @@ function Home() {
               <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-12 pt-14 pb-7">
                 {/* Activité 1 */}
                 {Articles.map((article ,index) => ( 
-                  <div className="activite-img-taille">
+                  <div className="activite-img-taille" key={index}>
                     <div
                       className="img-activite"
                       style={{ backgroundImage:  article.Pictures ?   `url(data:image/png;base64,${article.Pictures})`: `url(${activite1})` }}
@@ -381,7 +407,7 @@ function Home() {
                                 fill="white"
                               />
                             </svg>
-                            <p>Lire plus</p>
+                            <p>{t('Lire plus')}</p>
                           </Link>
                         </div>
                       </div>
@@ -394,7 +420,7 @@ function Home() {
                 to="/Nos-activites"
                 className="hover:bg-white text-center hover:text-[#066AB2] text-white bg-[#066AB2] w-48 py-3 font-medium text-lg transition delay-150 duration-700 ease-in-out hover:-translate-y-1 hover:scale-110 "
               >
-                Toutes les activités
+                {t('Toutes les activités')}
               </Link>
             </div>
 
@@ -408,7 +434,7 @@ function Home() {
                   {/* titre et bouton */}
                   <div className="flex sm:flex-row flex-col justify-between items-center">
                     <div className="text-2xl uppercase text-[#DCA61D] font-bold">
-                      Les membres de notre équipe
+                     {t('Les membres de notre équipe')}
                     </div>
                     <Link to="/A-propos" className="flex items-center space-x-3 bg-[#066AB2] py-2 px-3 text-white">
                       <svg
@@ -423,7 +449,7 @@ function Home() {
                           fill="white"
                         />
                       </svg>
-                      <p>Tout les membres</p>
+                      <p>{t('Tout les membres')}</p>
                     </Link>
                   </div>
 
@@ -487,10 +513,10 @@ function Home() {
               >
                 <div className="bg-[#DCA61D76] h-[280px] flex flex-col items-center justify-center space-y-3">
                   <p className="text-center  sm:w-[600px] text-white font-bold text-2xl">
-                    Restez informer en vous abonnant a nos newsletter
+                    {t('Restez informer en vous abonnant a nos newsletter')}
                   </p>
                   <p className="text-lg text-white text-center">
-                    Veuillez entrer votre adresse mail
+                    {t('Veuillez entrer votre adresse mail')}
                   </p>
                   {/* barre de recherche */}
                   <form onSubmit={handleSubmit} className="flex items-center pt-4">
@@ -503,7 +529,7 @@ function Home() {
                       onChange={handleInputChange}
                     />
                     <button className="bg-[#066AB2] text-white sm:w-[100px] h-12 s:px-2 sm:px-0 ">
-                      S'abonner
+                     {t('S\'abonner')}
                     </button>
                   </form>
                 </div>
@@ -513,7 +539,7 @@ function Home() {
             {/* Les partenaires */}
             <div className="mt-20 flex flex-col items-center Animation-option">
               <p className=" uppercase text-2xl font-semibold text-[#4e4e4e]">
-                nos partenaires
+                {t('nos partenaires')}
               </p>
               <div className="pt-10 grid md:grid-cols-5 sm:grid-cols-3   gap-10">
               {Partenaires.map((partenaire, index) => (

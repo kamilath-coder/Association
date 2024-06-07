@@ -38,15 +38,18 @@ function Contact() {
     message: '',
   });
   const [info, setInfo] = useState({});
+  const { i18n } = useTranslation();
+  const [currentLanguage, setCurrentLanguage] = useState(i18n.language);
+  const { t} = useTranslation();
   useEffect(() => {
     const timer = setTimeout(() => {
       // Après 5 secondes, masquer le spinner et rediriger l'utilisateur
       setLoading(false);
     }, 1000); // 5000 millisecondes = 5 secondes
-
     // Nettoyer le timer si le composant est démonté avant la fin du délai
     return () => clearTimeout(timer);
   }, []);
+
   useEffect(() => {
     fetchContactInfo()
       .then(response => {
@@ -67,7 +70,7 @@ function Contact() {
       fetchContactBanner()
       .then(response => {
         console.log('Réponse du serveur :', response.data.info.banner);
-        setBanner(response.data.info.banner.fr_text1);
+        setBanner(response.data.info.banner);
         setBannerPicture(response.data.info.banner.picture);
         // setBanner(response.data.info.banners[0].fr_text1);
         // setBannerPicture(response.data.info.banners[0].picture);
@@ -77,9 +80,26 @@ function Contact() {
       });
   }, []);
 
-  // useEffect(() => {
-    
-  // }, []);
+  
+  useEffect(() => {
+    const savedLanguage = localStorage.getItem('language');
+    const browserLang = savedLanguage || navigator.language || navigator.userLanguage;
+    const lang = browserLang.substr(0, 2);
+    i18n.changeLanguage(lang);
+    setCurrentLanguage(lang);
+    console.log('Langue actuelle :', lang);
+
+     // Ajoutez cet écouteur d'événements pour mettre à jour currentLanguage chaque fois que la langue change
+    i18n.on('languageChanged', lng => {
+      setCurrentLanguage(lng);
+    });
+
+    // N'oubliez pas de nettoyer l'écouteur d'événements lorsque le composant est démonté
+    return () => {
+      i18n.off('languageChanged');
+    };
+  }, [i18n]);
+
   
   const handleInputChange = (event) => {
     setFormState({
@@ -87,9 +107,43 @@ function Contact() {
       [event.target.name]: event.target.value,
     });
   };
+ 
+  
   const handleSubmit = async (event) => {
     event.preventDefault();
+
+    let isError = false;
+
+    if (formState.nom === "") {
+      toast.error(t('form.errors.nomRequired'));
+      isError = true;
+    } 
+
+    if (formState.email === "") {
+      
+      toast.error(t('form.errors.emailRequired'));
+      isError = true;
+    }
+
+    if (formState.sujet === "") {
+      
+      toast.error(t('form.errors.sujetRequired'));
+      isError = true;
+    } 
+    if (formState.message === "") {
+      
+      toast.error(t('form.errors.messageRequired'));
+      isError = true;
+    }
+
+    if (isError) {
+      console.log('Erreurs de formulaire détectées');
+      toast.error(t('form.errors.formError'));
+      return;
+    }
+
     console.log('Formulaire soumis :', formState);
+
     try {
       const response = await sendFormData(formState);
       console.log('Réponse du serveur :', response);
@@ -107,8 +161,7 @@ function Contact() {
       toast.error(error.response.data.message);
     }
   };
-  const { t} = useTranslation();
-  
+
   return (
     <>
       {loading ? (
@@ -128,7 +181,8 @@ function Contact() {
             >
               <div className="bg-[#066AB225] flex justify-center items-center h-[400px]  ">
                 <div className="sm:text-4xl md:px-10 px-4  text-2xl font-bold text-white uppercase leading-relaxed animate-fade-up animate-once animate-duration-1000 animate-delay-[1ms] animate-normal">
-                 {Banner ? Banner :'contactez-nous'}
+                 {/* {Banner ? Banner :'contactez-nous'} */}
+                 {currentLanguage==="fr" ? (Banner.fr_text1 ? Banner.fr_text1 : 'Nos activités') : (Banner.text1 ? Banner.text1 : 'Nos activités')}
                 </div>
               </div>
             </div>

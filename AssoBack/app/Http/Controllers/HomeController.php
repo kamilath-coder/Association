@@ -14,7 +14,8 @@ use Illuminate\Http\Request;
 use App\Models\WebAboutUsTeam;
 use App\Mail\NewsletterSubscription;
 use Illuminate\Support\Facades\Mail;
-
+use Stripe\Stripe;
+use Stripe\Checkout\Session as StripeSession;
 class HomeController extends Controller
 {
     //
@@ -164,24 +165,7 @@ class HomeController extends Controller
 
     public function adhesion(Request $request){
         $info = WebSiteInfo::first();
-        $request->validate([
-            'nom' => 'required',
-            'email' => 'required|email',
-            'telephone' => 'required',
-            'residence' => 'required',
-            'genre' => 'required',
-            'profession' => 'required',
-            'raison' => 'required',
-        ],[
-            'nom.required' => 'Le nom est requis.',
-            'email.required' => 'L\'email est requis.',
-            'email.email' => 'Veuillez entrer un email valide.',
-            'telephone.required' => 'Le numéro de téléphone est requis.',
-            'residence.required' => 'La résidence est requise.',
-            'genre.required' => 'Le genre est requis.',
-            'profession.required' => 'La profession est requise.',
-            'raison.required' => 'La raison est requise.',
-        ]);
+
 
         $data = $request->all();
         $data['genre'] = $request->genre;
@@ -225,6 +209,60 @@ class HomeController extends Controller
 
 
 
+    }
+
+
+    // public function create(Request $request)
+    // {
+    //     Stripe::setApiKey(env('STRIPE_SECRET'));
+
+    //     $checkout = StripeSession::create([
+    //         'payment_method_types' => ['card'],
+    //         'line_items' => [
+    //             [
+    //                 'price_data' => [
+    //                     'currency' => 'XOF',
+    //                     'product_data' => [
+    //                         'name' => 'T-shirt',
+    //                     ],
+    //                     'unit_amount' => $request->amount ,
+    //                 ],
+    //                 'quantity' => 1,
+    //             ],
+    //         ],
+    //         'mode' => 'payment',
+    //         'success_url' => $request->success_url,
+    //         'cancel_url' => $request->cancel_url,
+    //     ]);
+
+    //     return response()->json(['sessionId' => $checkout->id]);
+    // }
+
+    public function create(Request $request)
+    {
+        Stripe::setApiKey(env('STRIPE_SECRET'));
+
+        $checkout = StripeSession::create([
+            'payment_method_types' => ['card'],
+            'line_items' => [
+                [
+                    'price_data' => [
+                        'currency' => 'usd',
+                        'product_data' => [
+                            'name' => 'T-shirt',
+                        ],
+                        'unit_amount' => $request->amount ,
+                    ],
+                    'quantity' => 1,
+                ],
+            ],
+            'mode' => 'payment',
+            'success_url' => $request->success_url,
+            'cancel_url' => $request->cancel_url,
+            'customer_email' => $request->email, // Ajoutez cette ligne
+        ]);
+
+        return response()->json(['sessionId' => $checkout->id]);
     }
 }
 

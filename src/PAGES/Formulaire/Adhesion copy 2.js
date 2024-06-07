@@ -114,90 +114,91 @@ export function Adhesion() {
         <p>{t('Devenir membre')}</p>
         <ToastContainer />
       </Button>
-      <Dialog open={open} handler={handleOpen} className="w-full md:w-1/2 mx-auto" size="xs">
+     <Dialog open={open} handler={handleOpen} className="w-full sm:w-3/4 md:w-2/3 lg:w-1/2 xl:w-1/3 2xl:w-1/4">
         <DialogHeader className=" justify-center">
           <div className=" flex items-center space-x-2 justify-center">
             <p className="  text-lg font-medium">
-             {t('Formulaire d\'adhésion')}
+            {t('Formulaire d\'adhésion')}
             </p>
-            <ToastContainer />
           </div>
         </DialogHeader>
-        <DialogBody className="h-[28rem]  overflow-y-scroll pl-8 overflow-x-hidden  ">
-          <form className="mt-6 flex flex-col space-y-3 w-[300px] "onSubmit={handleSubmit}>
-            <label>{t('Votre nom & prénom')}</label>
-            <input
-              type="text"
-              name="nom"
-              onChange={handleChange}
-              className="w-[250px] outline-none bg-[#f8f8f8] h-10 px-2"
-
-            />
-            <label>{t('Votre adresse mail')}</label>
-            <input
-              type="email"
-              name="email"
-              onChange={handleChange}
-              className="w-[250px] outline-none bg-[#f8f8f8] h-10 px-2"
-            />
-            <label>{t('Votre numero de télephone')}</label>
-            <input
-              type="tel"
-              name="telephone"
-              onChange={handleChange}
-              className="w-[250px] outline-none bg-[#f8f8f8] h-10 px-2"
-            />
-            <label>{t('Votre lieu de residence')}</label>
-            <input
-              type="text"
-              name="residence"
-              onChange={handleChange}
-              className="w-[250px] outline-none bg-[#f8f8f8] h-10 px-2"
-            />
-
-            <label>{t('Quel est votre genre')} ?</label>
-            <div className=" flex items-center space-x-4">
-              {/* genre */}
-              <div className=" flex items-center space-x-2">
-                <input type="radio" value="F" name="genre" onChange={handleChange} /> <p>F</p>
+        <DialogBody className="overflow-y-scroll pl-8 overflow-x-hidden flex items-center justify-center">
+          <form className="mt-6 flex flex-col space-y-3 w-[300px] overflow-auto" onSubmit={handleSubmit}>
+            <div className="flex justify-between space-x-3">
+              <div className="w-[120px]">
+      <label>{t('Votre nom')}</label>
+      <input
+        type="text"
+        name="nom"
+        onChange={handleChange}
+        className="w-full outline-none bg-[#f8f8f8] h-10 px-2"
+      />
               </div>
-              <div className=" flex items-center space-x-2">
-                <input type="radio" value="M" name="genre" onChange={handleChange}/><p>M</p>
-              </div>
-              <div className=" flex items-center space-x-2">
-                <input type="radio" value="Autre" name="genre" onChange={handleChange}/><p> {t('Autre')}</p>
+              <div className="w-[120px]">
+                <label>{t('Votre email')}</label>
+                <input
+                  type="email"
+                  name="email"
+                  onChange={handleChange}
+                  className="w-full outline-none bg-[#f8f8f8] h-10 px-2"
+                />
               </div>
             </div>
-            <label>{t('Votre profession')}</label>
-            <input
-              type="text"
-              name="profession"
-              onChange={handleChange}
-              className="w-[250px] outline-none bg-[#f8f8f8] h-10 px-2"
-            />
-             <label>{t('Pourquoi nous rejoindre')} ?</label>
-            <textarea className="w-[250px] outline-none bg-[#f8f8f8] h-20 p-2"  name="raison"
-            onChange={handleChange}></textarea>
-            <DialogFooter className="space-x-2">
-              <Button variant="text" color="blue-gray" onClick={handleOpen}>
-                {t('Quitter')}
-              </Button>
-              <Button text="variant" className=" bg-[#DCA61D]" type="submit" >
-                {t('Valider')}
-              </Button>
-            </DialogFooter>
+            <div className="flex justify-between space-x-3">
+              <div className="w-[120px]">
+                <label>{t('Votre numero de télephone')}</label>
+                <input
+                  type="tel"
+                  name="telephone"
+                  onChange={handleChange}
+                  className="w-full outline-none bg-[#f8f8f8] h-10 px-2"
+                />
+              </div>
+              <div className="w-[120px]">
+                <label>{t('Votre résidence')}</label>
+                <input
+                  type="text"
+                  name="residence"
+                  onChange={handleChange}
+                  className="w-full outline-none bg-[#f8f8f8] h-10 px-2"
+                />
+              </div>
+            </div>
+            <div className="flex justify-between space-x-3">
+              <div className="w-[120px]">
+                <label>{t('Votre genre')}</label>
+                <select
+                  name="genre"
+                  onChange={handleChange}
+                  className="w-full outline-none bg-[#f8f8f8] h-10 px-2"
+                >
+                  <option value="homme">{t('Homme')}</option>
+                  <option value="femme">{t('Femme')}</option>
+                </select>
+              </div>
+              <div className="w-[120px]">
+                <label>{t('Votre profession')}</label>
+                <input
+                  type="text"
+                  name="profession"
+                  onChange={handleChange}
+                  className="w-full outline-none bg-[#f8f8f8] h-10 px-2"
+                />
+              </div>
+            </div>
+            <div>
+              <label>{t('Pourquoi nous rejoindre')}</label>
+              <textarea
+                name="raison"
+                onChange={handleChange}
+                className="w-full outline-none bg-[#f8f8f8] h-10 px-2"
+              />
+            </div>
+            
           </form>
-          {/* <DialogFooter className="space-x-2">
-            <Button variant="text" color="blue-gray" onClick={handleOpen}>
-              Quitter
-            </Button>
-            <Button text="variant" className=" bg-[#DCA61D]" onClick={handleOpen} >
-              Valider
-            </Button>
-          </DialogFooter> */}
         </DialogBody>
-        
       </Dialog>
     </>
-  );
+  ); 
 }
+
