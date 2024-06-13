@@ -3,19 +3,23 @@
 namespace App\Http\Controllers;
 
 use App\Mail\Adhesion;
-use App\Models\WebPage;
+use App\Mail\NewsletterSubscription;
 use App\Models\Activity;
 use App\Models\Customers;
-use App\Models\WebBanner;
 use App\Models\NewsLetter;
 use App\Models\Partenaire;
+use App\Models\WebAboutUsTeam;
+use App\Models\WebBanner;
+use App\Models\WebHomePage;
+use App\Models\WebPage;
 use App\Models\WebSiteInfo;
 use Illuminate\Http\Request;
-use App\Models\WebAboutUsTeam;
-use App\Mail\NewsletterSubscription;
 use Illuminate\Support\Facades\Mail;
-use Stripe\Stripe;
 use Stripe\Checkout\Session as StripeSession;
+use Stripe\Checkout\Session;
+use Stripe\PaymentIntent;
+use Stripe\Stripe;
+
 class HomeController extends Controller
 {
     //
@@ -36,6 +40,22 @@ class HomeController extends Controller
             ],
             200);
         }
+    }
+
+    public function homeequipement(){
+        $HomeEquipement = WebHomePage::all();
+        if($HomeEquipement){
+            foreach($HomeEquipement as $equip){
+                $equip->image=base64_encode($equip->image);
+            }
+
+            return response()->json([
+                'message'=>'Informations du site récupérées avec succès',
+                'info' => $HomeEquipement,
+            ],
+            200);
+        }
+
     }
 
     public function HomeBaner(){
@@ -202,15 +222,9 @@ class HomeController extends Controller
         $mail=new Adhesion($datas,$info);
         Mail::to($request->email)->send($mail);
 
-
         return response()->json(['message' => 'Adhésion réussie']);
 
-
-
-
-
     }
-
 
     // public function create(Request $request)
     // {
@@ -263,6 +277,21 @@ class HomeController extends Controller
         ]);
 
         return response()->json(['sessionId' => $checkout->id]);
+    }
+
+
+    public function getPaymentStatus(Request $request)
+    {
+        Stripe::setApiKey(env('STRIPE_SECRET'));
+
+        $sessionId = $request->get('sessionId');
+
+        $session = Session::retrieve($sessionId);
+        $paymentIntent = PaymentIntent::retrieve($session->payment_intent);
+        return response()->json([
+            'status' => $paymentIntent->status,
+            'montant'=> $paymentIntent->amount / 100 // Stripe stocke les montants en centimes
+        ]);
     }
 }
 

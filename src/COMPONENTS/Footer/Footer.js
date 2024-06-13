@@ -4,6 +4,8 @@ import { GrFacebookOption } from "react-icons/gr";
 import { IoIosMail } from "react-icons/io";
 import { FaInstagram } from "react-icons/fa";
 import { TiSocialLinkedin } from "react-icons/ti";
+import { useTranslation } from 'react-i18next';
+import { FaHome, FaInfoCircle,  FaAnchor, FaNewspaper, FaPhone } from 'react-icons/fa'
 // setAddress(response.data.info.address);
 //         setPhone(response.data.info.phone);
 //         setEmail(response.data.info.email);
@@ -14,6 +16,7 @@ import { TiSocialLinkedin } from "react-icons/ti";
 //         setInsta(response.data.info.instagram_link);
 function Footer(props) {
   //console.log(props.info)
+  const { t} = useTranslation();
   return (
     <div className="bg-black flex flex-col space-y-3 items-center pt-10">
       <div className="text-3xl  text-[#DCA61D] font-bold">{props.info.name? props.info.name :'Association'}.</div>
@@ -34,11 +37,19 @@ function Footer(props) {
       </div>
 
       {/* Lien */}
-      <div className=" grid sm:grid-cols-4 grid-cols-2  gap-5 font-light text-white py-4">
-        <Link to="">A propos</Link>
-        <Link to="">Nos activités</Link>
-        <Link to="">Nouvelle</Link>
-        <Link to="">Contact</Link>
+      {/* <div className=" grid sm:grid-cols-4 grid-cols-2  gap-5 font-light text-white py-4">
+        <Link to="/" className="flex items-center"><FaHome className="mr-2" /> {t('Accueil')}</Link>
+        <Link to="/A-propos" className="flex items-center"><FaInfoCircle className="mr-2" /> {t('A propos')}</Link>
+        <Link to="/Nos-activites" className="flex items-center"><FaAnchor className="mr-2" /> {t('Nos activités')}</Link>
+        <Link to="/Les-nouvelles" className="flex items-center"><FaNewspaper className="mr-2" /> {t('Nouvelles')}</Link>
+        <Link to="/Contact" className="flex items-center"><FaPhone className="mr-2" /> {t('Contact')}</Link>
+      </div> */}
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center space-y-4 sm:space-y-0 sm:space-x-4 font-light text-white py-4">
+        <Link to="/" className="flex items-center mb-2 sm:mb-0"><FaHome className="mr-2" /> {t('Accueil')}</Link>
+        <Link to="/A-propos" className="flex items-center mb-2 sm:mb-0"><FaInfoCircle className="mr-2" /> {t('A propos')}</Link>
+        <Link to="/Nos-activites" className="flex items-center mb-2 sm:mb-0"><FaAnchor className="mr-2" /> {t('Nos activités')}</Link>
+        <Link to="/Les-nouvelles" className="flex items-center mb-2 sm:mb-0"><FaNewspaper className="mr-2" /> {t('Nouvelles')}</Link>
+        <Link to="/Contact" className="flex items-center mb-2 sm:mb-0"><FaPhone className="mr-2" /> {t('Contact')}</Link>
       </div>
       <div className=" text-xs font-thin bg-[#066AB2] text-white w-full py-2 text-center">Design by @Africa Digitalizer 2024</div>
     </div>

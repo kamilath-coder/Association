@@ -117,7 +117,7 @@ export function Adhesion() {
       <Dialog open={open} handler={handleOpen} className="w-full md:w-1/2 mx-auto" size="xs">
         <DialogHeader className=" justify-center">
           <div className=" flex items-center space-x-2 justify-center">
-            <p className="  text-lg font-medium">
+            <p className="text-lg font-medium">
              {t('Formulaire d\'adhésion')}
             </p>
             <ToastContainer />

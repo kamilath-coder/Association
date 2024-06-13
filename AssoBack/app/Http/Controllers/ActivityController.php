@@ -9,6 +9,7 @@ use App\Models\Customers;
 use App\Models\Nouvelles;
 use App\Models\WebSiteInfo;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ActivityController extends Controller
 {
@@ -115,53 +116,169 @@ class ActivityController extends Controller
 
 
 
-    public function store(Request $request){
+    public function fedapay(Request $request){
         $datas = WebSiteInfo::first();
         //dd($email->email);
         $data = $request->validate([
-            'prix' => 'required',
-            'email' => 'required|email|max:255',
+            'prixL' => 'required',
+            'emailL' => 'required|email|max:255',
+            'nomL' =>'required',
+            'phoneL'=>'required',
+            'prenomL'=>'required',
 
-        ],[
-            'prix.required' => 'Le prix est obligatoire',
-            'email.required' => 'L\'email est obligatoire',
-            'email.email' => 'L\'email doit être une adresse email valide',
         ]);
 
 
+
+
         $details = [
-            'prix' => $data['prix'],
-            'email' => $data['email'],
+            'prix' => $data['prixL'],
+            'email' => $data['emailL'],
         ];
-        $customer = Customers::where('E-mails',$data['email'])->first();
 
-        if($customer){
-            $customer->Names=$data['email'];
-        }else{
-            $customer->Names=$data['email'];
-            $customer->{'E-mails'}=$data['email'];
-            $customer->Country='Cameroun';
-            $customer->Province='Littoral';
-            $customer->City='Douala';
-            $customer->Adresses='Douala';
-            $customer->Postal_Code='00237';
-            $customer->Categories='Activity';
-            $customer->User='admin';
-            $customer->save();
-        }
 
+        $customer= new Customers();
+        $customer->Names=$data['nomL'];
+        $customer->{'E-mails'}=$data['emailL'];
+        $customer->Country='Cameroun';
+        $customer->Province='Littoral';
+        $customer->City='Douala';
+        $customer->Adresses='Douala';
+        $customer->Postal_Code='00237';
+        $customer->Categories='Activity';
+        $customer->User='admin';
+        $customer->Phones = $data['phoneL'];
+        $customer->az_id = rand(100000,999999);
+        $customer->save();
+
+        $price=$data['prixL'];
         $sales= new Sales();
         $sales->Items_Numbers=1;
         $sales->Quantities=1;
-        $sales->{'Unique Prices'}=$data['prix'];
-        $sales->Amount_Paid=$data['prix'];
+        $sales->{'Unique Prices'}=$data['prixL'];
+        $sales->Amount_Paid=$data['prixL'];
         $sales->delivered="No";
         $sales->Dates=date('Y-m-d');
         $sales->Customers_Numbers=$customer->Customers_Numbers;
 
         $sales->User='admin';
         $sales->save();
+        $provider='feedapay';
 
+        $providers=DB::table('online_payment_providors')->where('providor_id',$provider)->first();
+        //dd($providers);
+        $curency=DB::table('currency_rate')->where('id_currency',$request->id_currency)->first();
+       //dd($curency);
+       $price=$curency->value_to_usd * $price;
+       $delivery_fees=$price* $providers->smart_percentage;
+       $provider_fees= $price* $providers->providor_percentage;
+       //dd($delivery_fees, $provider_fees);
+       $amount_to_refund = $price - ($delivery_fees + $provider_fees);
+      //dd($amount_to_refund);
+      $data = DB::table('website_info')->first();
+       //envoer les information de payement a la table sales_transaction
+       $online_payment_transaction=DB::table('online_payment_transaction')->insert([
+           'seller_number' =>$data->info_id,
+           'management_fees' => $delivery_fees,
+           'payment_provider' => $provider,
+           'payment_id' => $request->paymentId,
+           'provider_fees' => $provider_fees,
+           'order_number' => 0,
+           'transaction_type' => 'credit',
+           'transaction_from' =>'website_sales',
+           'buyer_number' =>  $customer->Customers_Numbers,
+           'total_transaction_amount' => $price,
+           'amount_to_refund' =>   $amount_to_refund,
+           //'website_sales_number' => $salesnumber,
+       ]);
+        return response()->json([
+            'message' => 'Don enregistrées avec succès',
+            'data' => $data
+
+        ], 200);
+
+
+
+
+
+
+
+    }
+    public function stripe(Request $request){
+        $datas = WebSiteInfo::first();
+        //dd($email->email);
+        $data = $request->validate([
+            'prixL' => 'required',
+            'emailL' => 'required|email|max:255',
+            'nomL' =>'required',
+            'phoneL'=>'required',
+            'prenomL'=>'required',
+
+        ]);
+
+
+
+
+        $details = [
+            'prix' => $data['prixL'],
+            'email' => $data['emailL'],
+        ];
+
+
+        $customer= new Customers();
+        $customer->Names=$data['nomL'];
+        $customer->{'E-mails'}=$data['emailL'];
+        $customer->Country='Cameroun';
+        $customer->Province='Littoral';
+        $customer->City='Douala';
+        $customer->Adresses='Douala';
+        $customer->Postal_Code='00237';
+        $customer->Categories='Activity';
+        $customer->User='admin';
+        $customer->Phones = $data['phoneL'];
+        $customer->az_id = rand(100000,999999);
+        $customer->save();
+
+        $price=$data['prixL'];
+        $sales= new Sales();
+        $sales->Items_Numbers=1;
+        $sales->Quantities=1;
+        $sales->{'Unique Prices'}=$data['prixL'];
+        $sales->Amount_Paid=$data['prixL'];
+        $sales->delivered="No";
+        $sales->Dates=date('Y-m-d');
+        $sales->Customers_Numbers=$customer->Customers_Numbers;
+
+        $sales->User='admin';
+        $sales->save();
+        $provider='stripe';
+
+        $providers=DB::table('online_payment_providors')->where('providor_id',$provider)->first();
+        //dd($providers);
+        $curency=DB::table('currency_rate')->where('id_currency',$request->id_currency)->first();
+       //dd($curency);
+       $price=$curency->value_to_usd * $price;
+       $delivery_fees=$price* $providers->smart_percentage;
+       $provider_fees= $price* $providers->providor_percentage;
+       //dd($delivery_fees, $provider_fees);
+       $amount_to_refund = $price - ($delivery_fees + $provider_fees);
+      //dd($amount_to_refund);
+      $data = DB::table('website_info')->first();
+       //envoer les information de payement a la table sales_transaction
+       $online_payment_transaction=DB::table('online_payment_transaction')->insert([
+           'seller_number' =>$data->info_id,
+           'management_fees' => $delivery_fees,
+           'payment_provider' => $provider,
+           'payment_id' => $request->paymentId,
+           'provider_fees' => $provider_fees,
+           'order_number' => 0,
+           'transaction_type' => 'credit',
+           'transaction_from' =>'website_sales',
+           'buyer_number' =>  $customer->Customers_Numbers,
+           'total_transaction_amount' => $price,
+           'amount_to_refund' =>   $amount_to_refund,
+           //'website_sales_number' => $salesnumber,
+       ]);
         return response()->json([
             'message' => 'Don enregistrées avec succès',
             'data' => $data

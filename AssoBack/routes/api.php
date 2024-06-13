@@ -22,9 +22,10 @@ Route::get('/home/members',[HomeController::class,'members']);
 Route::post('/home/subscribe',[HomeController::class,'subscribe']);
 Route::get('/home/partenaire',[HomeController::class,'partenaire']);
 Route::get('/home/articles',[HomeController::class,'articles']);
+Route::get('/home/eqipement',[HomeController::class,'homeequipement']);
 Route::post('/adhesion/store',[HomeController::class,'adhesion']);
 Route::post('/payment/create', [HomeController::class, 'create']);
-
+Route::get('/payment-status',[HomeController::class, 'getPaymentStatus'] );
 //contact
 Route::post('/contact/store',[ContactController::class,'store']);
 Route::get('/contact/info',[ContactController::class,'index']);
@@ -49,6 +50,7 @@ Route::get('/activity/info',[ActivityController::class,'index']);
 Route::get('/activity/articles',[ActivityController::class,'articles']);
 Route::get('/activity/article/{id}',[ActivityController::class,'voirarticle']);
 Route::get('/activity/last',[ActivityController::class,'recentarticle']);
-Route::post('/activity/store',[ActivityController::class,'store']);
+Route::post('/activity/fedapay',[ActivityController::class,'fedapay']);
+Route::post('/activity/stripe',[ActivityController::class,'stripe']);
 
 

@@ -26,6 +26,7 @@ import {SlideHome} from "../../COMPONENTS/SlideHome/SlideHome"
 import { fetchNouvelleInfo } from  '../../API/nouvelle/Nouvelle';
 import { fetchHomeBanner } from  '../../API/home/Home';
 import { fetchNouvelles } from  '../../API/home/Home';
+import { fetchHomeEquipment } from  '../../API/home/Home';
 //import { fetchMembers } from  '../../API/about/About';
 import { removeTags } from '../../UTILS/Util';
 import { fetchMembers } from  '../../API/home/Home';
@@ -44,6 +45,7 @@ function Home() {
   const [PresentationPhoto, setPresentationPhoto] = useState('');
   const [Presentation, setPresentation] = useState('');
   const [email, setEmail] = useState('');
+  const [HomeEquipment, setHomeEquipment] = useState([]);
   const [Articles, setArticles] = useState([]);
   const [Article, setArticle] = useState();
   const { i18n } = useTranslation();
@@ -132,6 +134,17 @@ function Home() {
       .catch(error => {
         console.error('Il y avait une erreur!', error);
       });
+
+
+    fetchHomeEquipment()
+      .then(response => {
+        //console.log('Réponse du serveur :', response.data.info);
+        setHomeEquipment(response.data.info);
+      })
+      .catch(error => {
+        console.error('Il y avait une erreur!', error);
+      });
+    
      
   }, []);
   const handleInputChange = (event) => {
@@ -175,7 +188,7 @@ function Home() {
             {/* Card option */}
             <div className="animation-card grid sm:grid-cols-2 md:grid-cols-3 place-content-center place-items-center s:gap-10 md:gap-0 relative bottom-12 ">
               {/* card1 */}
-              <div className="bg-white w-[300px] shadow h-[329px] flex flex-col space-y-4 p-6 border-t-8 border-[#DCA61D]">
+              {HomeEquipment.map((homepage ,index) => (  <div className="bg-white w-[300px] shadow h-[329px] flex flex-col space-y-4 p-6 border-t-8 border-[#DCA61D]" key={index}>
                 <svg
                   width="60"
                   height="60"
@@ -196,87 +209,23 @@ function Home() {
                   </defs>
                 </svg>
                 <div className="text-xl font-semibold text-[#4E4E4E]">
-                  {" "}
-                  laboris nisi ut aliquip
-                </div>
-                <div>
-                  {" "}
-                  consectetur adipiscing elit, sed do eiusmod tempor incididunt
-                  ut labore et dolore magna aliqua. Ut enim ad minim veniam...
-                </div>
-                <Link to="" className="text-[#DCA61D] underline text-lg">
-                  Lire plus
-                </Link>
-              </div>
-              {/* card2 */}
-              <div className="bg-white shadow  w-[300px] h-[329px] flex flex-col space-y-4 p-6 border-t-8 border-[#DCA61D]">
-                <svg
-                  width="60"
-                  height="60"
-                  viewBox="0 0 60 60"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <g clip-path="url(#clip0_5_104)">
-                    <path
-                      d="M45.7499 24H31.4999V29.25C31.4999 32.9719 28.4718 36 24.7499 36C21.0281 36 17.9999 32.9719 17.9999 29.25V17.85L11.9156 21.5062C10.1062 22.5844 8.99994 24.5437 8.99994 26.6437V31.0781L1.49994 35.4094C0.065566 36.2344 -0.431309 38.0719 0.403066 39.5062L7.90307 52.5C8.72807 53.9344 10.5656 54.4219 11.9999 53.5969L21.6937 48H34.4999C37.8093 48 40.4999 45.3094 40.4999 42H41.9999C43.6593 42 44.9999 40.6594 44.9999 39V33H45.7499C46.9968 33 47.9999 31.9969 47.9999 30.75V26.25C47.9999 25.0031 46.9968 24 45.7499 24ZM59.5968 20.4937L52.0968 7.49999C51.2718 6.06561 49.4343 5.57811 47.9999 6.40311L38.3062 12H28.7249C27.5999 12 26.5031 12.3187 25.5468 12.9094L22.4062 14.8687C21.5249 15.4125 20.9999 16.3781 20.9999 17.4094V29.25C20.9999 31.3219 22.6781 33 24.7499 33C26.8218 33 28.4999 31.3219 28.4999 29.25V21H45.7499C48.6468 21 50.9999 23.3531 50.9999 26.25V28.9219L58.4999 24.5906C59.9343 23.7562 60.4218 21.9281 59.5968 20.4937Z"
-                      fill="#066AB2"
-                    />
-                  </g>
-                  <defs>
-                    <clipPath id="clip0_5_104">
-                      <rect width="60" height="60" fill="white" />
-                    </clipPath>
-                  </defs>
-                </svg>
-                <div className="text-xl font-semibold text-[#4E4E4E]">
-                  {" "}
-                  laboris nisi ut aliquip
-                </div>
-                <div>
-                  {" "}
-                  consectetur adipiscing elit, sed do eiusmod tempor incididunt
-                  ut labore et dolore magna aliqua. Ut enim ad minim veniam...
-                </div>
-                <Link to="" className="text-[#DCA61D] underline text-lg">
-                  Lire plus
-                </Link>
-              </div>
+                  
+                  
+                  {currentLanguage==="fr" ? (homepage.fr_title ? removeTags(homepage.fr_title) : 'Pourquoi nous rejoindre') : (homepage.title? removeTags(homepage.title):'Duis aute irure dolor in reprehenderit')}
 
-              {/* card3*/}
-              <div className="bg-white shadow  w-[300px] h-[329px] flex flex-col space-y-4 p-6 border-t-8 border-[#DCA61D]">
-                <svg
-                  width="60"
-                  height="60"
-                  viewBox="0 0 60 60"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <g clip-path="url(#clip0_5_104)">
-                    <path
-                      d="M45.7499 24H31.4999V29.25C31.4999 32.9719 28.4718 36 24.7499 36C21.0281 36 17.9999 32.9719 17.9999 29.25V17.85L11.9156 21.5062C10.1062 22.5844 8.99994 24.5437 8.99994 26.6437V31.0781L1.49994 35.4094C0.065566 36.2344 -0.431309 38.0719 0.403066 39.5062L7.90307 52.5C8.72807 53.9344 10.5656 54.4219 11.9999 53.5969L21.6937 48H34.4999C37.8093 48 40.4999 45.3094 40.4999 42H41.9999C43.6593 42 44.9999 40.6594 44.9999 39V33H45.7499C46.9968 33 47.9999 31.9969 47.9999 30.75V26.25C47.9999 25.0031 46.9968 24 45.7499 24ZM59.5968 20.4937L52.0968 7.49999C51.2718 6.06561 49.4343 5.57811 47.9999 6.40311L38.3062 12H28.7249C27.5999 12 26.5031 12.3187 25.5468 12.9094L22.4062 14.8687C21.5249 15.4125 20.9999 16.3781 20.9999 17.4094V29.25C20.9999 31.3219 22.6781 33 24.7499 33C26.8218 33 28.4999 31.3219 28.4999 29.25V21H45.7499C48.6468 21 50.9999 23.3531 50.9999 26.25V28.9219L58.4999 24.5906C59.9343 23.7562 60.4218 21.9281 59.5968 20.4937Z"
-                      fill="#066AB2"
-                    />
-                  </g>
-                  <defs>
-                    <clipPath id="clip0_5_104">
-                      <rect width="60" height="60" fill="white" />
-                    </clipPath>
-                  </defs>
-                </svg>
-                <div className="text-xl font-semibold text-[#4E4E4E]">
-                  {" "}
-                  laboris nisi ut aliquip
                 </div>
                 <div>
-                  {" "}
-                  consectetur adipiscing elit, sed do eiusmod tempor incididunt
-                  ut labore et dolore magna aliqua. Ut enim ad minim veniam...
+                {currentLanguage==="fr" ? (homepage.fr_text	 ? removeTags(homepage.fr_text)	 : 'Pourquoi nous rejoindre') : (homepage.text ? removeTags(homepage.text):'Duis aute irure dolor in reprehenderit')}
+
+                 
+                  {/* consectetur adipiscing elit, sed do eiusmod tempor incididunt
+                  ut labore et dolore magna aliqua. Ut enim ad minim veniam... */}
                 </div>
                 <Link to="" className="text-[#DCA61D] underline text-lg">
                   Lire plus
                 </Link>
-              </div>
+              </div>) )}
+           
             </div>
 
             {/* description entreprise */}
@@ -380,13 +329,14 @@ function Home() {
                     >
                       <div className="bg-color-activite text-white pl-4 flex flex-col justify-end">
                         <div className="text-xl font-semibold w-72">
-                        {article.Descriptions? removeTags(article.Descriptions):'Duis aute irure dolor in reprehenderit'}
+                       
+                        {currentLanguage==="fr" ? (article.fr_description ? article.fr_description : 'Pourquoi nous rejoindre') : (article.Descriptions? removeTags(article.Descriptions):'Duis aute irure dolor in reprehenderit')}
                         </div>
                         <div className=" italic font-light">
-                        {article.item_date
-                          ? new Date(article.item_date).toLocaleDateString('fr-FR', options)
-                          : 'Jeudi 23 Mars 2024'
+                        {currentLanguage==="fr" ? (article.item_date ? new Date(article.item_date).toLocaleDateString('fr-FR', options): 'Jeudi 23 Mars 2024') : (
+                          article.item_date ? new Date(article.item_date).toLocaleDateString('en-EN', options): 'Thursday, 23 March 2024')
                         }
+                        
                         </div>
 
                         {/* button lire plus */}
