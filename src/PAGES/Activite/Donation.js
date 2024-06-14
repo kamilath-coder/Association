@@ -290,7 +290,7 @@ export function Donation() {
     try {
       const response = await sendFormData(formState);
       console.log('Réponse du serveur :', response);
-      toast.success(response.message);
+      toast.success(t('form.success'));
       // Réinitialisez l'état
      
       
@@ -427,7 +427,7 @@ export function Donation() {
                 <input
                   type="text"
                   name="prenomL"
-                  className="w-[120px] outline-none bg-[#f8f8f8] h-12 px-2"
+                  className="w-[250px] outline-none bg-[#f8f8f8] h-12 px-2"
                   onChange={handleInputChange}
                 />
               </div>

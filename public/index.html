@@ -20,7 +20,7 @@
     <script src="https://cdn.fedapay.com/checkout.js?v=1.1.2"></script>
   </body>
   <script>
-    var BASE_URL = 'http://127.0.0.1:8000';
+    var BASE_URL = 'https://yogam.africadigitalizer.com/AssoBack';
     axios.get(`${BASE_URL}/api/home/info`)
       .then(response => {
         // Utilisez les données ici pour mettre à jour votre page
@@ -32,6 +32,6 @@
         console.log('Href du lien:', link.href); // Ajout d'un log pour le href du lien
       })
       .catch(error => console.error('Erreur:', error));
-</script>
+  </script>
 </html>
 

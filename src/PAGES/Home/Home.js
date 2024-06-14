@@ -158,14 +158,26 @@ function Home() {
     try {
       const response = await subscribe(email);
      // console.log(response.message);
-      toast.success(response.message);
+      toast.success(t('subscription_success'));
     } catch (error) {
       console.error(error);
       if (error.response && error.response.status === 422) {
-          const errors = error.response.data.errors;
-          if (errors.email) {
-              toast.error(errors.email[0]);
-          }
+        const errorCode = error.response.data.message;
+        let errorMessage;
+        switch (errorCode) {
+          case 'email_dotcom':
+            errorMessage = t('emailMustContainDotCom');
+            break;
+          case 'email_unique':
+            errorMessage = t('emailAlreadySubscribed');
+            break;
+          case 'email_invalid':
+            errorMessage = t('pleaseEnterValidEmail');
+            break;
+          default:
+            errorMessage = t('unknownError');
+        }
+        toast.error(errorMessage);
       }
     }
   };
@@ -184,7 +196,7 @@ function Home() {
 
             {/* en tete */}
            <SlideHome  banner={Banner}/>
-          <ToastContainer />
+          
             {/* Card option */}
             <div className="animation-card grid sm:grid-cols-2 md:grid-cols-3 place-content-center place-items-center s:gap-10 md:gap-0 relative bottom-12 ">
               {/* card1 */}
@@ -457,6 +469,7 @@ function Home() {
 
             {/* newsletter */}
             <div className="mt-60 Animation-option">
+              <ToastContainer />
               <div
                 className="bg-cover bg-center bg-no-repeat h-full sm:h-[280px]"
                 style={{ backgroundImage: `url(${back_newletter})` }}

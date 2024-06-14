@@ -2,23 +2,26 @@
 
 namespace App\Http\Controllers;
 
+use Stripe\Stripe;
 use App\Mail\Adhesion;
-use App\Mail\NewsletterSubscription;
+use App\Models\WebPage;
 use App\Models\Activity;
 use App\Models\Customers;
+use App\Models\WebBanner;
+use Stripe\PaymentIntent;
+use App\Models\CustomerAz;
 use App\Models\NewsLetter;
 use App\Models\Partenaire;
-use App\Models\WebAboutUsTeam;
-use App\Models\WebBanner;
 use App\Models\WebHomePage;
-use App\Models\WebPage;
 use App\Models\WebSiteInfo;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Stripe\Checkout\Session;
+use App\Models\WebAboutUsTeam;
+use Illuminate\Support\Facades\DB;
+use App\Mail\NewsletterSubscription;
 use Illuminate\Support\Facades\Mail;
 use Stripe\Checkout\Session as StripeSession;
-use Stripe\Checkout\Session;
-use Stripe\PaymentIntent;
-use Stripe\Stripe;
 
 class HomeController extends Controller
 {
@@ -149,13 +152,13 @@ class HomeController extends Controller
                 'unique:web_news_letter,email',
                 function ($attribute, $value, $fail) {
                     if (!str_contains($value, '.com')) {
-                        $fail('L\'email doit contenir ".com".');
+                        $fail('email_dotcom');
                     }
                 },
             ],
         ],[
-            'email.unique' => 'Cet email est déjà inscrit à la newsletter.',
-            'email.email' => 'Veuillez entrer un email valide.',
+            'email.unique' => 'email_unique',
+            'email.email' => 'email_invalid',
         ]);
         $newsletter = new NewsLetter;
         $newsletter->email = $request->email;
@@ -204,21 +207,75 @@ class HomeController extends Controller
             'email' => $data['email'],
             'nom' => $data['nom'],
         ];
+        $az_Custommer = new CustomerAz;
+
+        //on verifier si l'email existe
+        $exist = $az_Custommer->where('E-mails',$data['email'])->first();
+        if($exist){
+            $exist2=DB::table('customers_credential')->where('userN',$data['email'])->first();
+            if($exist2){
+                
+            }else{
+                $password = Str::random(8);
+                DB::table('customers_credential')->insert([
+                    'customer_number' => $exist->Customers_Numbers,
+                    'userN' => $data['email'],
+                    'passW' => md5($password),
+                ]);
+            }
+            $customer = new Customers;
+            //on verifier si le customer existe
+            $exist3 = $customer->where('az_id',$exist->Customers_Numbers)->first();
+            if($exist3){
+            }else{
+                $customer->Names = $data['nom'];
+                $customer->{'E-mails'}= $data['email'];
+                $customer->Phones = $data['telephone'];
+                $customer->Adresses = $data['residence'];
+                $customer->sexe = $data['genre'];
+                $customer->Categories = $data['profession'];
+                $customer->Description = $data['raison'];
+                $customer->Notes = $data['raison'];
+                $customer->az_id = $exist->Customers_Numbers;
+                $customer->save();
+            }
+
+        }else{
+            $az_Custommer->Names = $data['nom'];
+            $az_Custommer->{'E-mails'}= $data['email'];
+            $az_Custommer->Phones = $data['telephone'];
+            $az_Custommer->Adresses = $data['residence'];
+            $az_Custommer->sexe = $data['genre'];
+            $az_Custommer->Categories = $data['profession'];
+            $az_Custommer->Description = $data['raison'];
+            $az_Custommer->Notes = $data['raison'];
+            //le az_id doit etre aleatoire pour l'instant
+            //$az_Custommer->az_id = rand(100000,999999);
+
+            $az_Custommer->save();
+            //on lui genere un mot depasse par defaut
 
 
-        $customer = new Customers;
-        $customer->Names = $data['nom'];
-        $customer->{'E-mails'}= $data['email'];
-        $customer->Phones = $data['telephone'];
-        $customer->Adresses = $data['residence'];
-        $customer->sexe = $data['genre'];
-        $customer->Categories = $data['profession'];
-        $customer->Description = $data['raison'];
-        $customer->Notes = $data['raison'];
-        //le az_id doit etre aleatoire pour l'instant
-        $customer->az_id = rand(100000,999999);
+            $password = Str::random(8);
+            DB::table('customers_credential')->insert([
+                'customer_number' => $az_Custommer->Customers_Numbers,
+                'userN' => $data['email'],
+                'passW' => md5($password),
+            ]);
 
-        $customer->save();
+            $customer = new Customers;
+            $customer->Names = $data['nom'];
+            $customer->{'E-mails'}= $data['email'];
+            $customer->Phones = $data['telephone'];
+            $customer->Adresses = $data['residence'];
+            $customer->sexe = $data['genre'];
+            $customer->Categories = $data['profession'];
+            $customer->Description = $data['raison'];
+            $customer->Notes = $data['raison'];
+            //le az_id doit etre aleatoire pour l'instant
+            $customer->az_id = $az_Custommer->Customers_Numbers;
+            $customer->save();
+        }
         $mail=new Adhesion($datas,$info);
         Mail::to($request->email)->send($mail);
 

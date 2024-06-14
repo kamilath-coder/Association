@@ -1,5 +1,5 @@
 import axios from 'axios';
-export const sendFormData = async (formData) => {
+export const sendAddhFormData = async (formData) => {
     try {
         const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/api/adhesion/store`,formData)
         return response.data;

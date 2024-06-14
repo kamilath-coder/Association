@@ -8,12 +8,12 @@ import {
   DialogFooter,
 } from "@material-tailwind/react";
 import { useTranslation } from 'react-i18next';
-import { sendFormData } from '../../API/formulaire/Adhesion';
+import { sendAddhFormData } from '../../API/formulaire/Adhesion';
 import {ToastContainer,toast} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 export function Adhesion() {
-  const [open, setOpen] = React.useState(false);
-  const [formState, setFormState] = React.useState({
+  const [open, setOpen] = useState(false);
+  const [formState, setFormState] = useState({
     nom: '',
     email: '',
     telephone: '',
@@ -82,9 +82,9 @@ export function Adhesion() {
     console.log('Formulaire soumis :', formState);
 
     try {
-      const response = await sendFormData(formState);
+      const response = await sendAddhFormData(formState);
       console.log('Réponse du serveur :', response);
-      toast.success(response.message);
+      toast.success(t('form.success'));
     } catch (error) {
       console.error('Erreur lors de l\'envoi du formulaire :', error);
       toast.error(error.response.data.message);

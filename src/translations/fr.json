@@ -51,8 +51,14 @@
     "Nom": "Nom",
     "Telephone": "Telephone",
     "Prénom": "Prénom",
+    "subscription_success": "Abonnement réussi",
+    "emailMustContainDotCom": "L'email doit contenir '.com' ",
+    "emailAlreadySubscribed": "Email déjà abonné",
+    "pleaseEnterValidEmail": "Veuillez entrer une adresse email valide",
+    "unknownError": "Erreur inconnue",
     
     "form": {
+        "success" : "Soumission du formulaire réussie",
         "errors": {
           "nomRequired": "Le nom est requis",
           "emailRequired": "L'email est requis",
@@ -64,7 +70,7 @@
           "professionRequired": "La profession est requise",
           "raisonRequired": "La raison est requise",
           "formError": "Erreur de soumission du formulaire"
-        
+         
         }
     }
 }

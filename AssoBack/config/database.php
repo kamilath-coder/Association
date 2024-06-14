@@ -58,6 +58,26 @@ return [
                 PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
             ]) : [],
         ],
+        'mysql2' => [
+            'driver' => 'mysql',
+            'url' => env('DATABASE_URL'),
+            'host' => env('AZ_DB_HOST', '127.0.0.1'),
+            'port' => env('AZ_DB_PORT', '3306'),
+            'database' => env('AZ_DB_DATABASE', 'az'),
+            'username' => env('AZ_DB_USERNAME', 'root'),
+            'password' => env('AZ_DB_PASSWORD', ''),
+            'unix_socket' => env('AZ_DB_SOCKET', ''),
+            'charset' => 'utf8mb4',
+            'max_index_length' => 191,
+            'collation' => 'utf8mb4_general_ci',
+            'prefix' => '',
+            'prefix_indexes' => true,
+            'strict' => true,
+            'engine' => null,
+            'options' => extension_loaded('pdo_mysql') ? array_filter([
+                PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
+            ]) : [],
+        ],
 
         'mariadb' => [
             'driver' => 'mariadb',
