@@ -5,16 +5,19 @@ import {
   Tab,
   TabPanel,
 } from "@material-tailwind/react";
- 
+import { useTranslation } from 'react-i18next';
 export function Mission(props) {
+  //const { i18n } = useTranslation();
+  //const [currentLanguage, setCurrentLanguage] = useState(i18n.language);
+  const { t} = useTranslation();
   const data = [
     {
-      label: "Notre histoire",
+      label: t('Notre histoire'),
       value: "html",
       desc: props.info.site_history ? props.info.site_history : "It really matters and then like it really doesn't matter."
     },
     {
-      label: "Nos valeurs",
+      label: t('Nos valeurs'),
       value: "react",
       desc: props.info.site_value? props.info.site_value:`Because it's about motivating the doers. Excepteur sint 
       occaecat cupidatat non proident, sunt in culpa qui officia 
@@ -24,14 +27,14 @@ export function Mission(props) {
       deserunt mollit anim id est laborum.`,
     },
     {
-      label: "Notre mission",
+      label:t('Notre mission'),
       value: "vue",
       desc:props.info.site_mission?props.info.site_mission: `We're not always in the position that we want to be at.
       We're constantly growing. We're constantly making mistakes. We're
       constantly trying to express ourselves and actualize our dreams.`,
     },
     {
-      label: "Notre vision",
+      label: t('Notre vision'),
       value: "angular",
       desc: props.info.site_vision ? props.info.site_vision : `Because it's about motivating the doers. Because I'm here
       to follow my dreams and inspire other people to follow their dreams, too.`,

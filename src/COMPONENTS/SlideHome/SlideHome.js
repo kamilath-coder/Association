@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { useState, useEffect } from "react";
 
 export function SlideHome({banner}) {
+  
   const { i18n } = useTranslation();
   const [currentLanguage, setCurrentLanguage] = useState(i18n.language);
   const { t} = useTranslation();

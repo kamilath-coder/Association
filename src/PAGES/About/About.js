@@ -1,4 +1,3 @@
-import {Adhesion} from '../../PAGES/Formulaire/Adhesion'
 import React from "react";
 import Header from "../../COMPONENTS/Header/Header";
 import { NavbarDefault } from "../../COMPONENTS/Navbar/Navbar";
@@ -39,7 +38,7 @@ function About() {
   const [BannerPicture, setBannerPicture] = useState('');
   const [Members, setMembers] = useState([]);
   const [info, setInfo] = useState({});
-  //const { t} = useTranslation();
+  
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -52,7 +51,7 @@ function About() {
   }, []);
   const { i18n } = useTranslation();
   const [currentLanguage, setCurrentLanguage] = useState(i18n.language);
-
+  const { t} = useTranslation();
   useEffect(() => {
     const savedLanguage = localStorage.getItem('language');
     const browserLang = savedLanguage || navigator.language || navigator.userLanguage;
@@ -77,8 +76,8 @@ function About() {
       .then(response => {
         console.log('Réponse du serveur :', response.data);
         setNameSite(response.data.info.name);
-        setPresentation(response.data.info.presentation_text);
-        setPresentationTitle(response.data.info.fr_presentation_title);
+        setPresentation(response.data.info);
+        setPresentationTitle(response.data.info);
         setPresentationPhoto(response.data.info.presentation_photo);
         setInfo(response.data.info);
         
@@ -134,13 +133,14 @@ function About() {
             <div className="Animation-option mt-20 flex flex-col md:flex-row md:space-x-28 md:space-y-0 space-y-12 justify-center s:px-4 md:px-0">
               <div className="flex flex-col space-y-3 ">
                 <div className="text-white text-sm bg-[#DCA61D] w-36 text-center py-1 rounded-full">
-                  Qui sommes-nous
+                 {t('Qui sommes-nous')}
                 </div>
                 <p className="text-3xl font-semibold text-[#066AB2]">
                   {NameSite? NameSite :'Nom de l’association'}
                 </p>
                 <div className="sm:w-[500px] leading-loose">
-                 {Presentation? removeTags(Presentation) :''}
+                {currentLanguage==="fr" ? (Presentation.fr_presentation_text ? removeTags(Presentation.fr_presentation_text) : '') : (Presentation.presentation_text ? removeTags(Presentation.presentation_text) : '')}
+                 
                 </div>
               </div>
               <div className="sm:w-[500px]">
@@ -162,7 +162,8 @@ function About() {
               {/* Description texte */}
               <div>
                 <p className="text-3xl font-semibold text-[#066AB2] uppercase">
-                  {PresentationTitle ? PresentationTitle :'Pourquoi nous rejoindre'} ?
+                {currentLanguage==="fr" ? (PresentationTitle.fr_presentation_title ? removeTags(PresentationTitle.fr_presentation_title) : 'Pourquoi nous rejoindre') : (PresentationTitle.presentation_title ? removeTags(PresentationTitle.presentation_title) : 'Pourquoi nous rejoindre')}?
+                  
                 </p>
                 <div className="h-1 w-20 bg-[#DCA61D] mt-4"></div>
                 <div className="sm:w-[500px] w-[320px] leading-loose mt-4">
@@ -179,7 +180,9 @@ function About() {
                   <br />
                   Sed blandit libero volutpat sed cras ornare. Cras adipiscing
                   enim eu turpis egestas pretium aenean pharetra magna .... */}
-                   {Presentation? removeTags(Presentation) :''}
+                   {/* {Presentation? removeTags(Presentation) :''} */}
+                  {currentLanguage==="fr" ? (Presentation.fr_presentation_text ? removeTags(Presentation.fr_presentation_text) : '') : (Presentation.presentation_text ? removeTags(Presentation.presentation_text) : '')}
+
                 </div>
                 <div className="flex items-center space-x-3 bg-[#DCA61D] text-white mt-4 py-2 px-3 ">
                   {/* <Adhesion/> */}
@@ -195,7 +198,7 @@ function About() {
                       fill="white"
                     />
                   </svg>
-                  <p>Devenir membre</p>
+                  <p>{t('Devenir membre')}</p>
                 </div>
               </div>
             </div>

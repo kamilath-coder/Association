@@ -4,7 +4,7 @@ export function fetchHomeInfo() {
     return axios.get(`${process.env.REACT_APP_BASE_URL}/api/home/info`);
 };
 export function fetchHomeEquipment() {
-    return axios.get(`${process.env.REACT_APP_BASE_URL}/api//home/eqipement`);
+    return axios.get(`${process.env.REACT_APP_BASE_URL}/api/home/eqipement`);
 };
 export function fetchHomeBanner() {
     return axios.get(`${process.env.REACT_APP_BASE_URL}/api/home/baner`);

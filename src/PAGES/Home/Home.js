@@ -156,7 +156,7 @@ function Home() {
     console.log('Formulaire soumis :', email);
 
     try {
-      const response = await subscribe(email);
+      await subscribe(email);
      // console.log(response.message);
       toast.success(t('subscription_success'));
     } catch (error) {
@@ -246,8 +246,8 @@ function Home() {
                 <div className="uppercase text-lg sm:text-2xl md:w-[400px] font-semibold text-[#4E4E4E]">
                   {/* Welcome to Egovenz City Municipal */}
                   {/* {PresentationTitle ? PresentationTitle :'Pourquoi nous rejoindre'} ? */}
-                  {currentLanguage==="fr" ? (PresentationTitle.fr_presentation_title ? PresentationTitle.fr_presentation_title : 'Pourquoi nous rejoindre') : (PresentationTitle.presentation_title ? PresentationTitle.presentation_title : 'Pourquoi nous rejoindre')}
-
+                  {/* {currentLanguage==="fr" ? (PresentationTitle.fr_presentation_title ? PresentationTitle.fr_presentation_title : 'Pourquoi nous rejoindre') : (PresentationTitle.presentation_title ? PresentationTitle.presentation_title : 'Pourquoi nous rejoindre')} */}
+                  {currentLanguage==="fr" ? (PresentationTitle.fr_presentation_title ? removeTags(PresentationTitle.fr_presentation_title) : 'Pourquoi nous rejoindre') : (PresentationTitle.presentation_title ? removeTags(PresentationTitle.presentation_title) : 'Pourquoi nous rejoindre')}?
                 </div>
                 <div className="h-1 w-20 bg-[#DCA61D]"></div>
                 <div className="sm:w-[500px] w-[320px] leading-loose">
