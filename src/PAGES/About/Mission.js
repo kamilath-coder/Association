@@ -6,38 +6,58 @@ import {
   TabPanel,
 } from "@material-tailwind/react";
 import { useTranslation } from 'react-i18next';
+import { useState, useEffect } from "react";
+import { removeTags } from '../../UTILS/Util';
 export function Mission(props) {
-  //const { i18n } = useTranslation();
-  //const [currentLanguage, setCurrentLanguage] = useState(i18n.language);
+  const { i18n } = useTranslation();
+  const [currentLanguage, setCurrentLanguage] = useState(i18n.language);
+  useEffect(() => {
+    const savedLanguage = localStorage.getItem('language');
+    const browserLang = savedLanguage || navigator.language || navigator.userLanguage;
+    const lang = browserLang.substr(0, 2);
+    i18n.changeLanguage(lang);
+    setCurrentLanguage(lang);
+    console.log('Langue actuelle :', lang);
+
+     // Ajoutez cet écouteur d'événements pour mettre à jour currentLanguage chaque fois que la langue change
+    i18n.on('languageChanged', lng => {
+      setCurrentLanguage(lng);
+    });
+
+    // N'oubliez pas de nettoyer l'écouteur d'événements lorsque le composant est démonté
+    return () => {
+      i18n.off('languageChanged');
+    };
+  }, [i18n]);
   const { t} = useTranslation();
   const data = [
     {
       label: t('Notre histoire'),
       value: "html",
-      desc: props.info.site_history ? props.info.site_history : "It really matters and then like it really doesn't matter."
+      desc: (currentLanguage==="fr"? (props.info.site_history_fr ? removeTags(props.info.site_history_fr) : "It really matters and then like it really doesn't matter."):(props.info.site_history ? removeTags(props.info.site_history) : "It really matters and then like it really doesn't matter."))
     },
     {
       label: t('Nos valeurs'),
       value: "react",
-      desc: props.info.site_value? props.info.site_value:`Because it's about motivating the doers. Excepteur sint 
+      desc:(currentLanguage==="fr"?  (props.info.site_value_fr ? removeTags(props.info.site_value_fr):"sa valeur fr"):(props.info.site_value? removeTags(props.info.site_value):`Because it's about motivating the doers. Excepteur sint 
       occaecat cupidatat non proident, sunt in culpa qui officia 
       deserunt mollit anim id est laborum.Because I'm here
       to follow my dreams and inspire other people to follow their dreams, too.Excepteur sint 
       occaecat cupidatat non proident, sunt in culpa qui officia 
-      deserunt mollit anim id est laborum.`,
+      deserunt mollit anim id est laborum.`)),
     },
     {
       label:t('Notre mission'),
       value: "vue",
-      desc:props.info.site_mission?props.info.site_mission: `We're not always in the position that we want to be at.
+      desc:(currentLanguage==="fr"? (props.info.site_mission_fr ? removeTags(props.info.site_mission_fr):"sa mission") :(props.info.site_mission? removeTags(props.info.site_mission): `We're not always in the position that we want to be at.
       We're constantly growing. We're constantly making mistakes. We're
-      constantly trying to express ourselves and actualize our dreams.`,
+      constantly trying to express ourselves and actualize our dreams.`)),
     },
     {
       label: t('Notre vision'),
       value: "angular",
-      desc: props.info.site_vision ? props.info.site_vision : `Because it's about motivating the doers. Because I'm here
-      to follow my dreams and inspire other people to follow their dreams, too.`,
+      desc: (currentLanguage==="fr"? (props.info.site_vision_fr ? removeTags(props.info.site_vision_fr) :"leur mission") :(props.info.site_vision ? removeTags(props.info.site_vision) : `Because it's about motivating the doers. Because I'm here
+      to follow my dreams and inspire other people to follow their dreams, too.`)),
     },
     
   ];

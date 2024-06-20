@@ -211,7 +211,7 @@ function About() {
               >
                 <div className="bg-color-white h-[340px] md:px-10 px-5 pt-6">
                   <div className="text-2xl uppercase text-[#DCA61D] font-bold">
-                    Les membres de notre équipe
+                   {t('Les membres de notre équipe')}
                   </div>
                 </div>
               </div>
@@ -222,7 +222,7 @@ function About() {
                   <div key={index}>
                     <Link to="/A-propos/membre">
                       <div className="photo-membre">
-                        <img src={member.picture ? `data:image/png;base64,${member.picture}` : profil1} alt="pp1" />
+                        <img src={member.photo ? `data:image/png;base64,${member.photo}` : profil1} alt="pp1" />
                       </div>
                     </Link>
                     <div className="flex flex-col items-center space-y-2 w-[206px] p-3 pb-6 bg-white shadow">

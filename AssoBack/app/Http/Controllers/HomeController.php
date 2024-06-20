@@ -150,11 +150,6 @@ class HomeController extends Controller
                 'required',
                 'email',
                 'unique:web_news_letter,email',
-                function ($attribute, $value, $fail) {
-                    if (!str_contains($value, '.com')) {
-                        $fail('email_dotcom');
-                    }
-                },
             ],
         ],[
             'email.unique' => 'email_unique',

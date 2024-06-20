@@ -421,7 +421,7 @@ function Home() {
                     {Members.map((member, index) => ( <div>
                       <Link to="/A-propos/membre">
                         <div className="photo-membre">
-                          <img src={member.picture ? `data:image/png;base64,${member.picture}` : profil1} alt="pp1" />
+                          <img src={member.photo ? `data:image/png;base64,${member.photo}` : profil1} alt="pp1" />
                         </div>
                       </Link>
                       <div className="flex flex-col items-center space-y-2 w-[206px] p-3 pb-6 bg-white shadow">
@@ -432,33 +432,20 @@ function Home() {
                           {member.name? member.name : 'Kouakou ange christ'}
                         </p>
                         {/* reseaux sociaux */}
+                        
                         <div className="flex flex-row items-center space-x-2 pt-3">
-                          <Link to="">
-                            <GrFacebookOption className="text-xl text-[#4e4e4e] bg-[#d9d9d9] hover:bg-[#066AB2] hover:text-white w-6 h-6 rounded-full p-1" />
-                          </Link>
-                          <Link to="">
+                          {member.facebook_link? <a href={member.facebook_link} target="_blank" rel="noreferrer noopener">
+                              <GrFacebookOption className="text-xl text-[#4e4e4e] bg-[#d9d9d9] hover:bg-[#066AB2] hover:text-white w-6 h-6 rounded-full p-1" />
+                            </a>:''}
+                          {member.linkedin_link ? <a href={member.linkedin_link} target="_blank" rel="noreferrer noopener">
                             <TiSocialLinkedin className="text-xl text-[#4e4e4e] bg-[#d9d9d9] hover:bg-[#066AB2] hover:text-white w-6 h-6 rounded-full p-1" />
-                          </Link>
-                          <Link to="">
+                          </a> :''}
+                          {member.google_link ?<a href={member.google_link} target="_blank" rel="noreferrer noopener">
                             <IoIosMail className="text-xl text-[#4e4e4e] bg-[#d9d9d9] hover:bg-[#066AB2] hover:text-white w-6 h-6 rounded-full p-1" />
-                          </Link>
-                          <Link to="">
-                            <FaInstagram className="text-xl text-[#4e4e4e] bg-[#d9d9d9] hover:bg-[#066AB2] hover:text-white w-6 h-6 rounded-full p-1" />
-                          </Link>
-                        </div>
-                        <div className="flex flex-row items-center space-x-2 pt-3">
-                        {member.facebook_link? <a href={member.facebook_link} target="_blank" rel="noreferrer noopener">
-                            <GrFacebookOption className="text-xl text-[#4e4e4e] bg-[#d9d9d9] hover:bg-[#066AB2] hover:text-white w-6 h-6 rounded-full p-1" />
                           </a>:''}
-                        {member.linkedin_link ? <a href={member.linkedin_link} target="_blank" rel="noreferrer noopener">
-                          <TiSocialLinkedin className="text-xl text-[#4e4e4e] bg-[#d9d9d9] hover:bg-[#066AB2] hover:text-white w-6 h-6 rounded-full p-1" />
-                        </a> :''}
-                        {member.google_link ?<a href={member.google_link} target="_blank" rel="noreferrer noopener">
-                          <IoIosMail className="text-xl text-[#4e4e4e] bg-[#d9d9d9] hover:bg-[#066AB2] hover:text-white w-6 h-6 rounded-full p-1" />
-                        </a>:''}
-                       {member.twitter_link ? <a href={member.twitter_link} target="_blank" rel="noreferrer noopener">
-                          <RiTwitterXLine className="text-xl text-[#4e4e4e] bg-[#d9d9d9] hover:bg-[#066AB2] hover:text-white w-6 h-6 rounded-full p-1" />
-                        </a>: '' }
+                          {member.twitter_link ? <a href={member.twitter_link} target="_blank" rel="noreferrer noopener">
+                            <RiTwitterXLine className="text-xl text-[#4e4e4e] bg-[#d9d9d9] hover:bg-[#066AB2] hover:text-white w-6 h-6 rounded-full p-1" />
+                          </a>: '' }
                         </div>
                       </div>
                      </div>))}
