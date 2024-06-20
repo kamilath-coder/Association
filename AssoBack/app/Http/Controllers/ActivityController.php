@@ -164,10 +164,10 @@ class ActivityController extends Controller
         $sales->User='admin';
         $sales->save();
         $provider='feedapay';
-
+        $info = WebSiteInfo::first();
         $providers=DB::table('online_payment_providors')->where('providor_id',$provider)->first();
         //dd($providers);
-        $curency=DB::table('currency_rate')->where('id_currency',$request->id_currency)->first();
+        $curency=DB::table('currency_rate')->where('id_currency',$info->currency)->first();
        //dd($curency);
        $price=$curency->value_to_usd * $price;
        $delivery_fees=$price* $providers->smart_percentage;
@@ -252,10 +252,10 @@ class ActivityController extends Controller
         $sales->User='admin';
         $sales->save();
         $provider='stripe';
-
+        $info = WebSiteInfo::first();
         $providers=DB::table('online_payment_providors')->where('providor_id',$provider)->first();
         //dd($providers);
-        $curency=DB::table('currency_rate')->where('id_currency',$request->id_currency)->first();
+        $curency=DB::table('currency_rate')->where('id_currency',$info->currency)->first();
        //dd($curency);
        $price=$curency->value_to_usd * $price;
        $delivery_fees=$price* $providers->smart_percentage;
