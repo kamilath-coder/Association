@@ -104,7 +104,7 @@ function Nouvelle() {
         <>
           <div>
             <Header info={info} />
-            <NavbarDefault />
+            <NavbarDefault info={info} />
 
             {/* en tete */}
             <div
@@ -125,9 +125,7 @@ function Nouvelle() {
                 {t('les nouvelles')}
               </div>
               <div className="sm:w-[600px] text-center">
-                Ut enim ad minim veniam, quis nostrud exercitation ullamco
-                laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure
-                dolor in reprehenderit in voluptate
+                {t('The latest news are shared with members and visitors constantly in order to keep them connected every time by being aware of what is going on with us')}
               </div>
 
               <div className=" grid md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-10">
@@ -138,7 +136,7 @@ function Nouvelle() {
                     <div className=" relative overflow-hidden w-[334px] h-[225px]">
                       <img
                         src={article.picture ? `data:image/png;base64,${article.picture}` :Nouvelle1}
-                        className="w-full h-full object-cover"
+                        className="w-full h-full object-cover rounded-lg"
                         alt="Nouvelle1"
                       />
                     </div>
@@ -225,9 +223,7 @@ function Nouvelle() {
                 {t('faire une donation ici')}
               </div>
               <div className="sm:w-[800px] text-center pb-8">
-                Ut enim ad minim veniam, quis nostrud exercitation ullamco
-                laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure
-                dolor in reprehenderit in voluptate
+              {t('Chaque don, petit ou grand, contribue à transformer des vies et à créer un avenir meilleur pour des milliers de personnes. En choisissant de soutenir l\'Association, vous devenez un acteur clé de notre mission.')}
               </div>
               <Donation />
             </div>

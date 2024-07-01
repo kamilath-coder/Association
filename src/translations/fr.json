@@ -40,11 +40,11 @@
 
     "nos différents activités": "nos différents activités",
 
-    "Les membres de notre équipe": "Les membres de notre équipe",
+    "OUR MEMBERS": "NOS MEMBRES",
     "Veuillez entrer votre adresse mail": "Veuillez entrer votre adresse mail",
     "S'abonner":"S'abonner",
-    "Notre mission": "Notre mission",
-    "Tout les membres": "Tout les membres",
+    "Learn more": "En savoir plus",
+    "Show all members":"Afficher tous les membres",
     "nos partenaires" : "nos partenaires",
     "Toutes les activités": "Toutes les activités",
     "Restez informer en vous abonnant a nos newsletter": "Restez informer en vous abonnant a nos newsletter",
@@ -56,7 +56,9 @@
     "emailAlreadySubscribed": "Email déjà abonné",
     "pleaseEnterValidEmail": "Veuillez entrer une adresse email valide",
     "unknownError": "Erreur inconnue",
-    
+    "Les photos de l'activité" : "Les photos de l'activité",
+    "Nouvelles recentes" : "Nouvelles recentes",
+    "Activités recentes": "Activités recentes",
     "form": {
         "success" : "Soumission du formulaire réussie",
         "errors": {
@@ -77,7 +79,11 @@
     "Notre histoire": "Notre histoire",
     "Nos valeurs": "Nos valeurs",
     "Notre mission": "Notre mission",
-    "Notre vision": "Notre vision"
-    
-
+    "Notre vision": "Notre vision",
+    "Chaque don, petit ou grand, contribue à transformer des vies et à créer un avenir meilleur pour des milliers de personnes. En choisissant de soutenir l'Association, vous devenez un acteur clé de notre mission.":"Chaque don, petit ou grand, contribue à transformer des vies et à créer un avenir meilleur pour des milliers de personnes. En choisissant de soutenir l'Association, vous devenez un acteur clé de notre mission.",
+    "Faire un don": "Faire un don",
+    "Montant de don": "Montant de don",
+    "Devise": "Devise",
+    "The latest news are shared with members and visitors constantly in order to keep them connected every time by being aware of what is going on with us.": "Les dernières nouvelles sont partagées avec les membres et les visiteurs en permanence afin de les maintenir connectés à chaque fois en étant au courant de ce qui se passe avec nous.",
+    "We remain available anytime to support you with whatever concerns you may have. Contact us now.": "Nous restons disponibles à tout moment pour vous soutenir dans tous les problèmes que vous pourriez rencontrer. Contactez-nous maintenant."
 }

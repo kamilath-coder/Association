@@ -4,6 +4,7 @@ import { NavbarDefault } from "../../COMPONENTS/Navbar/Navbar";
 import {ToastContainer,toast} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import backcontact from "../../ASSETS/Image/Backcontact.png";
+import azicon from "../../ASSETS/Image/AZICON.jpeg";
 import { useState, useEffect } from "react";
 import Loader from "../../COMPONENTS/Loader/Loading";
 //import { Link } from "react-router-dom";
@@ -165,7 +166,7 @@ function Contact() {
         <>
           <div>
             <Header info={info} />
-            <NavbarDefault />
+            <NavbarDefault info={info}/>
             <ToastContainer />
             {/* en tete */}
             <div
@@ -250,26 +251,27 @@ function Contact() {
                 </p>
                 <div className="h-1 w-20 bg-[#DCA61D] mt-3"></div>
                 <div className=" mt-6 sm:w-[550px]">
-                  Aliquam erat volutpat. Etiam ut nisi tempus, sagittis leo ut,
-                  placerat metus. Cras non convallis tellus.
+                  {t('We remain available anytime to support you with whatever concerns you may have. Contact us now.')}
                 </div>
                 <div className="mt-8 flex flex-col space-y-6">
                   {/* Localisation */}
                   <div className=" flex flex-row  space-x-4">
-                    <div className=" bg-blue-gray-100 w-12 h-12 flex justify-center items-center rounded-full">
-                      <svg
-                        width="32"
-                        height="32"
-                        viewBox="0 0 32 32"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          d="M17.0669 3.21442C12.6477 3.21442 9.06689 6.78082 9.06689 11.1984C9.06689 18.8368 17.0669 28.7984 17.0669 28.7984C17.0669 28.7984 25.0669 18.8352 25.0669 11.1984C25.0669 6.78242 21.4861 3.21442 17.0669 3.21442ZM17.0669 15.616C15.9212 15.616 14.8224 15.1609 14.0122 14.3507C13.202 13.5406 12.7469 12.4418 12.7469 11.296C12.7469 10.1503 13.202 9.05147 14.0122 8.24132C14.8224 7.43116 15.9212 6.97602 17.0669 6.97602C18.2126 6.97602 19.3114 7.43116 20.1216 8.24132C20.9318 9.05147 21.3869 10.1503 21.3869 11.296C21.3869 12.4418 20.9318 13.5406 20.1216 14.3507C19.3114 15.1609 18.2126 15.616 17.0669 15.616Z"
-                          fill="#066AB2"
-                        />
-                      </svg>
-                    </div>
+                    <a href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(addressInfo ? addressInfo : '456, Lorem Street, Los Angeles, US 33454')}`} target="_blank" rel="noopener noreferrer">
+                      <div className=" bg-blue-gray-100 w-12 h-12 flex justify-center items-center rounded-full">
+                        <svg
+                          width="32"
+                          height="32"
+                          viewBox="0 0 32 32"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M17.0669 3.21442C12.6477 3.21442 9.06689 6.78082 9.06689 11.1984C9.06689 18.8368 17.0669 28.7984 17.0669 28.7984C17.0669 28.7984 25.0669 18.8352 25.0669 11.1984C25.0669 6.78242 21.4861 3.21442 17.0669 3.21442ZM17.0669 15.616C15.9212 15.616 14.8224 15.1609 14.0122 14.3507C13.202 13.5406 12.7469 12.4418 12.7469 11.296C12.7469 10.1503 13.202 9.05147 14.0122 8.24132C14.8224 7.43116 15.9212 6.97602 17.0669 6.97602C18.2126 6.97602 19.3114 7.43116 20.1216 8.24132C20.9318 9.05147 21.3869 10.1503 21.3869 11.296C21.3869 12.4418 20.9318 13.5406 20.1216 14.3507C19.3114 15.1609 18.2126 15.616 17.0669 15.616Z"
+                            fill="#066AB2"
+                          />
+                        </svg>
+                      </div>
+                    </a>
                     <div>
                       <p className=" font-semibold pb-1">{t('Localisation')}</p>
                       <p>{addressInfo ? addressInfo : '456, Lorem Street, Los Angeles, US 33454.'}</p>
@@ -277,7 +279,7 @@ function Contact() {
                   </div>
                   {/* Phone */}
                   <div className=" flex flex-row  space-x-6">
-                    <div className=" bg-blue-gray-100 w-12 h-12 flex justify-center items-center rounded-full">
+                    <a href={phoneInfo ? `tel:${phoneInfo}` : 'tel:+1(123)123-12331'} className=" bg-blue-gray-100 w-12 h-12 flex justify-center items-center rounded-full">
                       <svg
                         width="26"
                         height="26"
@@ -290,7 +292,7 @@ function Contact() {
                           fill="#066AB2"
                         />
                       </svg>
-                    </div>
+                    </a>
                     <div>
                       <p className=" font-semibold pb-1">{t('Télephone')}</p>
                       <p>{phoneInfo? phoneInfo :'+1 (123) / 123 – 12331'}</p>
@@ -298,7 +300,7 @@ function Contact() {
                   </div>
                   {/* Email */}
                   <div className=" flex flex-row  space-x-6">
-                    <div className=" bg-blue-gray-100 w-12 h-12 flex justify-center items-center rounded-full">
+                    <a href={`mailto:${emailInfo ? emailInfo : 'info@loremips.com'}`} className=" bg-blue-gray-100 w-12 h-12 flex justify-center items-center rounded-full">
                       <svg
                         width="26"
                         height="26"
@@ -311,7 +313,7 @@ function Contact() {
                           fill="#066AB2"
                         />
                       </svg>
-                    </div>
+                    </a>
                     <div>
                       <p className=" font-semibold pb-1">{t('Email')}</p>
                       <p>{emailInfo ? emailInfo:'info@loremips.com /admin@loremps.com'}</p>
@@ -356,6 +358,9 @@ function Contact() {
                         {TweetInfo?<a href={TweetInfo} target="_blank" rel="noreferrer noopener">
                           <RiTwitterXLine className="text-lg text-[#4e4e4e] " />
                         </a>:''}
+                        <a href={`https://az-companies.com/fr/${info.Customers_Numbers}/public-profile`} target="_blank" rel="noreferrer noopener">
+                          <img src={azicon} alt="Logo AZ" className="text-xl text-[#4e4e4e] w-4 h-4" />
+                        </a>
                       </div>
                     </div>
                   </div>

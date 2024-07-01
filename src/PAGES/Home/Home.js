@@ -192,7 +192,7 @@ function Home() {
         <>
           <div className="bg-[#F9F9F9]">
             <Header  info={info}/>
-            <NavbarDefault />
+            <NavbarDefault info={info}/>
 
             {/* en tete */}
            <SlideHome  banner={Banner}/>
@@ -272,12 +272,12 @@ function Home() {
                   to="/A-propos"
                   className="hover:bg-white text-center hover:text-[#066AB2] text-white bg-[#066AB2] w-40 py-3 font-medium text-lg transition delay-150 duration-700 ease-in-out hover:-translate-y-1 hover:scale-110"
                 >
-                 {t( 'Notre mission')}
+                 {t('Learn more')}
                 </Link>
               </div>
               <div className=" flex flex-col ">
-                <div className="img_taille">
-                  <img
+                <div className="img_taille rounded-lg">
+                  <img className="rounded-lg"
                     src={PresentationPhoto ? `data:image/png;base64,${PresentationPhoto}` : img_description}
                     alt="imagede description de l'association"
                   />
@@ -336,7 +336,7 @@ function Home() {
                 {Articles.map((article ,index) => ( 
                   <div className="activite-img-taille" key={index}>
                     <div
-                      className="img-activite"
+                      className="rounded-lg img-activite "
                       style={{ backgroundImage:  article.Pictures ?   `url(data:image/png;base64,${article.Pictures})`: `url(${activite1})` }}
                     >
                       <div className="bg-color-activite text-white pl-4 flex flex-col justify-end">
@@ -411,7 +411,7 @@ function Home() {
                           fill="white"
                         />
                       </svg>
-                      <p>{t('Tout les membres')}</p>
+                      <p>{t('Show all members')}</p>
                     </Link>
                   </div>
 
@@ -420,8 +420,8 @@ function Home() {
                     {/* membre1 */}
                     {Members.map((member, index) => ( <div>
                       <Link to="/A-propos/membre">
-                        <div className="photo-membre">
-                          <img src={member.photo ? `data:image/png;base64,${member.photo}` : profil1} alt="pp1" />
+                        <div className="photo-membre rounded-lg">
+                          <img src={member.photo ? `data:image/png;base64,${member.photo}` : profil1} alt="pp1" className="rounded-lg" />
                         </div>
                       </Link>
                       <div className="flex flex-col items-center space-y-2 w-[206px] p-3 pb-6 bg-white shadow">

@@ -37,7 +37,7 @@ class ActivityController extends Controller
     }
     public function ActivityBaner(){
 
-        $banner=WebPage::with('banner')->where('name','Activity')->first();
+        $banner=WebPage::with('banner')->where('name','Our activities')->first();
         if($banner){
             $banner->banner->picture=base64_encode($banner->banner->picture);
 
@@ -69,7 +69,7 @@ class ActivityController extends Controller
                     $art->category->Pictures=base64_encode($art->category->Pictures);
                 }
             }
-            $categoryDescription = $article[0]->category->fr_description;
+            $categoryDescription = $article[0]->category;
 
             return response()->json([
                 'message'=>'Informations du site récupérées avec succès',
@@ -164,10 +164,11 @@ class ActivityController extends Controller
         $sales->User='admin';
         $sales->save();
         $provider='feedapay';
-        $info = WebSiteInfo::first();
-        $providers=DB::table('online_payment_providors')->where('providor_id',$provider)->first();
+        //$info = WebSiteInfo::first();
+        $providers=DB::table('online_payment_providors')->where('providor_name',$provider)->first();
         //dd($providers);
-        $curency=DB::table('currency_rate')->where('id_currency',$info->currency)->first();
+        $curency=DB::table('currency_rate')->where('sign','F CFA')->first();
+        // $curency=DB::table('currency_rate')->where('id_currency',$info->currency)->first();
        //dd($curency);
        $price=$curency->value_to_usd * $price;
        $delivery_fees=$price* $providers->smart_percentage;
@@ -175,33 +176,35 @@ class ActivityController extends Controller
        //dd($delivery_fees, $provider_fees);
        $amount_to_refund = $price - ($delivery_fees + $provider_fees);
       //dd($amount_to_refund);
-      $data = DB::table('website_info')->first();
-       //envoer les information de payement a la table sales_transaction
-       $online_payment_transaction=DB::table('online_payment_transaction')->insert([
-           'seller_number' =>$data->info_id,
-           'management_fees' => $delivery_fees,
-           'payment_provider' => $provider,
-           'payment_id' => $request->paymentId,
-           'provider_fees' => $provider_fees,
-           'order_number' => 0,
-           'transaction_type' => 'credit',
-           'transaction_from' =>'website_sales',
-           'buyer_number' =>  $customer->Customers_Numbers,
-           'total_transaction_amount' => $price,
-           'amount_to_refund' =>   $amount_to_refund,
-           //'website_sales_number' => $salesnumber,
-       ]);
-        return response()->json([
-            'message' => 'Don enregistrées avec succès',
-            'data' => $data
-
-        ], 200);
-
-
-
-
-
-
+      $info = DB::table('website_info')->first();
+       if($info){
+            $info->presentation_photo=base64_encode($info->presentation_photo);
+            $info->presentation_photo2=base64_encode($info->presentation_photo2);
+            $info->short_logo=base64_encode($info->short_logo);
+            $info->logo=base64_encode($info->logo);
+            $info->file=base64_encode($info->file);
+            $info->fr_file=base64_encode($info->fr_file);
+            //envoer les information de payement a la table sales_transaction
+            $online_payment_transaction=DB::table('online_payment_transaction')->insert([
+                'seller_number' =>$info->info_id,
+                'management_fees' => $delivery_fees,
+                'payment_provider' => $provider,
+                'payment_id' => $request->paymentId,
+                'provider_fees' => $provider_fees,
+                'order_number' => 0,
+                'transaction_type' => 'credit',
+                'transaction_from' =>'website_sales',
+                'buyer_number' =>  $customer->Customers_Numbers,
+                'total_transaction_amount' => $price,
+                'amount_to_refund' =>   $amount_to_refund,
+                //'website_sales_number' => $salesnumber,
+            ]);
+            return response()->json([
+                'message'=>'Informations du site récupérées avec succès',
+                'info' => $info,
+            ],
+            200);
+        }
 
     }
     public function stripe(Request $request){
@@ -252,10 +255,12 @@ class ActivityController extends Controller
         $sales->User='admin';
         $sales->save();
         $provider='stripe';
-        $info = WebSiteInfo::first();
-        $providers=DB::table('online_payment_providors')->where('providor_id',$provider)->first();
+        //$info = WebSiteInfo::first();
+        $providers=DB::table('online_payment_providors')->where('providor_name',$provider)->first();
         //dd($providers);
-        $curency=DB::table('currency_rate')->where('id_currency',$info->currency)->first();
+        $curency=DB::table('currency_rate')->where('sign','F CFA')->first();
+
+        // $curency=DB::table('currency_rate')->where('id_currency',$info->currency)->first();
        //dd($curency);
        $price=$curency->value_to_usd * $price;
        $delivery_fees=$price* $providers->smart_percentage;
@@ -263,33 +268,56 @@ class ActivityController extends Controller
        //dd($delivery_fees, $provider_fees);
        $amount_to_refund = $price - ($delivery_fees + $provider_fees);
       //dd($amount_to_refund);
-      $data = DB::table('website_info')->first();
-       //envoer les information de payement a la table sales_transaction
-       $online_payment_transaction=DB::table('online_payment_transaction')->insert([
-           'seller_number' =>$data->info_id,
-           'management_fees' => $delivery_fees,
-           'payment_provider' => $provider,
-           'payment_id' => $request->paymentId,
-           'provider_fees' => $provider_fees,
-           'order_number' => 0,
-           'transaction_type' => 'credit',
-           'transaction_from' =>'website_sales',
-           'buyer_number' =>  $customer->Customers_Numbers,
-           'total_transaction_amount' => $price,
-           'amount_to_refund' =>   $amount_to_refund,
-           //'website_sales_number' => $salesnumber,
-       ]);
-        return response()->json([
-            'message' => 'Don enregistrées avec succès',
-            'data' => $data
+        //   $data = DB::table('website_info')->first();
+        //    //envoer les information de payement a la table sales_transaction
+        //    $online_payment_transaction=DB::table('online_payment_transaction')->insert([
+        //        'seller_number' =>$data->info_id,
+        //        'management_fees' => $delivery_fees,
+        //        'payment_provider' => $provider,
+        //        'payment_id' => $request->paymentId,
+        //        'provider_fees' => $provider_fees,
+        //        'order_number' => 0,
+        //        'transaction_type' => 'credit',
+        //        'transaction_from' =>'website_sales',
+        //        'buyer_number' =>  $customer->Customers_Numbers,
+        //        'total_transaction_amount' => $price,
+        //        'amount_to_refund' =>   $amount_to_refund,
+        //        //'website_sales_number' => $salesnumber,
+        //    ]);
+        //     return response()->json([
+        //         'message' => 'Don enregistrées avec succès',
+        //         'data' => $data
 
-        ], 200);
-
-
-
-
-
-
+        //     ], 200);
+        $info = DB::table('website_info')->first();
+       if($info){
+            $info->presentation_photo=base64_encode($info->presentation_photo);
+            $info->presentation_photo2=base64_encode($info->presentation_photo2);
+            $info->short_logo=base64_encode($info->short_logo);
+            $info->logo=base64_encode($info->logo);
+            $info->file=base64_encode($info->file);
+            $info->fr_file=base64_encode($info->fr_file);
+            //envoer les information de payement a la table sales_transaction
+            $online_payment_transaction=DB::table('online_payment_transaction')->insert([
+                'seller_number' =>$info->info_id,
+                'management_fees' => $delivery_fees,
+                'payment_provider' => $provider,
+                'payment_id' => $request->paymentId,
+                'provider_fees' => $provider_fees,
+                'order_number' => 0,
+                'transaction_type' => 'credit',
+                'transaction_from' =>'website_sales',
+                'buyer_number' =>  $customer->Customers_Numbers,
+                'total_transaction_amount' => $price,
+                'amount_to_refund' =>   $amount_to_refund,
+                //'website_sales_number' => $salesnumber,
+            ]);
+            return response()->json([
+                'message'=>'Don enregistrées avec succès',
+                'info' => $info,
+            ],
+            200);
+        }
 
     }
 

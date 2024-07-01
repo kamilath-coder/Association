@@ -1,6 +1,7 @@
 import React from "react";
 import { useState,useEffect } from 'react';
 import axios from 'axios';
+import {fetchActivityInfo } from  '../../API/activity/Activity';
 import {getPaymentStatus} from  '../../API/activity/Activity';
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements } from '@stripe/react-stripe-js';
@@ -47,12 +48,17 @@ function PaymentPopup({ open,tel, user_Id, montant, email, onSuccess, userPrenom
 
     
     const createPaymentSession = async () => {
-      try { 
+      try {
+    
+          const tauxConversion = 555; // 1 USD = 555 XOF
+          const montantEnUSD = montant / tauxConversion; // Convertir le montant en USD
+          const montantEnCentimes = montantEnUSD * 100; // Convertir en centimes pour Stripe
+          const montantArrondi = Math.round(montantEnCentimes); // Arrondir à l'entier le plus proche
         const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/api/payment/create`, {
           provider: 'stripe',
           item_id: 'item_id',
           item_name: 'item',
-          amount: montant*100,
+          amount: montantArrondi,
           currency: 'XOF',
           email: email,
           description: 'Publicité sur Mon Bon Sejour',
@@ -244,8 +250,10 @@ export function Donation() {
   
   const { i18n } = useTranslation();
   const [currentLanguage, setCurrentLanguage] = useState(i18n.language);
+  const [curency,setCurency]= useState();
   const [formState, setFormState] = useState(JSON.parse(localStorage.getItem('formState')) || {
     prixL:'',
+    devise:'',
     emailL:'',
     nomL:'',
     phoneL:'',
@@ -264,11 +272,29 @@ export function Donation() {
     i18n.on('languageChanged', lng => {
       setCurrentLanguage(lng);
     });
+    fetchActivityInfo()
+    .then(response => {
+      console.log('Réponse du serveur :',response.data.info.currency);
+      // setAddress(response.data.info.address);
+      // setPhone(response.data.info.phone);
+      // setEmail(response.data.info.email);
+      // setFace(response.data.info.facebook_link);
+      // setLink(response.data.info.linkedin_link);
+      // setGmail(response.data.info.google_link);
+      // setTweet(response.data.info.twitter_link);
+      // setInsta(response.data.info.instagram_link);
+      setCurency(response.data.info.currency);
+    })
+    .catch(error => {
+      console.error('Il y avait une erreur!', error);
+    });
 
     // N'oubliez pas de nettoyer l'écouteur d'événements lorsque le composant est démonté
     return () => {
       i18n.off('languageChanged');
     };
+
+   
   }, [i18n]);
   const handleInputChange = (event) => {
     setFormState({
@@ -387,19 +413,38 @@ export function Donation() {
               />
             </svg>
             <p className=" uppercase text-[#DCA61D] text-lg font-medium">
-              Faire un don
+              {t('Faire un don')}
             </p>
           </div>
         </DialogHeader>
         <DialogBody className="h-[28rem]  overflow-y-scroll pl-8 overflow-x-hidden  ">
           <form className="mt-6 flex flex-col space-y-3 w-[300px]"  onSubmit={handleSubmit}>
-            <select className=" w-[250px] outline-none bg-[#f8f8f8] h-12 px-2" name="prixL" onChange={handleInputChange}>
+            {/* <select className=" w-[250px] outline-none bg-[#f8f8f8] h-12 px-2" name="prixL" onChange={handleInputChange}>
               <option>100</option>
               <option>150</option>
               <option>200</option>
               <option>300</option>
               <option>400</option>
-            </select>
+            </select> */}
+
+            <div className=" flex flex-row items-center space-x-3">
+              <div className=" flex-col flex">
+                <label>{t('Montant de don')}</label>
+                <input
+                  type="number"
+                  className="w-[120px] outline-none bg-[#f8f8f8] h-12 px-2"
+                  name="prixL"
+                  onChange={handleInputChange}
+                   min="1"
+                />
+              </div>
+              <div className=" flex-col flex">
+                <label>{t('Devise')}</label>
+                <select className="w-[100px] outline-none bg-[#f8f8f8] h-12 px-2" name="devise" onChange={handleInputChange}>
+                  <option>Fcfa</option>
+                </select>
+              </div>
+            </div>
             <label>{t('Votre adresse mail')}</label>
             <input
               type="email"
@@ -441,14 +486,17 @@ export function Donation() {
  
               </div> */}
             </div>
-            <DialogFooter className="space-x-2">
-              <Button variant="text" color="blue-gray" onClick={handleOpen}>
-               {t('Quitter')}
-              </Button>
+            {/* <DialogFooter className="space-x-2">
+        
               <Button  text='variant' type="submit" className=" bg-[#DCA61D]"  >
                 {t('Valider')}
               </Button>
               
+            </DialogFooter> */}
+            <DialogFooter className="flex justify-center space-x-2">
+              <Button text='variant' type="submit" className="bg-[#DCA61D]">
+                {t('Valider')}
+              </Button>
             </DialogFooter>
             {showPopup && (
                 <PaymentPopup

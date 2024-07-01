@@ -39,15 +39,18 @@
   "Valider": "Validate",
   "Quitter": "Exit",
   "Pourquoi nous rejoindre": "Why join us",
-  "Les membres de notre équipe": "The members of our team",
+  "OUR MEMBERS": "OUR MEMBERS",
   "Veuillez entrer votre adresse mail": "Please enter your email address",
   "S'abonner" : "Subscribe",
   "nos partenaires": "Our partners",  
-  "Notre mission": "Our mission",
-  "Tout les membres": "All members",
+  "Learn more": "Learn more",
+  "Show all members": "Show all members",
   "nos différents activités": "Our different activities",
   "Toutes les activités": "All activities",
   "Restez informer en vous abonnant a nos newsletter": "Stay informed by subscribing to our newsletter",
+  "Les photos de l'activité": "Activity photos",
+  "Nouvelles recentes": "Recent news",
+  "Activités recentes" :"Recent activity",
   "Nom": "Name",
   "Telephone": "Phone",
   "Prénom": "Surname",
@@ -77,10 +80,12 @@
   "Notre histoire": "Our history",
   "Nos valeurs": "Our values",
   "Notre mission": "Our mission",
-  "Notre vision": "Our vision"
-
-    
-
-
+  "Notre vision": "Our vision",
+  "Chaque don, petit ou grand, contribue à transformer des vies et à créer un avenir meilleur pour des milliers de personnes. En choisissant de soutenir l'Association, vous devenez un acteur clé de notre mission.":"Every donation, whether small or large, helps transform lives and create a better future for thousands of people. By choosing to support the Association, you become a key player in our mission.",
+  "Faire un don": "Make a donation",
+  "Montant de don" : "Donation amount",
+  "Devise": "Currency",
+  "The latest news are shared with members and visitors constantly in order to keep them connected every time by being aware of what is going on with us.": "The latest news are shared with members and visitors constantly in order to keep them connected every time by being aware of what is going on with us.",
+  "We remain available anytime to support you with whatever concerns you may have. Contact us now.": "We remain available anytime to support you with whatever concerns you may have. Contact us now."
 
 }

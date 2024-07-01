@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import { GrFacebookOption } from "react-icons/gr";
 import { IoIosMail } from "react-icons/io";
 import { FaInstagram } from "react-icons/fa";
+import azicon from "../../ASSETS/Image/AZICON.jpeg";
+import aDicon from "../../ASSETS/Image/Africa Digitalizer LOGO3.svg";
 import { TiSocialLinkedin } from "react-icons/ti";
 import { useTranslation } from 'react-i18next';
 import { FaHome, FaInfoCircle,  FaAnchor, FaNewspaper, FaPhone } from 'react-icons/fa'
@@ -34,6 +36,9 @@ function Footer(props) {
         {props.info.instagram_link?<a href={props.info.instagram_link} target="_blank" rel="noreferrer noopener">
           <FaInstagram className="text-xl text-[#000000] bg-[#DCA61D] hover:bg-[#066AB2] hover:text-white w-6 h-6 rounded-full p-1" />
         </a>:''}
+        <a href={`https://az-companies.com/fr/${props.info.Customers_Numbers}/public-profile`} target="_blank" rel="noreferrer noopener">
+          <img src={azicon} alt="Logo AZ" className="text-xl text-[#000000] bg-[#DCA61D] hover:bg-[#066AB2] hover:text-white w-6 h-6 rounded-full p-1 w-4 h-4 " />
+        </a>
       </div>
 
       {/* Lien */}
@@ -51,7 +56,10 @@ function Footer(props) {
         <Link to="/Les-nouvelles" className="flex items-center mb-2 sm:mb-0"><FaNewspaper className="mr-2" /> {t('Nouvelles')}</Link>
         <Link to="/Contact" className="flex items-center mb-2 sm:mb-0"><FaPhone className="mr-2" /> {t('Contact')}</Link>
       </div>
-      <div className=" text-xs font-thin bg-[#066AB2] text-white w-full py-2 text-center">Design by @Africa Digitalizer 2024</div>
+      {/* <div className=" text-xs font-thin bg-[#066AB2] text-white w-full py-2 text-center">Design by @Africa Digitalizer <img src={aDicon} alt="Logo AZ" className="text-xl text-[#000000] rounded-full w-6 h-6 " /> 2024</div> */}
+      <div className="flex justify-center items-center space-x-2 text-xs font-thin bg-[#066AB2] text-white w-full py-2">
+        Design by @Africa Digitalizer <img src={aDicon} alt="Logo AZ" className="rounded-full w-8 h-8" /> 2024
+      </div>
     </div>
   );
 }

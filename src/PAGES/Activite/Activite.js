@@ -61,7 +61,7 @@ function Activite() {
 
     fetchActivityInfo()
       .then(response => {
-        //console.log('Réponse du serveur :', response.data);
+        console.log('Réponse du serveur :', response.data);
         // setAddress(response.data.info.address);
         // setPhone(response.data.info.phone);
         // setEmail(response.data.info.email);
@@ -91,6 +91,7 @@ function Activite() {
         //console.log('Réponse du serveur :', response.data.info);
         setArticles(response.data.info);
         setArticle(response.data.categoryDescription);
+        console.log('le resultat', response.data.categoryDescription);
       })
       .catch(error => {
         console.error('Il y avait une erreur!', error);
@@ -106,7 +107,7 @@ function Activite() {
         <>
           <div>
             <Header info={info} />
-            <NavbarDefault />
+           <NavbarDefault info={info} /> 
 
             {/* en tete */}
             <div
@@ -127,7 +128,9 @@ function Activite() {
                 {t('nos différents activités')}
               </div>
               <div className="Animation-option sm:w-[600px] text-center">
-                {Article ? removeTags(Article):'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate'}
+                {/* {Article ? removeTags(Article.Descriptions):'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate'} */}
+                {/* {currentLanguage==="fr" ? (Article.fr_description ? removeTags(Article.fr_description) : 'Pourquoi nous rejoindre') : (Article.Descriptions ? removeTags(Article.Descriptions):'Duis aute irure dolor in reprehenderit')} */}
+                {currentLanguage==="fr" ? (Article?.fr_description ? removeTags(Article.fr_description) : 'Pourquoi nous rejoindre') : (Article?.Descriptions ? removeTags(Article.Descriptions):'Duis aute irure dolor in reprehenderit')}
               </div>
               {/* Activite bloc */}
               <div className=" Animation-option grid sm:grid-cols-2 md:grid-cols-3 gap-12 pt-14">
@@ -135,7 +138,7 @@ function Activite() {
                {Articles.map((article ,index) => ( 
                 <div className="activite-img-taille" key={index}>
                   <div
-                    className="img-activite"
+                    className="rounded-lg img-activite "
                     style={{ backgroundImage:  article.Pictures ?   `url(data:image/png;base64,${article.Pictures})`: `url(${activite1})` }}
                   >
                     <div className="bg-color-activite text-white pl-4 flex flex-col justify-end">
@@ -189,9 +192,7 @@ function Activite() {
                 {t('faire une donation ici')}
               </div>
               <div className="sm:w-[800px] text-center pb-8">
-                Ut enim ad minim veniam, quis nostrud exercitation ullamco
-                laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure
-                dolor in reprehenderit in voluptate
+                {t('Chaque don, petit ou grand, contribue à transformer des vies et à créer un avenir meilleur pour des milliers de personnes. En choisissant de soutenir l\'Association, vous devenez un acteur clé de notre mission.')}
               </div>
               <Donation />
             </div>

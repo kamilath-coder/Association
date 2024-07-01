@@ -61,7 +61,7 @@ function VoirPlus() {
   useEffect(() => {
     fetchNouvelleInfo()
       .then(response => {
-        console.log('Réponse du serveur :', response.data);
+        //console.log('Réponse du serveur :', response.data);
         // setNameSite(response.data.info.name);
         // setPresentation(response.data.info.presentation_text);
         // setPresentationTitle(response.data.info.fr_presentation_title);
@@ -74,7 +74,7 @@ function VoirPlus() {
       });
     fetchNouvelleBanner()
       .then(response => {
-        console.log('Réponse du serveur :', response.data.info);
+        //console.log('Réponse du serveur :', response.data.info);
         setBanner(response.data.info.banner);
         setBannerPicture(response.data.info.banner.picture);
        
@@ -86,7 +86,7 @@ function VoirPlus() {
     
     fetchNouvelleslast()
       .then(response => {
-        console.log('Réponse du serveur :', response.data.info);
+        //console.log('Réponse du serveur :', response.data.info);
         setArticleLast(response.data.info);
       })
       .catch(error => {
@@ -95,7 +95,7 @@ function VoirPlus() {
     const loadArticle = async () => {
       try {
         const data = await fetchArticle(id);
-        console.log(data);
+        console.log('data is data ',data);
         setArticle(data);
       } catch (error) {
         console.error('Erreur lors de la récupération de l\'article:', error);
@@ -115,7 +115,7 @@ function VoirPlus() {
         <>
           <div>
             <Header info={info}/>
-            <NavbarDefault />
+            <NavbarDefault info={info} />
 
             {/* en tete */}
             <div
@@ -135,15 +135,17 @@ function VoirPlus() {
                 {/* premiere image de l'activite */}
                 <div className=" relative overflow-hidden sm:w-[731px] sm:h-[465px] ">
                   <img
-                    src={Article.picture ? `data:image/png;base64,${Article.picture}` :Nouvelle1}
+                    src={Article?.picture ? `data:image/png;base64,${Article.picture}` :Nouvelle1}
                     alt="photoactivite "
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-cover rounded-lg"
                   />
                 </div>
                 <div className="sm:w-[731px]">
                   <p className="text-2xl font-semibold pt-4 text-[#066AB2]">
                     
-                    {Article.article_tittle? Article.article_tittle : 'Duis aute irure dolor in reprehenderit'} 
+                    {/* {Article.article_tittle? Article.article_tittle : 'Duis aute irure dolor in reprehenderit'}  */}
+                    {currentLanguage==="fr" ? (Article.article_tittle? Article.article_tittle : 'Pourquoi nous rejoindre') : (Article.en_article_tittle? Article.en_article_tittle:'Consultingproject')}
+
                   </p>
                   {/* date et lieu */}
                   <div className="flex flex-col sm:flex-row sm:items-center sm:space-x-3 pt-4">
@@ -174,10 +176,13 @@ function VoirPlus() {
                       </svg>
                       <p className=" font-thin italic">
                         {/* {Article.creation_date? Article.article_tittle : 'Jeudi 23 Mars 2024'}  */}
-                        {Article.creation_date 
+                        {/* {Article.creation_date 
                           ? new Date(Article.creation_date).toLocaleDateString('fr-FR', options)
                           : 'Jeudi 23 Mars 2024'
-                        }
+                        } */}
+                        {currentLanguage==="fr" ? (Article.creation_date ? new Date(Article.creation_date).toLocaleDateString('fr-FR', options): 'Jeudi 23 Mars 2024') : (
+                        Article.creation_date ? new Date(Article.creation_date).toLocaleDateString('en-EN', options): 'Thursday, 23 March 2024')
+                      }
                       </p>
                     </div>
                     {/* heure de l'activite */}
@@ -237,14 +242,20 @@ function VoirPlus() {
                     esse cillum dolore eu fugiat nulla pariatur. Excepteur sint
                     occaecat cupidatat non proident, sunt in culpa qui officia
                     deserunt mollit anim id est laborum. */}
-                    {
+                    {/* {
                       Article.article 
                       ? removeTags(Article.article) 
                       : 'Aliquam erat volutpat. Etiam ut nisi tempus, sagittis leo ut, placerat metus. Cras non convallis tellus....'
-                    }
+                    } */}
+                    {currentLanguage==="fr" ? (Article.article ? removeTags(Article.article) : 'Aliquam erat volutpat. Etiam ut nisi tempus, sagittis leo ut, placerat metus. Cras non convallis tellus....') 
+                        : 
+                          (Article.en_article
+                          ? removeTags(Article.en_article) 
+                          : 'Aliquam erat volutpat..')
+                      }
                   </div>
                   <p className="text-lg font-semibold pt-10 text-[#4E4E4E]">
-                    Les photos de l'activité
+                   {t('Les photos de l\'activité')}
                   </p>
                   {/* AUTRES PHOTOS DE L'ACTIVITE */}
                   <div className="grid sm:grid-cols-4 grid-cols-2 gap-2 pt-6">
@@ -253,7 +264,7 @@ function VoirPlus() {
                         <img
                           src={article.Image ? `data:image/png;base64,${article.Image}` :Nouvelle2}
                           alt="photoactivite"
-                          className="w-full h-full object-cover"
+                          className="w-full h-full object-cover rounded-lg"
                         />
                       </div>
                     ))}
@@ -262,21 +273,10 @@ function VoirPlus() {
                 </div>
               </div>
               <div className=" md:w-1/4">
-                {/* Barre de recherche */}
-                <div className="flex flex-col items-center space-y-4 border border-[#D9D9D9] p-8">
-                  <p className="text-lg">Recherche de poste</p>
-                  <input
-                    type="search"
-                    placeholder="un mot clé"
-                    className=" bg-transparent border-[#D9D9D9] mb-4 border-2 outline-none h-12 px-3 w-[250px] "
-                  />
-                  <button className=" bg-[#DCA61D] text-white h-12 px-3 w-[250px]">
-                    Recherche
-                  </button>
-                </div>
+                
 
                 <div className=" mt-20">
-                  <p className="text-xl  font-medium pb-10">Nouvelles recentes</p>
+                  <p className="text-xl  font-medium pb-10">{t('Nouvelles recentes')}</p>
                   <div className=" grid grid-cols-1 sm:grid-cols-2 md:grid-cols-1">
                     {/*Nouvelle 1 */}
                     <div className="w-[220px] flex flex-col space-y-3 ">
@@ -284,22 +284,31 @@ function VoirPlus() {
                       <div className=" relative overflow-hidden w-[214px] h-[125px]">
                         <img
                           src={ArticleLast.picture ? `data:image/png;base64,${ArticleLast.picture}` :Nouvelle1}
-                          className="w-full h-full object-cover"
+                          className="w-full h-full object-cover rounded-lg"
                           alt="Nouvelle1"
                         />
                       </div>
                       <p className="  font-semibold text-[#4e4e4e]">
-                       {ArticleLast.article_tittle? ArticleLast.article_tittle : 'Consulting project'}
+                       {/* {ArticleLast.article_tittle? ArticleLast.article_tittle : 'Consulting project'} */}
+                        {currentLanguage==="fr" ? (ArticleLast.article_tittle? ArticleLast.article_tittle : 'Pourquoi nous rejoindre') : (ArticleLast.en_article_tittle? ArticleLast.en_article_tittle:'Consultingproject')}
+
                         
                       </p>
                       <div className="text-sm">
                         {/* Aliquam erat volutpat. Etiam ut nisi tempus, sagittis
                         leo ut, placerat metus. Cras non convallis tellus.... */}
-                        {
+                        {/* {
                           ArticleLast.article 
                           ? removeTags(ArticleLast.article) 
                           : 'Aliquam erat volutpat. Etiam ut nisi tempus, sagittis leo ut, placerat metus. Cras non convallis tellus....'
-                        }
+                        } */}
+                        {currentLanguage==="fr" ? (ArticleLast.article ? removeTags(ArticleLast.article) : 'Aliquam erat volutpat. Etiam ut nisi tempus, sagittis leo ut, placerat metus. Cras non convallis tellus....') 
+                        : 
+                          (ArticleLast.en_article
+                          ? removeTags(ArticleLast.en_article) 
+                          : 'Aliquam erat volutpat..')
+                      }
+                        
                       </div>
                       {/* date */}
                       <div className="flex items-center space-x-2">
@@ -326,10 +335,15 @@ function VoirPlus() {
                             </clipPath>
                           </defs>
                         </svg>
-                        <p className=" font-thin italic">{ArticleLast.creation_date 
+                        <p className=" font-thin italic">
+                          {/* {ArticleLast.creation_date 
                           ? new Date(ArticleLast.creation_date).toLocaleDateString('fr-FR', options)
                           : 'Jeudi 23 Mars 2024'
-                        }</p>
+                        } */}
+                        {currentLanguage==="fr" ? (ArticleLast.creation_date ? new Date(ArticleLast.creation_date).toLocaleDateString('fr-FR', options): 'Jeudi 23 Mars 2024') : (
+                          ArticleLast.creation_date ? new Date(ArticleLast.creation_date).toLocaleDateString('en-EN', options): 'Thursday, 23 March 2024')
+                        }
+                        </p>
                       </div>
                       {/* button lire plus */}
                       <div className=" text-white">
@@ -349,7 +363,7 @@ function VoirPlus() {
                               fill="white"
                             />
                           </svg>
-                          <p>Lire plus</p>
+                          <p>{t('Lire plus')}</p>
                         </Link>
                       </div>
                     </div>
@@ -361,12 +375,12 @@ function VoirPlus() {
             {/* Donation */}
             <div className="Animation-option flex flex-col items-center space-y-4 ">
               <div className="uppercase text-lg md:text-2xl w-[400px] text-center font-semibold text-[#4E4E4E]">
-                faire une donation ici
+                {t('faire une donation ici')}
+                
               </div>
               <div className="sm:w-[800px] text-center pb-8">
-                Ut enim ad minim veniam, quis nostrud exercitation ullamco
-                laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure
-                dolor in reprehenderit in voluptate
+               {t('Chaque don, petit ou grand, contribue à transformer des vies et à créer un avenir meilleur pour des milliers de personnes. En choisissant de soutenir l\'Association, vous devenez un acteur clé de notre mission.')}
+                        
               </div>
               <Donation />
             </div>

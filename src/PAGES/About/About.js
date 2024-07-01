@@ -1,6 +1,7 @@
 import React from "react";
 import Header from "../../COMPONENTS/Header/Header";
 import { NavbarDefault } from "../../COMPONENTS/Navbar/Navbar";
+import {Adhesion} from '../../PAGES/Formulaire/Adhesion';
 import backAbout from "../../ASSETS/Image/backAbout.png";
 import { Mission } from "./Mission";
 import img_rejoindre from "../../ASSETS/Image/Activity1.png";
@@ -114,7 +115,7 @@ function About() {
         <>
           <div>
             <Header info={info} />
-            <NavbarDefault />
+            <NavbarDefault info={info} />
 
             {/* en tete */}
             <div
@@ -154,7 +155,7 @@ function About() {
               <div className="relative overflow-hidden sm:w-[451px] sm:h-[435px]  ">
                 <img
                   src={PresentationPhoto ? `data:image/png;base64,${PresentationPhoto}` : img_rejoindre}
-                  className="w-full h-full  object-cover"
+                  className="w-full h-full  object-cover rounded-lg"
                   alt="rejoindre"
                 />
               </div>
@@ -184,9 +185,9 @@ function About() {
                   {currentLanguage==="fr" ? (Presentation.fr_presentation_text ? removeTags(Presentation.fr_presentation_text) : '') : (Presentation.presentation_text ? removeTags(Presentation.presentation_text) : '')}
 
                 </div>
-                <div className="flex items-center space-x-3 bg-[#DCA61D] text-white mt-4 py-2 px-3 ">
-                  {/* <Adhesion/> */}
-                  <svg
+                <div className="flex items-center space-x-2 text-white mt-4 py-2 px-3 ">
+                  <Adhesion/>
+                  {/* <svg
                     width="25"
                     height="25"
                     viewBox="0 0 25 25"
@@ -198,8 +199,12 @@ function About() {
                       fill="white"
                     />
                   </svg>
-                  <p>{t('Devenir membre')}</p>
+                  <p>{t('Devenir membre')}</p> */}
                 </div>
+                {/* <div className="flex items-center space-x-3 bg-[#DCA61D] text-white mt-4 py-2 px-3 ">
+                  <Adhesion/>
+                  
+                </div> */}
               </div>
             </div>
 
@@ -211,7 +216,7 @@ function About() {
               >
                 <div className="bg-color-white h-[340px] md:px-10 px-5 pt-6">
                   <div className="text-2xl uppercase text-[#DCA61D] font-bold">
-                   {t('Les membres de notre équipe')}
+                   {t('OUR MEMBERS')}
                   </div>
                 </div>
               </div>
@@ -220,9 +225,9 @@ function About() {
                 {/* membre1 */}
                 {Members.map((member, index) => (
                   <div key={index}>
-                    <Link to="/A-propos/membre">
-                      <div className="photo-membre">
-                        <img src={member.photo ? `data:image/png;base64,${member.photo}` : profil1} alt="pp1" />
+                    <Link to="/A-propos/membre ">
+                      <div className="photo-membre rounded-lg">
+                        <img src={member.photo ? `data:image/png;base64,${member.photo}` : profil1} alt="pp1" className="rounded-lg" />
                       </div>
                     </Link>
                     <div className="flex flex-col items-center space-y-2 w-[206px] p-3 pb-6 bg-white shadow">

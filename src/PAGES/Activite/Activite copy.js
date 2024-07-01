@@ -75,7 +75,7 @@ function Activite() {
           <div>
             <Header info={info} />
             <NavbarDefault />
-
+            <NavbarDefault info={info} />
             {/* en tete */}
             <div
               className="bg-cover bg-center bg-no-repeat h-[400px] animate-fade animate-once animate-duration-[1000ms] animate-delay-[1ms] animate-ease-linear animate-normal "
