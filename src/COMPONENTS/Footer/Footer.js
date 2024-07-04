@@ -4,7 +4,7 @@ import { GrFacebookOption } from "react-icons/gr";
 import { IoIosMail } from "react-icons/io";
 import { FaInstagram } from "react-icons/fa";
 import azicon from "../../ASSETS/Image/AZICON.jpeg";
-import aDicon from "../../ASSETS/Image/Africa Digitalizer LOGO3.svg";
+import aDicon from "../../ASSETS/Image/ad_logo.png";
 import { TiSocialLinkedin } from "react-icons/ti";
 import { useTranslation } from 'react-i18next';
 import { FaHome, FaInfoCircle,  FaAnchor, FaNewspaper, FaPhone } from 'react-icons/fa'
@@ -58,7 +58,7 @@ function Footer(props) {
       </div>
       {/* <div className=" text-xs font-thin bg-[#066AB2] text-white w-full py-2 text-center">Design by @Africa Digitalizer <img src={aDicon} alt="Logo AZ" className="text-xl text-[#000000] rounded-full w-6 h-6 " /> 2024</div> */}
       <div className="flex justify-center items-center space-x-2 text-xs font-thin bg-[#066AB2] text-white w-full py-2">
-        Design by @Africa Digitalizer <img src={aDicon} alt="Logo AZ" className="rounded-full w-8 h-8" /> 2024
+        Design by @Africa Digitalizer <img src={aDicon} alt="Logo AZ" className="rounded-full w-9 h-9" /> 2024
       </div>
     </div>
   );

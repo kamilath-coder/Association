@@ -76,7 +76,7 @@ function Nouvelle() {
       });
     fetchNouvelleBanner()
       .then(response => {
-        console.log('Réponse du serveur :', response.data.info.banners);
+        console.log('Réponse du serveur pour le banner  :', response.data.info.banner);
         setBanner(response.data.info.banner);
         setBannerPicture(response.data.info.banner.picture);
         })
@@ -102,7 +102,7 @@ function Nouvelle() {
         <Loader />
       ) : (
         <>
-          <div>
+          <div className="overflow-hidden">
             <Header info={info} />
             <NavbarDefault info={info} />
 
@@ -111,10 +111,9 @@ function Nouvelle() {
               className="bg-cover bg-center bg-no-repeat h-[400px] animate-fade animate-once animate-duration-[1000ms] animate-delay-[1ms] animate-ease-linear animate-normal"
               style={{ backgroundImage: `url(data:image/png;base64,${BannerPicture ? BannerPicture : backActivite})` }}
             >
-              <div className="bg-[#066AB225] flex justify-center items-center h-[400px]  ">
-                <div className="sm:text-4xl md:px-10 px-4  text-2xl font-bold text-white uppercase leading-relaxed animate-fade-up animate-once animate-duration-1000 animate-delay-[1ms] animate-normal">
-                {/* {currentLanguage==="fr" && Banner.fr_text1 ?Banner.fr_text1 : (Banner.en_text1 ? Banner.text1 : 'Nos activités')} */}
-                {currentLanguage==="fr" ? (Banner.fr_text1 ? Banner.fr_text1 : 'Nos activités') : (Banner.text1 ? Banner.text1 : 'Nos activités')}
+              <div className="bg-[#066AB225] flex justify-center items-center h-[400px]">
+                <div className="sm:text-4xl md:px-10 px-4 text-2xl font-bold text-white uppercase leading-relaxed animate-fade-up animate-once animate-duration-1000 animate-delay-[1ms] animate-normal">
+                  {currentLanguage === "fr" ? (Banner.fr_text1 ? Banner.fr_text1 : 'À propos de nous') : (Banner.text1 ? Banner.text1 : 'À propos de nous')}
                 </div>
               </div>
             </div>

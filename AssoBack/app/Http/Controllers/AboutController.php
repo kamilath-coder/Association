@@ -45,7 +45,7 @@ class AboutController extends Controller
         }
 
     }
-   
+
     public function members(){
 
         $members=WebAboutUsTeam::all();
@@ -58,6 +58,19 @@ class AboutController extends Controller
             return response()->json([
                 'message'=>'Informations du site récupérées avec succès',
                 'info' => $members,
+            ],
+            200);
+        }
+    }
+
+
+    public function voirmembre($id){
+        $member=WebAboutUsTeam::find($id);
+        if($member){
+            $member->photo=base64_encode($member->photo);
+            return response()->json([
+                'message'=>'Informations du site récupérées avec succès',
+                'info' => $member,
             ],
             200);
         }

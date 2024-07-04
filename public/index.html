@@ -14,14 +14,14 @@
     <title>React App</title>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   </head>
-  <body>
+  <body class="overflow-x-hidden">
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>
     <script src="https://cdn.fedapay.com/checkout.js?v=1.1.2"></script>
   </body>
   <script>
-    // var BASE_URL = 'https://yogam.africadigitalizer.com/AssoBack';
-    var BASE_URL = 'http://127.0.0.1:8000';
+    var BASE_URL = 'https://yogam.africadigitalizer.com/AssoBack';
+    //var BASE_URL = 'http://127.0.0.1:8000';
     axios.get(`${BASE_URL}/api/home/info`)
       .then(response => {
         // Utilisez les données ici pour mettre à jour votre page
@@ -30,7 +30,7 @@
         const link2 = document.querySelector('link[rel="icon"]');
         link.href = `data:image/png;base64,${response.data.info.logo}`;
         link2.href = `data:image/png;base64,${response.data.info.logo}`;
-        console.log('Href du lien:', link.href); // Ajout d'un log pour le href du lien
+        //console.log('Href du lien:', link.href); // Ajout d'un log pour le href du lien
       })
       .catch(error => console.error('Erreur:', error));
   </script>

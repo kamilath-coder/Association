@@ -76,6 +76,8 @@
     
     }
   },
+  "Portable": "Mobile",
+  "Profession": "Profession",
   "Qui sommes-nous": "Who are we",
   "Notre histoire": "Our history",
   "Nos valeurs": "Our values",
@@ -86,6 +88,13 @@
   "Montant de don" : "Donation amount",
   "Devise": "Currency",
   "The latest news are shared with members and visitors constantly in order to keep them connected every time by being aware of what is going on with us.": "The latest news are shared with members and visitors constantly in order to keep them connected every time by being aware of what is going on with us.",
-  "We remain available anytime to support you with whatever concerns you may have. Contact us now.": "We remain available anytime to support you with whatever concerns you may have. Contact us now."
+  "We remain available anytime to support you with whatever concerns you may have. Contact us now.": "We remain available anytime to support you with whatever concerns you may have. Contact us now.",
+  "Envoyer un don":"Send a donation",
+  "Nos progressions":"Our progress",
+  "visite":"visit",
+  "Nombre de follower":"Number of followers",
+  "mention":"mention",
+  "vue total":"total view",
+  "Les membres de notre équipe":"OUR TEAM MEMBERS"
 
 }

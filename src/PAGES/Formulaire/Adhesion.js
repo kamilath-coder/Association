@@ -123,7 +123,7 @@ export function Adhesion() {
             <ToastContainer />
           </div>
         </DialogHeader>
-        <DialogBody className="h-[28rem]  overflow-y-scroll pl-8 overflow-x-hidden  ">
+        <DialogBody className="flex justify-center items-center h-[28rem]  overflow-y-scroll pl-8 overflow-x-hidden  ">
           <form className="mt-6 flex flex-col space-y-3 w-[300px] "onSubmit={handleSubmit}>
             <label>{t('Votre nom & prénom')}</label>
             <input
@@ -178,11 +178,11 @@ export function Adhesion() {
              <label>{t('Pourquoi nous rejoindre')} ?</label>
             <textarea className="w-[250px] outline-none bg-[#f8f8f8] h-20 p-2"  name="raison"
             onChange={handleChange}></textarea>
-            <DialogFooter className="space-x-2">
+            <DialogFooter className="flex justify-center items-center space-x-2">
               <Button variant="text" color="blue-gray" onClick={handleOpen}>
                 {t('Quitter')}
               </Button>
-              <Button text="variant" className=" bg-[#DCA61D]" type="submit" >
+              <Button text="variant" className="bg-[#DCA61D]" type="submit">
                 {t('Valider')}
               </Button>
             </DialogFooter>

@@ -395,7 +395,7 @@ export function Donation() {
             fill="white"
           />
         </svg>
-        <p>Envoyer un don</p>
+        <p>{t('Envoyer un don')}</p>
       </Button>
       <Dialog open={donationModalOpen} handler={handleOpen} size="xs"  >
         <DialogHeader className=" justify-center">
@@ -417,7 +417,7 @@ export function Donation() {
             </p>
           </div>
         </DialogHeader>
-        <DialogBody className="h-[28rem]  overflow-y-scroll pl-8 overflow-x-hidden  ">
+        <DialogBody className="flex justify-center items-center h-[28rem]  overflow-y-scroll pl-8 overflow-x-hidden  ">
           <form className="mt-6 flex flex-col space-y-3 w-[300px]"  onSubmit={handleSubmit}>
             {/* <select className=" w-[250px] outline-none bg-[#f8f8f8] h-12 px-2" name="prixL" onChange={handleInputChange}>
               <option>100</option>

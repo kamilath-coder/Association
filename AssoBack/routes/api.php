@@ -34,6 +34,7 @@ Route::get('/contact/baner',[ContactController::class,'ContactBaner']);
 //Abour
 Route::get('/about/info',[AboutController::class,'index']);
 Route::get('/about/members',[AboutController::class,'members']);
+Route::get('/about/members/{id}',[AboutController::class,'voirmembre']);
 Route::get('/about/baner',[AboutController::class,'AboutBaner']);
 
 //nouvelle

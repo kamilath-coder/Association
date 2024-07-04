@@ -20,7 +20,7 @@
     "Nos activités": "Nos activités",
     "Nouvelles": "Nouvelles",
     "Contact": "Contact",
-
+    "Les membres de notre équipe":"LES MEMBRES DE NOTRE ÉQUIPE",
     "Devenir membre": "Devenir membre",
     "Formulaire d'adhésion": "Formulaire d'adhésion",
     "Votre nom & prénom": "Votre nom & prénom",
@@ -75,6 +75,8 @@
          
         }
     },
+    "Portable": "Portable",
+   "Profession": "Profession",
     "Qui sommes-nous": "Qui sommes-nous",
     "Notre histoire": "Notre histoire",
     "Nos valeurs": "Nos valeurs",
@@ -85,5 +87,12 @@
     "Montant de don": "Montant de don",
     "Devise": "Devise",
     "The latest news are shared with members and visitors constantly in order to keep them connected every time by being aware of what is going on with us.": "Les dernières nouvelles sont partagées avec les membres et les visiteurs en permanence afin de les maintenir connectés à chaque fois en étant au courant de ce qui se passe avec nous.",
-    "We remain available anytime to support you with whatever concerns you may have. Contact us now.": "Nous restons disponibles à tout moment pour vous soutenir dans tous les problèmes que vous pourriez rencontrer. Contactez-nous maintenant."
+    "We remain available anytime to support you with whatever concerns you may have. Contact us now.": "Nous restons disponibles à tout moment pour vous soutenir dans tous les problèmes que vous pourriez rencontrer. Contactez-nous maintenant.",
+    "Envoyer un don":"Envoyer un don",
+    "Nos progressions":"Nos progressions",
+    "visite":"visite",
+    "Nombre de follower":"Nombre de follower",
+    "mention":"mention",
+    "vue total":"vue total"
+
 }

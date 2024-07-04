@@ -149,8 +149,6 @@ function Contact() {
       const response = await sendFormData(formState);
       console.log('Réponse du serveur :', response);
       toast.success(t('form.success'));
-      // Réinitialisez l'état
-  
     } catch (error) {
       console.error('Erreur lors de l\'envoi du formulaire :', error);
       toast.error(error.response.data.message);
@@ -184,7 +182,7 @@ function Contact() {
 
             <div className="Animation-option  flex sm:flex-row flex-col s:space-y-10 md:space-y-0 sm:px-14 px-4 mt-20">
               <div className="w-full md:w-1/2">
-                <p className=" text-2xl text-[#4E4E4E] font-semibold uppercase">
+                <p className="text-2xl text-[#4E4E4E] font-semibold uppercase">
                 {t('Formulaire de contact')}
                 </p>
                 <div className="h-1 w-20 bg-[#DCA61D] mt-3"></div>

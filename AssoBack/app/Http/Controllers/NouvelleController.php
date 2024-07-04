@@ -34,7 +34,7 @@ class NouvelleController extends Controller
 
     public function NouvelleBaner(){
 
-        $banner=WebPage::with('banner')->where('name','News')->first();
+        $banner=WebPage::with('banner')->where('name','Articles')->first();
         if($banner){
             $banner->banner->picture=base64_encode($banner->banner->picture);
 

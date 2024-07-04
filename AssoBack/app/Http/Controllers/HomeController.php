@@ -104,7 +104,7 @@ class HomeController extends Controller
                     $art->category->Pictures=base64_encode($art->category->Pictures);
                 }
             }
-            $categoryDescription = $article[0]->category->fr_description;
+            $categoryDescription = $article[0]->category;
 
             return response()->json([
                 'message'=>'Informations du site récupérées avec succès',

@@ -116,23 +116,24 @@ function VoirPlus() {
         <Loader />
       ) : (
         <>
-          <div className="overflow-hidden">
+          <div>
             <Header info={info}/>
             <NavbarDefault info={info} />
 
             {/* en tete */}
             <div
               className="bg-cover bg-center bg-no-repeat h-[400px] animate-fade animate-once animate-duration-[1000ms] animate-delay-[1ms] animate-ease-linear animate-normal"
-              style={{ backgroundImage: `url(data:image/png;base64,${BannerPicture ? BannerPicture : backActivite})` }}
+              style={{ backgroundImage: BannerPicture ?  `url(data:image/png;base64,${BannerPicture })`: `url(${backActivite})` }}
             >
-              <div className="bg-[#066AB225] flex justify-center items-center sm:h-[300px] md:h-[350px] lg:h-[400px]">
-                <div className="sm:text-3xl md:text-4xl lg:text-4xl md:px-10 px-4 text-2xl font-bold text-white uppercase leading-relaxed animate-fade-up animate-once animate-duration-1000 animate-delay-[1ms] animate-normal">
+              <div className="bg-[#066AB225] flex justify-center items-center h-[400px]  ">
+                <div className="sm:text-4xl md:px-10 px-4  text-2xl font-bold text-white uppercase leading-relaxed animate-fade-up animate-once animate-duration-1000 animate-delay-[1ms] animate-normal">
+                  {/* {Banner ? Banner :'Nos activités'} */}
                   {currentLanguage==="fr" ? (Banner.fr_text1 ? Banner.fr_text1 : 'Nos activités') : (Banner.text1 ? Banner.text1 : 'Nos activités')}
                 </div>
               </div>
             </div>
 
-            <div className="Animation-option flex md:flex-row flex-col md:space-y-0 space-y-14 my-20 px-10">
+            <div className="Animation-option flex md:flex-row flex-col md:space-y-0 space-y-14 my-20  px-10">
               <div className=" md:w-3/4">
                 {/* premiere image de l'activite */}
                 <div className="rounded-lg relative overflow-hidden sm:w-[731px] sm:h-[465px] ">
@@ -233,7 +234,19 @@ function VoirPlus() {
                   </div>
                   {/* description */}
                   <div className=" pt-4 leading-loose">
-                    
+                    {/* Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
+                    do eiusmod tempor incididunt ut labore et dolore magna
+                    aliqua. Ut enim ad minim veniam, quis nostrud exercitation
+                    ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                    Duis aute irure dolor in reprehenderit in voluptate velit
+                    esse cillum dolore eu fugiat nulla pariatur. Excepteur sint
+                    occaecat cupidatat non proident, sunt in culpa qui officia
+                    deserunt mollit anim id est laborum. */}
+                    {/* {
+                      Article.Descriptions 
+                      ? removeTags(Article.Descriptions) 
+                      : 'Aliquam erat volutpat. Etiam ut nisi tempus, sagittis leo ut, placerat metus. Cras non convallis tellus....'
+                    } */}
                     {currentLanguage==="fr" ? (Article?.fr_description ? removeTags(Article.fr_description) : 'Pourquoi nous rejoindre') : (Article?.Descriptions? removeTags(Article.Descriptions):'Duis aute irure dolor in reprehenderit')}
 
                   </div>
@@ -242,7 +255,7 @@ function VoirPlus() {
                   </p>:''}
                   {/* AUTRES PHOTOS DE L'ACTIVITE */}
                   <div className="grid sm:grid-cols-4 grid-cols-2 gap-2 pt-6">
-                    {/* {Article.images ?? Article.images.map((article ,index) => ( 
+                    {Article.images ?? Article.images.map((article ,index) => ( 
                       <div className="rounded-lg relative overflow-hidden w-[156px] h-[115px] " key={index}>
                         <img
                           src={article?.Image? `data:image/png;base64,${article.Image}` :activite4}
@@ -250,21 +263,10 @@ function VoirPlus() {
                           className="rounded-lg w-full h-full object-cover "
                         />
                       </div>
-                    ))} */}
-                    {Article.images.map((image, index) => (
-                      <div key={index} className="rounded-lg relative overflow-hidden w-[156px] h-[115px] ">
-                        <img
-                          src={image?.Image ? `data:image/png;base64,${image.Image}` : activite4} 
-                          alt={image.description || "Description de l'image non disponible"} // Fournit une description significative ou un texte de repli.
-                          className="rounded-lg w-full h-full object-cover"
-                        />
-                      </div>
                     ))}
                   </div>
                 </div>
               </div>
-             
-              
               <div className=" md:w-1/4">
                 
 
@@ -324,7 +326,6 @@ function VoirPlus() {
                 </div>
               </div>
             </div>
-
 
             {/* Donation */}
             <div className="Animation-option flex flex-col items-center space-y-4 ">

@@ -113,19 +113,19 @@ function VoirPlus() {
         <Loader />
       ) : (
         <>
-          <div>
+          <div className="overflow-hidden">
             <Header info={info}/>
             <NavbarDefault info={info} />
 
             {/* en tete */}
+            
             <div
               className="bg-cover bg-center bg-no-repeat h-[400px] animate-fade animate-once animate-duration-[1000ms] animate-delay-[1ms] animate-ease-linear animate-normal"
               style={{ backgroundImage: `url(data:image/png;base64,${BannerPicture ? BannerPicture : backActivite})` }}
             >
-              <div className="bg-[#066AB225] flex justify-center items-center h-[400px]  ">
-                <div className="sm:text-4xl md:px-10 px-4  text-2xl font-bold text-white uppercase leading-relaxed animate-fade-up animate-once animate-duration-1000 animate-delay-[1ms] animate-normal">
-                {/* {Banner ? Banner :'Nouvelle'} */}
-                {currentLanguage==="fr" ? (Banner.fr_text1 ? Banner.fr_text1 : 'Nos activités') : (Banner.text1 ? Banner.text1 : 'Nos activités')}
+              <div className="bg-[#066AB225] flex justify-center items-center h-[400px]">
+                <div className="sm:text-4xl md:px-10 px-4 text-2xl font-bold text-white uppercase leading-relaxed animate-fade-up animate-once animate-duration-1000 animate-delay-[1ms] animate-normal">
+                  {currentLanguage === "fr" ? (Banner.fr_text1 ? Banner.fr_text1 : 'À propos de nous') : (Banner.text1 ? Banner.text1 : 'À propos de nous')}
                 </div>
               </div>
             </div>
@@ -144,7 +144,7 @@ function VoirPlus() {
                   <p className="text-2xl font-semibold pt-4 text-[#066AB2]">
                     
                     {/* {Article.article_tittle? Article.article_tittle : 'Duis aute irure dolor in reprehenderit'}  */}
-                    {currentLanguage==="fr" ? (Article.article_tittle? Article.article_tittle : 'Pourquoi nous rejoindre') : (Article.en_article_tittle? Article.en_article_tittle:'Consultingproject')}
+                    {currentLanguage==="fr" ? (Article.article_tittle? Article.article_tittle : 'Pourquoi nous rejoindre') : (Article?.en_article_tittle? Article.en_article_tittle:'Consultingproject')}
 
                   </p>
                   {/* date et lieu */}
@@ -180,8 +180,8 @@ function VoirPlus() {
                           ? new Date(Article.creation_date).toLocaleDateString('fr-FR', options)
                           : 'Jeudi 23 Mars 2024'
                         } */}
-                        {currentLanguage==="fr" ? (Article.creation_date ? new Date(Article.creation_date).toLocaleDateString('fr-FR', options): 'Jeudi 23 Mars 2024') : (
-                        Article.creation_date ? new Date(Article.creation_date).toLocaleDateString('en-EN', options): 'Thursday, 23 March 2024')
+                        {currentLanguage==="fr" ? (Article?.creation_date ? new Date(Article.creation_date).toLocaleDateString('fr-FR', options): 'Jeudi 23 Mars 2024') : (
+                        Article?.creation_date ? new Date(Article.creation_date).toLocaleDateString('en-EN', options): 'Thursday, 23 March 2024')
                       }
                       </p>
                     </div>
@@ -206,7 +206,7 @@ function VoirPlus() {
                       </svg>
                       <p className=" font-thin italic">
                         {
-                          Article.creation_date 
+                          Article?.creation_date 
                           ? `${new Date(Article.creation_date).getHours().toString().padStart(2, '0')}h ${new Date(Article.creation_date).getMinutes().toString().padStart(2, '0')}`
                           : '09h30'
                         }
@@ -228,28 +228,16 @@ function VoirPlus() {
                         />
                       </svg>
                       <p className=" font-thin italic">
-                        {Article.related_link? Article.related_link :'Cocody,Abidjan, Côte d’ivoire'}
+                        {Article?.related_link? Article.related_link :'Cocody,Abidjan, Côte d’ivoire'}
                       </p>
                     </div>
                   </div>
                   {/* description */}
                   <div className=" pt-4 leading-loose">
-                    {/* Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                    do eiusmod tempor incididunt ut labore et dolore magna
-                    aliqua. Ut enim ad minim veniam, quis nostrud exercitation
-                    ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                    Duis aute irure dolor in reprehenderit in voluptate velit
-                    esse cillum dolore eu fugiat nulla pariatur. Excepteur sint
-                    occaecat cupidatat non proident, sunt in culpa qui officia
-                    deserunt mollit anim id est laborum. */}
-                    {/* {
-                      Article.article 
-                      ? removeTags(Article.article) 
-                      : 'Aliquam erat volutpat. Etiam ut nisi tempus, sagittis leo ut, placerat metus. Cras non convallis tellus....'
-                    } */}
-                    {currentLanguage==="fr" ? (Article.article ? removeTags(Article.article) : 'Aliquam erat volutpat. Etiam ut nisi tempus, sagittis leo ut, placerat metus. Cras non convallis tellus....') 
+                   
+                    {currentLanguage==="fr" ? (Article?.article ? removeTags(Article.article) : 'Aliquam erat volutpat. Etiam ut nisi tempus, sagittis leo ut, placerat metus. Cras non convallis tellus....') 
                         : 
-                          (Article.en_article
+                          (Article?.en_article
                           ? removeTags(Article.en_article) 
                           : 'Aliquam erat volutpat..')
                       }
@@ -259,10 +247,10 @@ function VoirPlus() {
                   </p>
                   {/* AUTRES PHOTOS DE L'ACTIVITE */}
                   <div className="grid sm:grid-cols-4 grid-cols-2 gap-2 pt-6">
-                    {Article.images.map((article ,index) => (
+                    {Article?.images?.map((image ,index) => (
                       <div className=" relative overflow-hidden w-[156px] h-[115px]  " key={index}>
                         <img
-                          src={article.Image ? `data:image/png;base64,${article.Image}` :Nouvelle2}
+                          src={image.Image ? `data:image/png;base64,${image.Image}` :Nouvelle2}
                           alt="photoactivite"
                           className="w-full h-full object-cover rounded-lg"
                         />
@@ -283,14 +271,14 @@ function VoirPlus() {
                       {/* image */}
                       <div className=" relative overflow-hidden w-[214px] h-[125px]">
                         <img
-                          src={ArticleLast.picture ? `data:image/png;base64,${ArticleLast.picture}` :Nouvelle1}
+                          src={ArticleLast?.picture ? `data:image/png;base64,${ArticleLast.picture}` :Nouvelle1}
                           className="w-full h-full object-cover rounded-lg"
                           alt="Nouvelle1"
                         />
                       </div>
                       <p className="  font-semibold text-[#4e4e4e]">
                        {/* {ArticleLast.article_tittle? ArticleLast.article_tittle : 'Consulting project'} */}
-                        {currentLanguage==="fr" ? (ArticleLast.article_tittle? ArticleLast.article_tittle : 'Pourquoi nous rejoindre') : (ArticleLast.en_article_tittle? ArticleLast.en_article_tittle:'Consultingproject')}
+                        {currentLanguage==="fr" ? (ArticleLast?.article_tittle? ArticleLast.article_tittle : 'Pourquoi nous rejoindre') : (ArticleLast?.en_article_tittle? ArticleLast.en_article_tittle:'Consultingproject')}
 
                         
                       </p>
@@ -302,9 +290,9 @@ function VoirPlus() {
                           ? removeTags(ArticleLast.article) 
                           : 'Aliquam erat volutpat. Etiam ut nisi tempus, sagittis leo ut, placerat metus. Cras non convallis tellus....'
                         } */}
-                        {currentLanguage==="fr" ? (ArticleLast.article ? removeTags(ArticleLast.article) : 'Aliquam erat volutpat. Etiam ut nisi tempus, sagittis leo ut, placerat metus. Cras non convallis tellus....') 
+                        {currentLanguage==="fr" ? (ArticleLast?.article ? removeTags(ArticleLast.article) : 'Aliquam erat volutpat. Etiam ut nisi tempus, sagittis leo ut, placerat metus. Cras non convallis tellus....') 
                         : 
-                          (ArticleLast.en_article
+                          (ArticleLast?.en_article
                           ? removeTags(ArticleLast.en_article) 
                           : 'Aliquam erat volutpat..')
                       }
@@ -340,8 +328,8 @@ function VoirPlus() {
                           ? new Date(ArticleLast.creation_date).toLocaleDateString('fr-FR', options)
                           : 'Jeudi 23 Mars 2024'
                         } */}
-                        {currentLanguage==="fr" ? (ArticleLast.creation_date ? new Date(ArticleLast.creation_date).toLocaleDateString('fr-FR', options): 'Jeudi 23 Mars 2024') : (
-                          ArticleLast.creation_date ? new Date(ArticleLast.creation_date).toLocaleDateString('en-EN', options): 'Thursday, 23 March 2024')
+                        {currentLanguage==="fr" ? (ArticleLast?.creation_date ? new Date(ArticleLast.creation_date).toLocaleDateString('fr-FR', options): 'Jeudi 23 Mars 2024') : (
+                          ArticleLast?.creation_date ? new Date(ArticleLast.creation_date).toLocaleDateString('en-EN', options): 'Thursday, 23 March 2024')
                         }
                         </p>
                       </div>
