@@ -33,8 +33,7 @@ function Header(props) {
           <a href="https://az-companies.com/fr/login" target="_blank" rel="noreferrer" className="float-left bg-[#DCA61D] text-white py-2 px-4 rounded flex items-center">
             {/* Icône de connexion - Assurez-vous d'avoir une icône appropriée */}
             <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2"></circle>
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 12l-4-4m0 0l0 8m0-4l-4 0"></path>
+              <path d="M2.5 8V7a5 5 0 0 1 10 0v1h.5a1 1 0 0 1 1 1v6a1 1 0 0 1-1 1h-11a1 1 0 0 1-1-1v-6a1 1 0 0 1 1-1h.5zm1 0h9V7a4 4 0 0 0-9 0v1z"/>
             </svg>
             {/* Texte du bouton - Masqué sur les petits écrans */}
             <span className="hidden sm:inline">Connexion</span>
