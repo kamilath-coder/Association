@@ -38,6 +38,8 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
 function PaymentPopup({ open,tel, user_Id, montant, email, onSuccess, userPrenom,userNom, formData, onClose }) {
     const [isDialogOpen, setIsDialogOpen] = useState(open);
     const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY);
+    const {t} = useTranslation();
+    const { i18n } = useTranslation();
     useEffect(() => {
         setIsDialogOpen(open);
     }, [open]);
@@ -114,7 +116,7 @@ function PaymentPopup({ open,tel, user_Id, montant, email, onSuccess, userPrenom
         },
         button: {
           class: 'btn btn-primary',
-          text: 'Payer ' + montant + ' FCFA'
+          text:`${t('Payer')} ${montant} FCFA`
         },
         onComplete(resp) {
           const FedaPay = window['FedaPay'];
@@ -200,47 +202,31 @@ function PaymentPopup({ open,tel, user_Id, montant, email, onSuccess, userPrenom
     };
       
     return (
-        <BootstrapDialog onClose={handleClose} aria-labelledby="customized-dialog-title" open={isDialogOpen}>
-            <DialogTitle sx={{ m: 0, p: 2 }} id="customized-dialog-title" className='flex items-center text-[#FE7F2D] space-x-3'>
-                <p>Veuillez choisir le mode de paiement</p>
-                <IconButton aria-label="close" onClick={handleClose}
-                    sx={{
-                        position: 'absolute',
-                        right: 8,
-                        top: 8,
-                        color: (theme) => theme.palette.grey[500],
-                    }}>
-                    <CloseIcon />
-                </IconButton>
-            </DialogTitle>
-            <DialogContent dividers>
-                <Typography gutterBottom>
-                    Pour les paiements avec votre compte Az, choisissez l'option payer avec mon compte Az-Pay. Et pour les paiements par carte bancaire ou mobile money, choisissez l'option payer par carte ou mobile money
-                </Typography>
-            </DialogContent>
-            <DialogActions>
-              <Button onClick={handleOpenAZ} style={{ textTransform: "none", backgroundColor: "#233D4D", color: "white" }}>
-                Az-Pay : {montant} F CFA
-              </Button>
-              {/* <Button id="fedapay_btn_" onClick={handleOpenCard} style={{ textTransform: "none", backgroundColor: "#233D4D", color: "white" }}>
-                  Carte bancaire / Mobile money : {price} F CFA
-              </Button> */}
-
-              {/* <FedaCheckoutButton 
-                  style={{ textTransform: "none", backgroundColor: "#233D4D", color: "white" }}
-                  options={checkoutButtonOptions}
-              /> */}
-
-              <Button onClick={handlePayment} className={checkoutButtonOptions.button.class} 
-                  style={{ textTransform: "none", backgroundColor: "#233D4D", color: "white" }}>
-                  {checkoutButtonOptions.button.text}
-              </Button>
-              <Button onClick={handleStripePayment} style={{ textTransform: "none", backgroundColor: "#233D4D", color: "white" }}>
-                Stripe : {montant} F CFA
-              </Button>
-            </DialogActions>
-
-        </BootstrapDialog>
+      
+      <BootstrapDialog onClose={handleClose} aria-labelledby="customized-dialog-title" open={isDialogOpen}>
+        <DialogTitle id="customized-dialog-title" className="flex items-center text-orange-600 space-x-3 p-2">
+          <p>{t('Veuillez choisir le mode de paiement')}</p>
+          <IconButton aria-label="close" onClick={handleClose} className="absolute right-2 top-2 text-gray-500">
+            <CloseIcon />
+          </IconButton>
+        </DialogTitle>
+        <DialogContent dividers className="p-4">
+          <Typography gutterBottom>
+            {t('Pour les dons par carte bancaire ou mobile money, choisissez l\'option payer par stripe ou mobile money')}
+          </Typography>
+        </DialogContent>
+        <DialogActions className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2 p-4">
+          {/* <Button onClick={handleOpenAZ} className="text-none bg-blue-900 text-white py-2 px-4 rounded">
+            Az-Pay : {montant} F CFA
+          </Button> */}
+          <Button onClick={handlePayment} className={`${checkoutButtonOptions.button.class} text-none bg-blue-900 text-white py-2 px-4 rounded`}>
+            {checkoutButtonOptions.button.text}
+          </Button>
+          <Button onClick={handleStripePayment} className="text-none bg-blue-900 text-white py-2 px-4 rounded">
+           {t('Stripe')} : {montant} F CFA
+          </Button>
+        </DialogActions>
+      </BootstrapDialog>
     );
 }
 export function Donation() {
@@ -331,7 +317,9 @@ export function Donation() {
     try {
       const response = await sendFormDataStripe(formState);
       console.log('Réponse du serveur :', response);
-      toast.success(response.message);
+      //toast.success(response.message);
+      toast.success(t('form.success'));
+
       // Réinitialisez l'état
      
       

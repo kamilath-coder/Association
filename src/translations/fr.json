@@ -93,6 +93,11 @@
     "visite":"visite",
     "Nombre de follower":"Nombre de follower",
     "mention":"mention",
-    "vue total":"vue total"
+    "vue total":"vue total",
+    "Pour les dons par carte bancaire ou mobile money, choisissez l'option payer par stripe ou mobile money":"Pour les dons par carte bancaire ou mobile money, choisissez l'option payer par stripe ou mobile money.",
+    "Stripe":"Stripe",
+    "Payer" : "Payer",
+    "Veuillez choisir le mode de paiement" :"Veuillez choisir le mode de paiement"
+
 
 }
