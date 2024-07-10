@@ -36,7 +36,7 @@ export function NavbarDefault(props) {
     //   <NavLink to="/Contact" activeClassName="text-[#DCA61D]" className="flex items-center hover:text-[#DCA61D]"><FaPhone className="mr-2" /> {t('Contact')}</NavLink> 
     // </ul> 
     <ul className="mt-2 mb-4 flex flex-col gap-2 text-lg lg:mb-0 lg:mt-0 lg:flex-row lg:items-center lg:gap-6 animate-fade-right animate-once animate-duration-1000 animate-delay-[1ms] animate-ease-linear animate-normal animate-fill-both"> 
-      <NavLink to="/" className={({ isActive }) => isActive ? "text-[#DCA61D] flex items-center hover:text-[#DCA61D]" : "flex items-center hover:text-[#DCA61D]"}><FaHome className="mr-2" /> {t('Accueil')}</NavLink> 
+      <NavLink to="/" className={({ isActive }) => isActive ? "text-[#000000] flex items-center hover:text-[#DCA61D]" : "flex items-center hover:text-[#DCA61D]"}><FaHome className="mr-2" /> {t('Accueil')}</NavLink> 
       <NavLink to="/A-propos" className={({ isActive }) => isActive ? "text-[#DCA61D] flex items-center hover:text-[#DCA61D]" : "flex items-center hover:text-[#DCA61D]"}><FaInfoCircle className="mr-2" /> {t('A propos')}</NavLink> 
       <NavLink to="/Nos-activites" className={({ isActive }) => isActive ? "text-[#DCA61D] flex items-center hover:text-[#DCA61D]" : "flex items-center hover:text-[#DCA61D]"}><FaAnchor className="mr-2" /> {t('Nos activités')}</NavLink> 
       <NavLink to="/Les-nouvelles" className={({ isActive }) => isActive ? "text-[#DCA61D] flex items-center hover:text-[#DCA61D]" : "flex items-center hover:text-[#DCA61D]"}><FaNewspaper className="mr-2" /> {t('Nouvelles')}</NavLink> 

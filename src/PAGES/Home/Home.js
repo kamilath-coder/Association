@@ -204,13 +204,13 @@ function Home() {
                 <div className="uppercase text-lg sm:text-2xl md:w-auto lg:w-[400px] font-semibold text-[#4E4E4E]">
                   {currentLanguage==="fr" ? (PresentationTitle.fr_presentation_title ? removeTags(PresentationTitle.fr_presentation_title) : 'Pourquoi nous rejoindre') : (PresentationTitle.presentation_title ? removeTags(PresentationTitle.presentation_title) : 'Pourquoi nous rejoindre')}?
                 </div>
-                <div className="h-1 w-20 bg-[#DCA61D]"></div>
+                <div className="h-1 w-20 bg-[#121212]"></div>
                 <div className="sm:w-auto md:w-[500px] w-full leading-loose">
                   {currentLanguage==="fr" ? (Presentation.site_goal_fr ? removeTags(Presentation.site_goal_fr) : '') : (Presentation.site_goal ? removeTags(Presentation.site_goal) : '')}
                 </div>
                 <Link
                   to="/A-propos"
-                  className="hover:bg-white text-center hover:text-[#066AB2] text-white bg-[#066AB2] w-40 py-3 font-medium text-lg transition delay-150 duration-700 ease-in-out hover:-translate-y-1 hover:scale-110"
+                  className="hover:bg-white text-center hover:text-[#066AB2] text-white bg-[#f10f0f] w-40 py-3 font-medium text-lg transition delay-150 duration-700 ease-in-out hover:-translate-y-1 hover:scale-110"
                 >
                 {t('Learn more')}
                 </Link>
@@ -293,7 +293,7 @@ function Home() {
                         <div className="grid place-items-end">
                           <Link
                             to={`/Nos-activites/Voir-plus/${article.Items_Numbers}`}
-                            className="flex flex-row items-center justify-center space-x-3 bg-[#DCA61D] rounded-s-full py-2 w-[120px]"
+                            className="flex flex-row items-center justify-center space-x-3 bg-[#121212] rounded-s-full py-2 w-[120px]"
                           >
                             <svg
                               width="15"
@@ -318,7 +318,7 @@ function Home() {
               </div>
               <Link
                 to="/Nos-activites"
-                className="hover:bg-white text-center hover:text-[#066AB2] text-white bg-[#066AB2] w-48 py-3 font-medium text-lg transition delay-150 duration-700 ease-in-out hover:-translate-y-1 hover:scale-110"
+                className="hover:bg-white text-center hover:text-[#066AB2] text-white bg-[#f10f0f] w-48 py-3 font-medium text-lg transition delay-150 duration-700 ease-in-out hover:-translate-y-1 hover:scale-110"
               >
                 {t('Toutes les activités')}
               </Link>
@@ -333,10 +333,10 @@ function Home() {
                 <div className="bg-color-white h-[340px] md:px-10 px-5 pt-6">
                   {/* titre et bouton */}
                   <div className="flex sm:flex-row flex-col justify-between items-center">
-                    <div className="text-2xl uppercase text-[#DCA61D] font-bold">
+                    <div className="text-2xl uppercase text-[#121212] font-bold">
                      {t('Les membres de notre équipe')}
                     </div>
-                    <Link to="/A-propos" className="flex items-center space-x-3 bg-[#066AB2] py-2 px-3 text-white">
+                    <Link to="/A-propos" className="flex items-center space-x-3 bg-[#f10f0f] py-2 px-3 text-white">
                       <svg
                         width="25"
                         height="25"
@@ -373,16 +373,16 @@ function Home() {
                         
                         <div className="flex flex-row items-center space-x-2 pt-3">
                           {member.facebook_link? <a href={member.facebook_link} target="_blank" rel="noreferrer noopener">
-                              <GrFacebookOption className="text-xl text-[#4e4e4e] bg-[#d9d9d9] hover:bg-[#066AB2] hover:text-white w-6 h-6 rounded-full p-1" />
+                              <GrFacebookOption className="text-xl text-[#4e4e4e] bg-[#d9d9d9] hover:bg-[#f10f0f] hover:text-white w-6 h-6 rounded-full p-1" />
                             </a>:''}
                           {member.linkedin_link ? <a href={member.linkedin_link} target="_blank" rel="noreferrer noopener">
-                            <TiSocialLinkedin className="text-xl text-[#4e4e4e] bg-[#d9d9d9] hover:bg-[#066AB2] hover:text-white w-6 h-6 rounded-full p-1" />
+                            <TiSocialLinkedin className="text-xl text-[#4e4e4e] bg-[#d9d9d9] hover:bg-[#f10f0f] hover:text-white w-6 h-6 rounded-full p-1" />
                           </a> :''}
                           {member.google_link ?<a href={member.google_link} target="_blank" rel="noreferrer noopener">
-                            <IoIosMail className="text-xl text-[#4e4e4e] bg-[#d9d9d9] hover:bg-[#066AB2] hover:text-white w-6 h-6 rounded-full p-1" />
+                            <IoIosMail className="text-xl text-[#4e4e4e] bg-[#d9d9d9] hover:bg-[#f10f0f] hover:text-white w-6 h-6 rounded-full p-1" />
                           </a>:''}
                           {member.twitter_link ? <a href={member.twitter_link} target="_blank" rel="noreferrer noopener">
-                            <RiTwitterXLine className="text-xl text-[#4e4e4e] bg-[#d9d9d9] hover:bg-[#066AB2] hover:text-white w-6 h-6 rounded-full p-1" />
+                            <RiTwitterXLine className="text-xl text-[#4e4e4e] bg-[#d9d9d9] hover:bg-[#f10f0f] hover:text-white w-6 h-6 rounded-full p-1" />
                           </a>: '' }
                         </div>
                       </div>
@@ -416,7 +416,7 @@ function Home() {
                       value={email}
                       onChange={handleInputChange}
                     />
-                    <button className="bg-[#066AB2] text-white sm:w-[100px] h-12 s:px-2 sm:px-0 ">
+                    <button className="bg-[#f10f0f] text-white sm:w-[100px] h-12 s:px-2 sm:px-0 ">
                      {t('S\'abonner')}
                     </button>
                   </form>

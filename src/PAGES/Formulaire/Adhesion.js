@@ -97,7 +97,7 @@ export function Adhesion() {
       <Button
         onClick={handleOpen}
         variant="text"
-        className="hover:bg-[#066AB2] bg-[#DCA61D] rounded-none text-white   h-14 text-sm flex flex-row items-center  justify-center space-x-3"
+        className="hover:bg-[#066AB2] bg-[#121212] rounded-none text-white   h-14 text-sm flex flex-row items-center  justify-center space-x-3"
       >
         <svg
           width="25"

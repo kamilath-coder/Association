@@ -46,7 +46,7 @@ export function SlideHome({banner}) {
             </div>
             <Link
               to="/Nos-activites"
-              className="bg-white text-[#DCA61D] text-center hover:text-white hover:bg-[#DCA61D] w-40 py-3 font-medium text-lg transition delay-150 duration-700 ease-in-out hover:-translate-y-1 hover:scale-110 animate-fade-up animate-once animate-duration-[1200ms] animate-delay-[1ms] animate-ease-linear animate-normal"
+              className="bg-white text-[#DCA61D] text-center hover:text-white hover:bg-[#000000] w-40 py-3 font-medium text-lg transition delay-150 duration-700 ease-in-out hover:-translate-y-1 hover:scale-110 animate-fade-up animate-once animate-duration-[1200ms] animate-delay-[1ms] animate-ease-linear animate-normal"
             >
               {t('Nos activités')}
             </Link>
@@ -66,7 +66,7 @@ export function SlideHome({banner}) {
             </div>
             <Link
               to="/Nos-activites"
-              className="bg-white text-[#DCA61D] text-center hover:text-white hover:bg-[#DCA61D] w-40 py-3 font-medium text-lg transition delay-150 duration-700 ease-in-out hover:-translate-y-1 hover:scale-110 animate-fade-up animate-once animate-duration-[1200ms] animate-delay-[1ms] animate-ease-linear animate-normal"
+              className="bg-white text-[#DCA61D] text-center hover:text-white hover:bg-[#000000] w-40 py-3 font-medium text-lg transition delay-150 duration-700 ease-in-out hover:-translate-y-1 hover:scale-110 animate-fade-up animate-once animate-duration-[1200ms] animate-delay-[1ms] animate-ease-linear animate-normal"
             >
               Nos activités
             </Link>
@@ -86,7 +86,7 @@ export function SlideHome({banner}) {
             </div>
             <Link
               to="/Nos-activites"
-              className="bg-white text-[#DCA61D] text-center hover:text-white hover:bg-[#DCA61D] w-40 py-3 font-medium text-lg transition delay-150 duration-700 ease-in-out hover:-translate-y-1 hover:scale-110 animate-fade-up animate-once animate-duration-[1200ms] animate-delay-[1ms] animate-ease-linear animate-normal"
+              className="bg-white text-[#DCA61D] text-center hover:text-white hover:bg-[#000000] w-40 py-3 font-medium text-lg transition delay-150 duration-700 ease-in-out hover:-translate-y-1 hover:scale-110 animate-fade-up animate-once animate-duration-[1200ms] animate-delay-[1ms] animate-ease-linear animate-normal"
             >
               Nos activités
             </Link>

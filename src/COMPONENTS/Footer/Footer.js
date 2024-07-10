@@ -21,23 +21,23 @@ function Footer(props) {
   const { t} = useTranslation();
   return (
     <div className="bg-black flex flex-col space-y-3 items-center pt-10">
-      <div className="text-3xl  text-[#DCA61D] font-bold">{props.info.name? props.info.name :'Association'}.</div>
+      <div className="text-3xl  text-[#fff] font-bold">{props.info.name? props.info.name :'Association'}.</div>
       {/* reseaux sociaux */}
       <div className="flex flex-row items-center space-x-4 pt-3">
         {props.info.facebook_link?<a href={props.info.facebook_link} target="_blank" rel="noreferrer noopener">
-          <GrFacebookOption className="text-xl text-[#000000] bg-[#DCA61D] hover:bg-[#066AB2] hover:text-white w-6 h-6 rounded-full p-1" />
+          <GrFacebookOption className="text-xl text-[#000000] bg-[#000000] hover:bg-[#066AB2] hover:text-white w-6 h-6 rounded-full p-1" />
         </a>:''}
         {props.info.linkedin_link?<a href={props.info.linkedin_link} target="_blank" rel="noreferrer noopener">
-          <TiSocialLinkedin className="text-xl text-[#000000] bg-[#DCA61D] hover:bg-[#066AB2] hover:text-white w-6 h-6 rounded-full p-1" />
+          <TiSocialLinkedin className="text-xl text-[#000000] bg-[#121212] hover:bg-[#066AB2] hover:text-white w-6 h-6 rounded-full p-1" />
         </a>:''}
         {props.info.google_link?<a href={props.info.google_link} target="_blank" rel="noreferrer noopener">
-          <IoIosMail className="text-xl text-[#000000] bg-[#DCA61D] hover:bg-[#066AB2] hover:text-white w-6 h-6 rounded-full p-1" />
+          <IoIosMail className="text-xl text-[#000000] bg-[#121212] hover:bg-[#066AB2] hover:text-white w-6 h-6 rounded-full p-1" />
         </a>:''}
         {props.info.instagram_link?<a href={props.info.instagram_link} target="_blank" rel="noreferrer noopener">
-          <FaInstagram className="text-xl text-[#000000] bg-[#DCA61D] hover:bg-[#066AB2] hover:text-white w-6 h-6 rounded-full p-1" />
+          <FaInstagram className="text-xl text-[#000000] bg-[#121212] hover:bg-[#066AB2] hover:text-white w-6 h-6 rounded-full p-1" />
         </a>:''}
         <a href={`https://az-companies.com/fr/${props.info.Customers_Numbers}/public-profile`} target="_blank" rel="noreferrer noopener">
-          <img src={azicon} alt="Logo AZ" className="text-xl text-[#000000] bg-[#DCA61D] hover:bg-[#066AB2] hover:text-white w-6 h-6 rounded-full p-1 w-4 h-4 " />
+          <img src={azicon} alt="Logo AZ" className="text-xl text-[#000000] bg-[#121212] hover:bg-[#066AB2] hover:text-white w-6 h-6 rounded-full p-1 w-4 h-4 " />
         </a>
       </div>
 
@@ -57,7 +57,7 @@ function Footer(props) {
         <Link to="/Contact" className="flex items-center mb-2 sm:mb-0"><FaPhone className="mr-2" /> {t('Contact')}</Link>
       </div>
       {/* <div className=" text-xs font-thin bg-[#066AB2] text-white w-full py-2 text-center">Design by @Africa Digitalizer <img src={aDicon} alt="Logo AZ" className="text-xl text-[#000000] rounded-full w-6 h-6 " /> 2024</div> */}
-      <div className="flex justify-center items-center space-x-2 text-xs font-thin bg-[#066AB2] text-white w-full py-2">
+      <div className="flex justify-center items-center space-x-2 text-xs font-thin bg-[#f10505] text-white w-full py-2">
         Design by @Africa Digitalizer <img src={aDicon} alt="Logo AZ" className="rounded-full w-9 h-9" /> 2024
       </div>
     </div>
