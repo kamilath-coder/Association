@@ -222,6 +222,7 @@ function Home() {
                     alt="imagede description de l'association"
                   />
                 </div>
+                {/* hyjfufkuyf */}
                 <div className="bg-white rounded-md relative bottom-20 md:left-44 border-b-4 border-[#f90707] text-xl flex items-center justify-center h-10 w-80">
                   {NameSite? NameSite :'Nom de l’association'}
                 </div>
