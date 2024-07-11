@@ -187,6 +187,7 @@ function Home() {
     <>
       {loading ? (
         // Afficher le spinner tant que loading est true
+        // Afficher le spinner tant que loading est true
         <Loader />
       ) : (
         <>
